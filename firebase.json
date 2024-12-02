@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "public",
+    "public": "C:\\Users\\alain\\Desktop\\public",
     "ignore": [
       "firebase.json",
       "**/.*",
