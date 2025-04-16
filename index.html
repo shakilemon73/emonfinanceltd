@@ -3,16 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto CAPTCHA Verification</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Music Video Landing Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        p {
+            color: #666;
+        }
+        .embed-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            margin: 20px auto;
+        }
+        .embed-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
 </head>
 <body>
-    <div class="captcha-container">
-        <div id="status-message">Verifying...</div>
-        <div id="countdown">Auto-verifying in 30 seconds...</div>
-        <div class="spinner"></div>
+    <div class="container">
+        <h2>Check Out Our Latest Music Video</h2>
+        <p>This video showcases our latest release, featuring stunning visuals and an unforgettable soundtrack.</p>
+        <div class="embed-container">
+            <iframe 
+                src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fmusicvideo242%2Fposts%2Fpfbid02S9wJ8EmfoDXYJ7sbVkrgg4XpjVfHdVHsUD1nTxjwzC1F2uBgQabG81qSv6i3MbYil&show_text=true&width=500" 
+                loading="lazy" 
+                scrolling="no" 
+                frameborder="0" 
+                allowfullscreen="true" 
+                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+            </iframe>
+        </div>
+        <p>Share this post with your friends!</p>
+        <!-- Add social sharing buttons here -->
     </div>
-
-    <script src="script.js"></script>
 </body>
 </html>
