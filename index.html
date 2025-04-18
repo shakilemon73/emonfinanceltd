@@ -3,17 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Emon Finance Ltd - Advertising Agency</title>
+  <title>Emon Finance Ltd - Transformative Advertising</title>
   <script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.26.9/babel.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/framer-motion@11.11.9/dist/framer-motion.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    .parallax {
+      background-attachment: fixed;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    @media (max-width: 768px) {
+      .parallax {
+        background-attachment: scroll;
+      }
+    }
+  </style>
 </head>
 <body>
   <div id="root"></div>
   <script type="text/babel">
     console.log("React script running");
+
+    const { motion } = window.FramerMotion;
 
     const Logo = () => (
       <img 
@@ -24,186 +40,273 @@
     );
 
     const NavBar = () => (
-      <nav className="bg-white shadow-sm sticky top-0 z-50">
+      <motion.nav 
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="bg-white/90 backdrop-blur-sm shadow-sm sticky top-0 z-50"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Logo />
-            <div className="space-x-6">
-              <a href="#home" className="text-gray-600 hover:text-blue-600 text-sm font-medium transition">Home</a>
-              <a href="#about" className="text-gray-600 hover:text-blue-600 text-sm font-medium transition">About</a>
-              <a href="#services" className="text-gray-600 hover:text-blue-600 text-sm font-medium transition">Services</a>
-              <a href="#contact" className="text-gray-600 hover:text-blue-600 text-sm font-medium transition">Contact</a>
+            <div className="hidden md:flex space-x-6">
+              {['Home', 'About', 'Services', 'Contact'].map((item) => (
+                <a 
+                  key={item}
+                  href={`#${item.toLowerCase()}`} 
+                  className="text-gray-600 hover:text-blue-600 text-sm font-medium transition-colors duration-300"
+                >
+                  {item}
+                </a>
+              ))}
+            </div>
+            <div className="md:hidden">
+              {/* Placeholder for mobile menu (requires state management for toggle) */}
+              <svg className="h-6 w-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
+              </svg>
             </div>
           </div>
         </div>
-      </nav>
+      </motion.nav>
     );
 
     const Hero = () => (
-      <section id="home" className="bg-gray-50">
-        <div 
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 flex flex-col md:flex-row items-center"
-          style={{
-            backgroundImage: "url('https://freepik.com/advertising-team.jpg')", // Placeholder
-            backgroundSize: 'cover',
-            backgroundPosition: 'center'
-          }}
-        >
-          <div className="md:w-1/2 text-center md:text-left">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Amplify Your Brand
-            </h1>
-            <p className="text-lg text-gray-600 mb-6">
-              Innovative advertising solutions by Emon Finance Ltd.
-            </p>
-            <a 
-              href="#contact" 
-              className="inline-block bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition transform hover:scale-105"
-            >
-              Get in Touch
-            </a>
-          </div>
-          <div className="md:w-1/2 mt-8 md:mt-0">
-            <div className="h-64 bg-gray-200 rounded-lg" /> {/* Placeholder for image */}
-          </div>
+      <motion.section 
+        id="home" 
+        className="min-h-screen flex items-center parallax"
+        style={{
+          backgroundImage: "url('https://www.munro.agency/wp-content/uploads/2023/03/marketing-strategies.jpg')"
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center bg-black/50 py-20 rounded-lg">
+          <motion.h1 
+            className="text-5xl md:text-6xl font-bold text-white mb-6"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+          >
+            Ignite Your Brand’s Potential
+          </motion.h1>
+          <motion.p 
+            className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+          >
+            At Emon Finance Ltd, we craft bold, innovative campaigns that captivate audiences and drive unparalleled results.
+          </motion.p>
+          <motion.a
+            href="#contact"
+            className="inline-block bg-blue-600 text-white px-8 py-4 rounded-full font-medium hover:bg-blue-700 transition-transform duration-300 transform hover:scale-105"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+          >
+            Start Your Journey
+          </motion.a>
         </div>
-      </section>
+      </motion.section>
     );
 
     const About = () => (
-      <section id="about" className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">Who We Are</h2>
-          <p className="text-gray-600 leading-relaxed max-w-2xl mx-auto text-center">
-            Emon Finance Ltd is a leading advertising agency focused on delivering creative, data-driven 
-            campaigns that elevate brands. Our team combines strategy and innovation to drive results.
-          </p>
+      <motion.section 
+        id="about" 
+        className="py-20 bg-white"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <motion.div
+            initial={{ x: -100, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">We Redefine Advertising</h2>
+            <p className="text-gray-600 leading-relaxed">
+              Emon Finance Ltd is more than an agency—we’re your strategic partner in transforming ideas into unforgettable campaigns. 
+              With a blend of creativity, data, and passion, we empower brands to shine in a crowded world.
+            </p>
+          </motion.div>
+          <motion.div
+            className="h-80 bg-gray-200 rounded-lg"
+            initial={{ x: 100, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            {/* Placeholder for Freepik image (e.g., team working) */}
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
     );
 
     const Services = () => (
-      <section id="services" className="py-16 bg-gray-50">
+      <motion.section 
+        id="services" 
+        className="py-20 bg-gray-50"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Our Expertise</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition">
-              <svg className="h-12 w-12 text-blue-600 mb-4 mx-auto transform hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-              </svg>
-              <h3 className="text-xl font-medium text-gray-900 mb-2 text-center">Digital Marketing</h3>
-              <p className="text-gray-600 text-center">
-                Boost your online reach with SEO, PPC, and social media strategies.
-              </p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition">
-              <svg className="h-12 w-12 text-green-600 mb-4 mx-auto transform hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path>
-              </svg>
-              <h3 className="text-xl font-medium text-gray-900 mb-2 text-center">Branding</h3>
-              <p className="text-gray-600 text-center">
-                Craft a unique identity with our expert design and storytelling.
-              </p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition">
-              <svg className="h-12 w-12 text-blue-600 mb-4 mx-auto transform hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path>
-              </svg>
-              <h3 className="text-xl font-medium text-gray-900 mb-2 text-center">Ad Campaigns</h3>
-              <p className="text-gray-600 text-center">
-                Engage audiences with targeted, creative advertising solutions.
-              </p>
-            </div>
+          <motion.h2 
+            className="text-4xl font-bold text-gray-900 mb-12 text-center"
+            initial={{ y: 50, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            Solutions That Inspire
+          </motion.h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: <svg className="h-12 w-12 text-blue-600 transform group-hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>,
+                title: "Digital Marketing",
+                desc: "Amplify your reach with precision-targeted SEO, PPC, and social media campaigns that convert."
+              },
+              {
+                icon: <svg className="h-12 w-12 text-green-600 transform group-hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path></svg>,
+                title: "Branding",
+                desc: "Forge a lasting identity with stunning visuals and stories that resonate deeply."
+              },
+              {
+                icon: <svg className="h-12 w-12 text-blue-600 transform group-hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>,
+                title: "Ad Campaigns",
+                desc: "Captivate audiences with bold, creative ads that spark action and loyalty."
+              }
+            ].map((service, index) => (
+              <motion.div
+                key={service.title}
+                className="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition group"
+                initial={{ y: 50, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2, duration: 0.8 }}
+              >
+                <div className="flex justify-center mb-4">{service.icon}</div>
+                <h3 className="text-xl font-medium text-gray-900 mb-2 text-center">{service.title}</h3>
+                <p className="text-gray-600 text-center">{service.desc}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
-      </section>
+      </motion.section>
     );
 
     const Contact = () => (
-      <section id="contact" className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Let’s Connect</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="flex flex-col items-center md:items-start">
-              <p className="text-gray-600 mb-6 text-center md:text-left">
-                Ready to elevate your brand? Contact us today.
-              </p>
-              <div className="space-y-4">
+      <motion.section 
+        id="contact" 
+        className="py-20 bg-white"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-12">
+          <motion.div
+            initial={{ x: -100, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">Let’s Create Something Extraordinary</h2>
+            <p className="text-gray-600 mb-6">
+              Your vision deserves a spotlight. Connect with us to start building campaigns that inspire and achieve.
+            </p>
+            <div className="space-y-4">
+              <a 
+                href="mailto:support@emonfinanceltd.com" 
+                className="flex items-center text-gray-600 hover:text-blue-600 transition-transform duration-300 transform hover:scale-105"
+              >
+                <svg className="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l9-6 9 6v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"></path></svg>
+                support@emonfinanceltd.com
+              </a>
+              <div className="flex space-x-4">
                 <a 
-                  href="mailto:support@emonfinanceltd.com" 
-                  className="flex items-center text-gray-600 hover:text-blue-600 transition"
+                  href="https://www.linkedin.com/company/emonfinanceltd" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-blue-600 transition-transform duration-300 transform hover:scale-110"
                 >
-                  <svg className="h-6 w-6 mr-2 transform hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l9-6 9 6v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"></path>
+                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-1.337-.03-3.063-1.867-3.063-1.867 0-2.153 1.459-2.153 2.967v5.7h-3v-11h2.879v1.505h.04c.401-.757 1.379-1.557 2.833-1.557 3.027 0 3.587 1.991 3.587 4.579v6.473z"/>
                   </svg>
-                  support@emonfinanceltd.com
                 </a>
-                <div className="flex space-x-4">
-                  <a 
-                    href="https://www.linkedin.com/company/emonfinanceltd" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-gray-600 hover:text-blue-600 transition"
-                  >
-                    <svg className="h-6 w-6 transform hover:scale-110 transition" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-1.337-.03-3.063-1.867-3.063-1.867 0-2.153 1.459-2.153 2.967v5.7h-3v-11h2.879v1.505h.04c.401-.757 1.379-1.557 2.833-1.557 3.027 0 3.587 1.991 3.587 4.579v6.473z"/>
-                    </svg>
-                  </a>
-                  <a 
-                    href="https://facebook.com/emonfinanceltd" // Placeholder
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-gray-600 hover:text-blue-600 transition"
-                  >
-                    <svg className="h-6 w-6 transform hover:scale-110 transition" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div className="bg-gray-50 p-6 rounded-lg shadow-sm">
-              <h3 className="text-xl font-medium text-gray-900 mb-4">Send a Message</h3>
-              <div className="space-y-4">
-                <input 
-                  type="text" 
-                  placeholder="Your Name" 
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-                />
-                <input 
-                  type="email" 
-                  placeholder="Your Email" 
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-                />
-                <textarea 
-                  placeholder="Your Message" 
-                  className="w-full p-3 border rounded-lg h-32 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                ></textarea>
                 <a 
-                  href="mailto:support@emonfinanceltd.com?subject=Inquiry from Website" 
-                  className="block bg-blue-600 text-white px-6 py-3 rounded-full text-center hover:bg-blue-700 transition transform hover:scale-105"
+                  href="https://facebook.com/emonfinanceltd" // Placeholder
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-blue-600 transition-transform duration-300 transform hover:scale-110"
                 >
-                  Send Message
+                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
                 </a>
               </div>
             </div>
-          </div>
+          </motion.div>
+          <motion.div
+            className="bg-gray-50 p-8 rounded-xl shadow-sm"
+            initial={{ x: 100, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <h3 className="text-xl font-medium text-gray-900 mb-4">Get Started Today</h3>
+            <div className="space-y-4">
+              <input 
+                type="text" 
+                placeholder="Your Name" 
+                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+              />
+              <input 
+                type="email" 
+                placeholder="Your Email" 
+                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+              />
+              <textarea 
+                placeholder="Tell Us About Your Project" 
+                className="w-full p-3 border rounded-lg h-32 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
+              ></textarea>
+              <a 
+                href="mailto:support@emonfinanceltd.com?subject=New Project Inquiry" 
+                className="block bg-blue-600 text-white px-6 py-3 rounded-full text-center hover:bg-blue-700 transition-transform duration-300 transform hover:scale-105"
+              >
+                Send Your Vision
+              </a>
+            </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
     );
 
     const Footer = () => (
-      <footer className="bg-gray-900 text-gray-300 py-8">
+      <motion.footer 
+        className="bg-gray-900 text-gray-300 py-12"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="mb-4">© 2025 Emon Finance Ltd. All rights reserved.</p>
-          <div className="flex justify-center space-x-4">
+          <p className="mb-4">© 2025 Emon Finance Ltd. Crafted with vision.</p>
+          <div className="flex justify-center space-x-6">
             <a 
               href="https://www.linkedin.com/company/emonfinanceltd" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-gray-300 hover:text-white transition"
+              className="text-gray-300 hover:text-white transition-transform duration-300 transform hover:scale-110"
             >
-              <svg className="h-5 w-5 transform hover:scale-110 transition" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-1.337-.03-3.063-1.867-3.063-1.867 0-2.153 1.459-2.153 2.967v5.7h-3v-11h2.879v1.505h.04c.401-.757 1.379-1.557 2.833-1.557 3.027 0 3.587 1.991 3.587 4.579v6.473z"/>
               </svg>
             </a>
@@ -211,23 +314,23 @@
               href="https://facebook.com/emonfinanceltd" // Placeholder
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-gray-300 hover:text-white transition"
+              className="text-gray-300 hover:text-white transition-transform duration-300 transform hover:scale-110"
             >
-              <svg className="h-5 w-5 transform hover:scale-110 transition" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
               </svg>
             </a>
             <a 
               href="mailto:support@emonfinanceltd.com" 
-              className="text-gray-300 hover:text-white transition"
+              className="text-gray-300 hover:text-white transition-transform duration-300 transform hover:scale-110"
             >
-              <svg className="h-5 w-5 transform hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l9-6 9 6v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"></path>
               </svg>
             </a>
           </div>
         </div>
-      </footer>
+      </motion.footer>
     );
 
     const App = () => (
