@@ -3,95 +3,183 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Emon Finance Ltd. - Marketing Solutions</title>
+  <title>Emon Finance Ltd. - Performance Marketing</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7/babel.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-fadeIn { animation: fadeIn 0.8s ease-out forwards; }
+    .hover-scale { transition: transform 0.3s; }
+    .hover-scale:hover { transform: scale(1.05); }
+    .scroll-smooth { scroll-behavior: smooth; }
+    .teal-blue-text { color: #1A73E8; }
+    .teal-blue-bg { background-color: #1A73E8; }
+    .teal-blue-bg:hover { background-color: #1557b0; }
+  </style>
 </head>
-<body>
+<body class="scroll-smooth">
   <div id="root"></div>
   <script type="text/babel">
-    const { useState } = React;
+    const { useState, useEffect } = React;
 
     // Navigation Component
-    const Navbar = () => (
-      <nav className="bg-gray-800 text-white sticky top-0 z-50 shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <img 
-                src="https://media.licdn.com/dms/image/v2/D560BAQGS4tCTdvEdGw/company-logo_100_100/B56ZZJf6fAHsAU-/0/1744989825409?e=1750291200&v=beta&t=Fi_TOPK-UtNdgjDNMtQzccX63GY3mY5_34v_bReHLjY" 
-                alt="Emon Finance Ltd. Logo" 
-                className="h-10 w-auto"
-              />
-            </div>
-            <div className="flex items-center space-x-4">
-              <a href="#home" className="hover:text-green-400">Home</a>
-              <a href="#about" className="hover:text-green-400">About</a>
-              <a href="#services" className="hover:text-green-400">Services</a>
-              <a href="#partnerships" className="hover:text-green-400">Partnerships</a>
-              <a href="#case-studies" className="hover:text-green-400">Case Studies</a>
-              <a href="#contact" className="hover:text-green-400">Contact</a>
+    const Navbar = () => {
+      const [isScrolled, setIsScrolled] = useState(false);
+
+      useEffect(() => {
+        const handleScroll = () => setIsScrolled(window.scrollY > 50);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+      }, []);
+
+      return (
+        <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-lg' : 'bg-white'}`}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              <div className="flex items-center">
+                <img 
+                  src="https://media.licdn.com/dms/image/v2/D560BAQGS4tCTdvEdGw/company-logo_100_100/B56ZZJf6fAHsAU-/0/1744989825409?e=1750291200&v=beta&t=Fi_TOPK-UtNdgjDNMtQzccX63GY3mY5_34v_bReHLjY" 
+                  alt="Emon Finance Ltd. Logo" 
+                  className="h-10 w-auto"
+                />
+              </div>
+              <div className="hidden md:flex space-x-8">
+                {['Home', 'About', 'Solutions', 'Partnerships', 'Case Studies', 'Contact'].map((item) => (
+                  <a 
+                    key={item} 
+                    href={`#${item.toLowerCase().replace(' ', '-')}`} 
+                    className={`text-sm font-medium text-gray-800 hover:text-teal-blue-text transition-colors`}
+                  >
+                    {item}
+                  </a>
+                ))}
+              </div>
+              <div className="md:hidden">
+                <button className="text-gray-800"><i className="fas fa-bars"></i></button>
+              </div>
             </div>
           </div>
-        </div>
-      </nav>
-    );
+        </nav>
+      );
+    };
 
     // Hero Section
     const Hero = () => (
-      <section id="home" className="bg-gray-100 py-20 text-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1556740714-7a75a1b3e842?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Partner with Emon Finance Ltd. for Performance-Driven Marketing</h1>
-          <p className="text-lg md:text-xl text-white mb-6">Drive high-quality traffic and maximize ROI with our advertising solutions.</p>
-          <a href="#partnerships" className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600">Explore Partnership Opportunities</a>
+      <section 
+        id="home" 
+        className="min-h-screen flex items-center justify-center bg-white relative pt-16"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div className="flex flex-col items-center md:items-start text-center md:text-left">
+              <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 mb-4 leading-tight">
+                Unlock High-Performance Marketing with Emon Finance
+              </h1>
+              <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-md">
+                Boost conversions with targeted, AI-driven ad solutions.
+              </p>
+              <a 
+                href="#partnerships" 
+                className="teal-blue-bg text-white px-8 py-3 rounded-md text-lg font-semibold hover-scale shadow-lg"
+              >
+                Start Partnering Now
+              </a>
+            </div>
+            <div className="flex justify-center md:justify-end animate-fadeIn" style={{ animationDelay: '0.2s' }}>
+              <img 
+                src="https://images.unsplash.com/photo-1551288049-b1b0b0b2c6b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                alt="Marketing Professional with Dashboard" 
+                className="max-w-full h-auto rounded-lg"
+              />
+            </div>
+          </div>
         </div>
       </section>
     );
 
     // About Section
     const About = () => (
-      <section id="about" className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">About Emon Finance Ltd.</h2>
-          <p className="text-lg text-gray-600 mb-6">Emon Finance Ltd. empowers brands with data-driven advertising solutions. Founded in 2020, our mission is to deliver high-intent traffic and optimize ad spend for maximum ROI.</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <section id="about" className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
+          <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">Who We Are</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div>
-              <h3 className="text-xl font-semibold text-gray-800">Our Team</h3>
-              <p className="text-gray-600">Our team of marketing experts brings decades of experience in PPC, programmatic advertising, and traffic monetization.</p>
+              <h3 className="text-2xl font-semibold teal-blue-text mb-4">Our Mission</h3>
+              <p className="text-gray-600 leading-relaxed">
+                We empower brands with data-driven strategies for measurable success.
+              </p>
+              <h3 className="text-2xl font-semibold teal-blue-text mt-6 mb-4">Our Story</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Since 2020, Emon Finance Ltd. has connected advertisers with high-intent traffic, helping businesses worldwide grow through smarter marketing.
+              </p>
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-gray-800">Our Values</h3>
-              <p className="text-gray-600">Transparency, quality, and long-term partnerships are at the core of everything we do.</p>
+              <h3 className="text-2xl font-semibold teal-blue-text mb-4">Our Expertise</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Our experts in PPC, traffic monetization, and compliance deliver top-tier results for every client.
+              </p>
+              <h3 className="text-2xl font-semibold teal-blue-text mt-6 mb-4">Our Values</h3>
+              <ul className="space-y-2 text-gray-600">
+                <li><strong>Transparency:</strong> We provide clear reporting to earn your trust.</li>
+                <li><strong>Quality:</strong> We craft campaigns that meet the highest standards.</li>
+                <li><strong>Partnership:</strong> We build lasting relationships for mutual growth.</li>
+              </ul>
             </div>
           </div>
         </div>
       </section>
     );
 
-    // Services Section
-    const Services = () => (
-      <section id="services" className="py-16 bg-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Our Services</h2>
+    // Solutions Section
+    const Solutions = () => (
+      <section id="solutions" className="py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
+          <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">Solutions for Your Goals</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <i className="fas fa-bullseye text-green-500 text-3xl mb-4"></i>
-              <h3 className="text-xl font-semibold text-gray-800">PPC Campaign Management</h3>
-              <p className="text-gray-600">Optimize ad spend with AI-driven targeting for platforms like Google Ads and Microsoft Ads.</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <i className="fas fa-chart-line text-green-500 text-3xl mb-4"></i>
-              <h3 className="text-xl font-semibold text-gray-800">Traffic Monetization</h3>
-              <p className="text-gray-600">Maximize revenue with high-quality traffic for Tonic.com and System1 campaigns.</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <i className="fas fa-code text-green-500 text-3xl mb-4"></i>
-              <h3 className="text-xl font-semibold text-gray-800">Programmatic Advertising</h3>
-              <p className="text-gray-600">Leverage OpenRTB and API integrations for scalable ad solutions.</p>
-            </div>
+            {[
+              { 
+                icon: 'fa-bullseye', 
+                title: 'Drive Sales with PPC', 
+                desc: 'Boost ROI with precision targeting and real-time insights.' 
+              },
+              { 
+                icon: 'fa-chart-line', 
+                title: 'Monetize Traffic', 
+                desc: 'Turn traffic into revenue with strategic partnerships.' 
+              },
+              { 
+                icon: 'fa-code', 
+                title: 'Scale with Programmatic', 
+                desc: 'Scale campaigns with automated bidding and premium inventory.' 
+              },
+              { 
+                icon: 'fa-users', 
+                title: 'Lead Generation', 
+                desc: 'Attract high-quality leads tailored to your goals.' 
+              }
+            ].map((solution, index) => (
+              <div key={index} className="bg-white p-6 rounded-lg shadow-md hover-scale">
+                <i className={`fas ${solution.icon} text-teal-blue-text text-4xl mb-4`}></i>
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">{solution.title}</h3>
+                <p className="text-gray-600">{solution.desc}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-12 text-center">
+            <h3 className="text-2xl font-semibold teal-blue-text mb-4">Industries We Serve</h3>
+            <p className="text-gray-600">Finance – Drive loan and investment leads.</p>
+            <p className="text-gray-600">E-commerce – Increase sales and conversions.</p>
+            <p className="text-gray-600">Healthcare – Connect with high-intent patients.</p>
+            <p className="text-gray-600">Technology – Promote SaaS and tech solutions.</p>
+          </div>
+          <div className="mt-12 text-center">
+            <h3 className="text-2xl font-semibold teal-blue-text mb-4">Technical Capabilities</h3>
+            <p className="text-gray-600">Integrate seamlessly with APIs, OpenRTB, and major ad platforms.</p>
+            <p className="text-gray-600">Gain insights with advanced tracking and attribution tools.</p>
+            <p className="text-gray-600">Optimize conversions with custom, high-performing landing pages.</p>
           </div>
         </div>
       </section>
@@ -99,27 +187,41 @@
 
     // Partnerships Section
     const Partnerships = () => (
-      <section id="partnerships" className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Partner with Us</h2>
-          <p className="text-lg text-gray-600 mb-6 text-center">Deliver high-intent traffic to maximize conversions for platforms like Google Ads, Tonic, and System1.</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <section id="partnerships" className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
+          <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">Partner with Us</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div>
-              <h3 className="text-xl font-semibold text-gray-800">Why Partner?</h3>
-              <ul className="list-disc list-inside text-gray-600">
-                <li>Proven track record with $10M+ ad spend managed.</li>
-                <li>Compliance with GDPR, CCPA, and ad quality standards.</li>
-                <li>High CTR and conversion rates across finance and e-commerce verticals.</li>
+              <h3 className="text-2xl font-semibold teal-blue-text mb-4">Why Partner with Us?</h3>
+              <ul className="space-y-4 text-gray-600">
+                <li className="flex items-center"><i className="fas fa-check-circle teal-blue-text mr-2"></i> Get audiences that convert—boost your campaigns.</li>
+                <li className="flex items-center"><i className="fas fa-check-circle teal-blue-text mr-2"></i> Years of success with high-spend ad accounts.</li>
+                <li className="flex items-center"><i className="fas fa-check-circle teal-blue-text mr-2"></i> GDPR/CCPA-compliant—partner with confidence.</li>
+              </ul>
+              <h3 className="text-2xl font-semibold teal-blue-text mt-6 mb-4">Our Metrics</h3>
+              <ul className="space-y-2 text-gray-600">
+                <li>CTR: 2.5% average across campaigns</li>
+                <li>Monthly Impressions: 10M+</li>
+                <li>Conversion Rate: 5%+ on optimized campaigns</li>
               </ul>
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-gray-800">Partnership Process</h3>
-              <ol className="list-decimal list-inside text-gray-600">
-                <li>Submit your application via our contact form.</li>
-                <li>Our team reviews your proposal within 48 hours.</li>
-                <li>Onboard with tailored campaign strategies.</li>
+              <h3 className="text-2xl font-semibold teal-blue-text mb-4">How It Works</h3>
+              <ol className="space-y-4 text-gray-600">
+                <li className="flex items-center"><span className="teal-blue-bg text-white rounded-full w-6 h-6 flex items-center justify-center mr-2">1</span> Apply: Share your goals with us.</li>
+                <li className="flex items-center"><span className="teal-blue-bg text-white rounded-full w-6 h-6 flex items-center justify-center mr-2">2</span> Review: We’ll assess alignment in 48 hours.</li>
+                <li className="flex items-center"><span className="teal-blue-bg text-white rounded-full w-6 h-6 flex items-center justify-center mr-2">3</span> Onboard: Start with a tailored setup.</li>
               </ol>
-              <a href="#contact" className="mt-4 inline-block bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600">Apply Now</a>
+              <a 
+                href="#contact" 
+                className="mt-6 inline-block teal-blue-bg text-white px-6 py-3 rounded-md hover-scale"
+              >
+                Apply Now
+              </a>
+              <h3 className="text-2xl font-semibold teal-blue-text mt-6 mb-4">Our Partners</h3>
+              <p className="text-gray-600"><strong>Google Ads:</strong> Maximize ROI with high-spend PPC expertise.</p>
+              <p className="text-gray-600"><strong>System1:</strong> Scale campaigns with performance-driven traffic.</p>
+              <p className="text-gray-600"><strong>Tonic.com:</strong> Increase CPC/CPM with targeted traffic.</p>
             </div>
           </div>
         </div>
@@ -128,79 +230,173 @@
 
     // Case Studies Section
     const CaseStudies = () => (
-      <section id="case-studies" className="py-16 bg-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Case Studies</h2>
+      <section id="case-studies" className="py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
+          <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">Success Stories</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold text-gray-800">Finance Client Success</h3>
-              <p className="text-gray-600"><strong>Challenge:</strong> Low conversion rates on PPC campaigns.</p>
-              <p className="text-gray-600"><strong>Solution:</strong> Implemented AI-driven targeting and landing page optimization.</p>
-              <p className="text-gray-600"><strong>Results:</strong> Increased conversions by 35% in 3 months.</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-xl font-semibold text-gray-800">E-commerce Traffic Boost</h3>
-              <p className="text-gray-600"><strong>Challenge:</strong> High CPA for Tonic.com campaigns.</p>
-              <p className="text-gray-600"><strong>Solution:</strong> Refined audience segmentation and ad creatives.</p>
-              <p className="text-gray-600"><strong>Results:</strong> Reduced CPA by 20% and delivered 2M impressions.</p>
-            </div>
+            {[
+              {
+                title: 'Fintech Growth',
+                challenge: 'A fintech firm needed more loan applications.',
+                solution: 'We launched a multi-channel PPC campaign with AI targeting.',
+                results: '20% more conversions, 15% lower CPA.'
+              },
+              {
+                title: 'E-commerce Success',
+                challenge: 'An e-commerce feeds low ad click-through rates.',
+                solution: 'We revamped ad creatives and refined targeting.',
+                results: '30% higher CTR, 2x monthly revenue.'
+              }
+            ].map((caseStudy, index) => (
+              <div key={index} className="bg-white p-8 rounded-lg shadow-md hover-scale">
+                <h3 className="text-xl font-semibold teal-blue-text mb-4">{caseStudy.title}</h3>
+                <p className="text-gray-600 mb-2"><strong>Challenge:</strong> {caseStudy.challenge}</p>
+                <p className="text-gray-600 mb-2"><strong>Solution:</strong> {caseStudy.solution}</p>
+                <p className="text-gray-600"><strong>Results:</strong> {caseStudy.results}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
     );
 
     // Contact Section
-    const Contact = () => (
-      <section id="contact" className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Get in Touch</h2>
-          <form action="https://formspree.io/f/{your-form-id}" method="POST" className="max-w-lg mx-auto">
-            <div className="mb-4">
-              <label className="block text-gray-700">Name</label>
-              <input type="text" name="name" className="w-full p-2 border rounded" required />
+    const Contact = () => {
+      const [formData, setFormData] = useState({ name: '', email: '', company: '', message: '', partnership: 'Advertiser', consent: false });
+
+      const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
+      };
+
+      return (
+        <section id="contact" className="py-24 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
+            <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">Get in Touch</h2>
+            <div className="max-w-lg mx-auto">
+              <div className="space-y-6">
+                <div>
+                  <input 
+                    type="text" 
+                    name="name" 
+                    value={formData.name} 
+                    onChange={handleChange} 
+                    placeholder="Enter your name" 
+                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-blue-text" 
+                    required 
+                  />
+                </div>
+                <div>
+                  <input 
+                    type="email" 
+                    name="email" 
+                    value={formData.email} 
+                    onChange={handleChange} 
+                    placeholder="Enter your email" 
+                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-blue-text" 
+                    required 
+                  />
+                </div>
+                <div>
+                  <input 
+                    type="text" 
+                    name="company" 
+                    value={formData.company} 
+                    onChange={handleChange} 
+                    placeholder="Enter your company name" 
+                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-blue-text" 
+                    required 
+                  />
+                </div>
+                <div>
+                  <textarea 
+                    name="message" 
+                    value={formData.message} 
+                    onChange={handleChange} 
+                    placeholder="Tell us about your goals" 
+                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-blue-text" 
+                    rows="4" 
+                    required
+                  ></textarea>
+                </div>
+                <div>
+                  <select 
+                    name="partnership" 
+                    value={formData.partnership} 
+                    onChange={handleChange} 
+                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-blue-text"
+                  >
+                    <option>Advertiser</option>
+                    <option>Publisher</option>
+                    <option>Agency</option>
+                  </select>
+                </div>
+                <div className="flex items-center">
+                  <input 
+                    type="checkbox" 
+                    name="consent" 
+                    checked={formData.consent} 
+                    onChange={handleChange} 
+                    className="mr-2" 
+                    required 
+                  />
+                  <label className="text-gray-600 text-sm">
+                    I agree to the <a href="/privacy" className="teal-blue-text">Privacy Policy</a>
+                  </label>
+                </div>
+                <button 
+                  type="button" 
+                  className="w-full teal-blue-bg text-white p-3 rounded-md hover-scale"
+                  onClick={() => alert('Form submitted!')}
+                >
+                  Send Message
+                </button>
+              </div>
+              <div className="mt-8 text-center">
+                <p className="text-gray-600">Ready to grow? <a href="#" className="teal-blue-text">Chat with us now!</a></p>
+                <p className="text-gray-600 mt-2">Email: <a href="mailto:support@emonfinanceltd.com" className="teal-blue-text">support@emonfinanceltd.com</a></p>
+                <p className="text-gray-600">Phone: <a href="tel:+18001234567" className="teal-blue-text">+1-800-123-4567</a></p>
+                <p className="text-gray-600">Address: 123 Marketing Drive, Suite 456, City, State, ZIP</p>
+              </div>
             </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Email</label>
-              <input type="email" name="email" className="w-full p-2 border rounded" required />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Company</label>
-              <input type="text" name="company" className="w-full p-2 border rounded" />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Message</label>
-              <textarea name="message" className="w-full p-2 border rounded" rows="4" required></textarea>
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700">Partnership Type</label>
-              <select name="partnership" className="w-full p-2 border rounded">
-                <option>Advertiser</option>
-                <option>Publisher</option>
-                <option>Agency</option>
-              </select>
-            </div>
-            <div className="mb-4">
-              <label className="flex items-center">
-                <input type="checkbox" name="privacy" required className="mr-2" />
-                <span className="text-gray-700">I agree to the <a href="/privacy" className="text-green-500">Privacy Policy</a></span>
-              </label>
-            </div>
-            <button type="submit" className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600">Submit</button>
-          </form>
-          <div className="mt-8 text-center">
-            <p className="text-gray-600">Email: <a href="mailto:support@emonfinanceltd.com" className="text-green-500">support@emonfinanceltd.com</a></p>
-            <p className="text-gray-600">Follow us: <a href="https://linkedin.com" className="text-green-500">LinkedIn</a> | <a href="https://x.com" className="text-green-500">X</a></p>
           </div>
-        </div>
-      </section>
-    );
+        </section>
+      );
+    };
 
     // Footer Component
     const Footer = () => (
-      <footer className="bg-gray-800 text-white py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p>© 2025 Emon Finance Ltd. All rights reserved.</p>
-          <p><a href="/privacy" className="text-green-400">Privacy Policy</a> | <a href="/terms" className="text-green-400">Terms of Service</a></p>
+      <footer className="bg-gray-800 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <h3 className="text-lg font-semibold teal-blue-text mb-4">Emon Finance Ltd.</h3>
+              <p className="text-gray-400">Serving 50+ global clients since 2020</p>
+              <p className="text-gray-400">Certified Google Ads, Microsoft Ads, and Yahoo Ads partner</p>
+              <p className="text-gray-400">$10M+ in annual ad spend managed</p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold teal-blue-text mb-4">Quick Links</h3>
+              <p><a href="#about" className="text-gray-400 hover:text-teal-blue-text">About</a></p>
+              <p><a href="#solutions" className="text-gray-400 hover:text-teal-blue-text">Solutions</a></p>
+              <p><a href="#contact" className="text-gray-400 hover:text-teal-blue-text">Contact</a></p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold teal-blue-text mb-4">Legal</h3>
+              <p><a href="/privacy" className="text-gray-400 hover:text-teal-blue-text">Privacy Policy</a></p>
+              <p><a href="/terms" className="text-gray-400 hover:text-teal-blue-text">Terms of Service</a></p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold teal-blue-text mb-4">Contact Info</h3>
+              <p className="text-gray-400">support@emonfinanceltd.com</p>
+              <p className="text-gray-400">+1-800-123-4567</p>
+              <div className="mt-4">
+                <a href="https://www.linkedin.com/company/emon-finance-ltd" className="text-gray-400 hover:text-teal-blue-text mx-2"><i className="fab fa-linkedin"></i></a>
+                <a href="https://twitter.com/EmonFinanceLtd" className="text-gray-400 hover:text-teal-blue-text mx-2"><i className="fab fa-x-twitter"></i></a>
+              </div>
+            </div>
+          </div>
+          <p className="text-center text-gray-400 mt-8">© 2025 Emon Finance Ltd. All rights reserved.</p>
         </div>
       </footer>
     );
@@ -211,7 +407,7 @@
         <Navbar />
         <Hero />
         <About />
-        <Services />
+        <Solutions />
         <Partnerships />
         <CaseStudies />
         <Contact />
