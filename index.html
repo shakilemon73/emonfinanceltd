@@ -3,288 +3,146 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Emon Finance Ltd - Transformative Advertising</title>
-  <script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.26.9/babel.min.js"></script>
+  <title>Emon Finance Ltd - Empowering Wealth Creation</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
   <style>
+    body { font-family: 'Inter', sans-serif; margin: 0; }
     .hero-bg {
-      background-image: url('https://www.munro.agency/wp-content/uploads/2023/03/marketing-strategies.jpg');
+      background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1556740714-7f3e7e8e7b1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
       background-size: cover;
       background-position: center;
-      background-repeat: no-repeat;
     }
-    .animate-slide-up {
-      animation: slideUp 0.8s ease-out;
+    .gradient-text {
+      background: linear-gradient(90deg, #3b82f6, #10b981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    .animate-slide-left {
-      animation: slideLeft 0.8s ease-out;
-    }
-    .animate-slide-right {
-      animation: slideRight 0.8s ease-out;
-    }
-    @keyframes slideUp {
-      from { transform: translateY(50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    @keyframes slideLeft {
-      from { transform: translateX(-50px); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes slideRight {
-      from { transform: translateX(50px); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-    @media (max-width: 768px) {
-      .hero-bg {
-        background-position: top;
-      }
-    }
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    .fade-in { animation: fadeIn 1s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .hover-scale { transition: transform 0.3s; }
+    .hover-scale:hover { transform: scale(1.05); }
   </style>
 </head>
 <body>
   <div id="root"></div>
-  <script type="text/babel">
-    console.log("React script running - starting render");
-
-    const Logo = () => (
-      <img 
-        src="/path/to/emon-finance-logo.png" // Replace with actual logo URL or base64
-        alt="Emon Finance Ltd Logo" 
-        className="h-10 transition-transform duration-300 hover:scale-105"
-      />
-    );
-
-    const NavBar = () => (
-      <nav className="bg-white/90 backdrop-blur-sm shadow-sm sticky top-0 z-50 animate-slide-down">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Logo />
-            <div className="hidden md:flex space-x-6">
-              {['Home', 'About', 'Services', 'Contact'].map((item) => (
-                <a 
-                  key={item}
-                  href={`#${item.toLowerCase()}`} 
-                  className="text-gray-600 hover:text-blue-600 text-sm font-medium transition-colors duration-300"
-                >
-                  {item}
-                </a>
-              ))}
-            </div>
-            <div className="md:hidden">
-              <svg className="h-6 w-6 text-gray-600 transition-transform duration-300 hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
-              </svg>
-            </div>
-          </div>
+  <script>
+    // Check if React is loaded
+    if (!window.React || !window.ReactDOM) {
+      document.getElementById('root').innerHTML = `
+        <div class="text-center p-12 text-red-600">
+          <h1 class="text-3xl">Error: Failed to load dependencies</h1>
+          <p>Please check your internet connection and try again.</p>
         </div>
-      </nav>
-    );
+      `;
+      throw new Error("React not loaded");
+    }
 
-    const Hero = () => (
-      <section id="home" className="min-h-screen flex items-center hero-bg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center bg-black/50 py-20 rounded-lg">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 animate-slide-up">
-            Ignite Your Brand’s Potential
-          </h1>
-          <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto animate-slide-up" style={{ animationDelay: '0.2s' }}>
-            Emon Finance Ltd crafts bold campaigns that captivate and convert, turning your vision into reality.
-          </p>
-          <a
-            href="#contact"
-            className="inline-block bg-blue-600 text-white px-8 py-4 rounded-full font-medium hover:bg-blue-700 transition-transform duration-300 transform hover:scale-105 animate-slide-up"
-            style={{ animationDelay: '0.4s' }}
-          >
-            Start Your Journey
-          </a>
-        </div>
-      </section>
-    );
+    const { useState } = React;
 
-    const About = () => (
-      <section id="about" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-6 animate-slide-left">
-              We Redefine Advertising
-            </h2>
-            <p className="text-gray-600 leading-relaxed animate-slide-left" style={{ animationDelay: '0.2s' }}>
-              At Emon Finance Ltd, we’re not just an agency—we’re your partner in crafting campaigns that resonate. 
-              Our blend of creativity and strategy transforms brands into market leaders.
-            </p>
-          </div>
-          <div className="h-80 bg-gray-200 rounded-lg animate-slide-right">
-            {/* Placeholder for Freepik image (e.g., team working) */}
-          </div>
-        </div>
-      </section>
-    );
+    // Simplified Navbar Component
+    const Navbar = () => {
+      const [isOpen, setIsOpen] = useState(false);
 
-    const Services = () => (
-      <section id="services" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-gray-900 mb-12 text-center animate-slide-up">
-            Solutions That Inspire
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: <svg className="h-12 w-12 text-blue-600 transform group-hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>,
-                title: "Digital Marketing",
-                desc: "Skyrocket your reach with precision SEO, PPC, and social media campaigns that drive results."
+      return React.createElement(
+        'nav',
+        { className: 'bg-white shadow-lg sticky top-0 z-50' },
+        React.createElement(
+          'div',
+          { className: 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8' },
+          React.createElement(
+            'div',
+            { className: 'flex justify-between h-16 items-center' },
+            React.createElement(
+              'div',
+              { className: 'flex items-center' },
+              React.createElement('span', { className: 'ml-3 text-2xl font-bold text-gray-800' }, 'Emon Finance Ltd')
+            ),
+            React.createElement(
+              'button',
+              { 
+                onClick: () => setIsOpen(!isOpen),
+                className: 'md:hidden text-gray-600 hover:text-blue-600 focus:outline-none'
               },
-              {
-                icon: <svg className="h-12 w-12 text-green-600 transform group-hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path></svg>,
-                title: "Branding",
-                desc: "Forge a bold identity with stunning visuals and stories that leave a lasting mark."
-              },
-              {
-                icon: <svg className="h-12 w-12 text-blue-600 transform group-hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>,
-                title: "Ad Campaigns",
-                desc: "Captivate audiences with creative ads that spark action and build loyalty."
-              }
-            ].map((service, index) => (
-              <div
-                key={service.title}
-                className="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition group animate-slide-up"
-                style={{ animationDelay: `${index * 0.2}s` }}
-              >
-                <div className="flex justify-center mb-4">{service.icon}</div>
-                <h3 className="text-xl font-medium text-gray-900 mb-2 text-center">{service.title}</h3>
-                <p className="text-gray-600 text-center">{service.desc}</p>
-              </div>
-            ))}
-          </div>
+              React.createElement('svg', { className: 'h-6 w-6', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' },
+                React.createElement('path', {
+                  strokeLinecap: 'round',
+                  strokeLinejoin: 'round',
+                  strokeWidth: '2',
+                  d: isOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'
+                })
+              )
+            )
+          ),
+          isOpen && React.createElement(
+            'div',
+            { className: 'md:hidden bg-white pb-3 fade-in' },
+            React.createElement(
+              'div',
+              { className: 'px-2 pt-2 space-y-1' },
+              ['Home', 'Services', 'About', 'Contact'].map(item => 
+                React.createElement(
+                  'a',
+                  { 
+                    href: `#${item.toLowerCase()}`, 
+                    className: 'block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium'
+                  },
+                  item
+                )
+              )
+            )
+          )
+        )
+      );
+    };
+
+    // Simplified Hero Component
+    const Hero = () => {
+      return React.createElement(
+        'section',
+        { id: 'home', className: 'hero-bg h-screen flex items-center justify-center text-center text-white' },
+        React.createElement(
+          'div',
+          { className: 'max-w-4xl mx-auto px-4 fade-in' },
+          React.createElement('h1', { className: 'text-5xl sm:text-6xl font-bold mb-6 gradient-text' }, 'Shape Your Financial Destiny'),
+          React.createElement('p', { className: 'text-xl sm:text-2xl mb-8 text-gray-200' }, 'Discover innovative financial solutions tailored to your goals.'),
+          React.createElement(
+            'div',
+            { className: 'flex justify-center space-x-4' },
+            React.createElement('a', { href: '#services', className: 'bg-blue-600 text-white px-8 py-3 rounded-md text-lg font-medium hover:bg-blue-700 transition' }, 'Explore Services')
+          )
+        )
+      );
+    };
+
+    // Main App Component
+    const App = () => {
+      return React.createElement(
+        React.Fragment,
+        null,
+        React.createElement(Navbar),
+        React.createElement(Hero)
+      );
+    };
+
+    // Render the App
+    try {
+      const rootElement = document.getElementById('root');
+      const root = ReactDOM.createRoot(rootElement);
+      root.render(React.createElement(App));
+    } catch (error) {
+      console.error('Rendering error:', error);
+      document.getElementById('root').innerHTML = `
+        <div class="text-center p-12 text-red-600">
+          <h1 class="text-3xl">Error Rendering Application</h1>
+          <p>${error.message}</p>
         </div>
-      </section>
-    );
-
-    const Contact = () => (
-      <section id="contact" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-6 animate-slide-left">
-              Let’s Create Something Extraordinary
-            </h2>
-            <p className="text-gray-600 mb-6 animate-slide-left" style={{ animationDelay: '0.2s' }}>
-              Your vision deserves a spotlight. Connect with us to craft campaigns that inspire.
-            </p>
-            <div className="space-y-4">
-              <a 
-                href="mailto:support@emonfinanceltd.com" 
-                className="flex items-center text-gray-600 hover:text-blue-600 transition-transform duration-300 transform hover:scale-105"
-              >
-                <svg className="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l9-6 9 6v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"></path></svg>
-                support@emonfinanceltd.com
-              </a>
-              <div className="flex space-x-4">
-                <a 
-                  href="https://www.linkedin.com/company/emonfinanceltd" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-gray-600 hover:text-blue-600 transition-transform duration-300 transform hover:scale-110"
-                >
-                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-1.337-.03-3.063-1.867-3.063-1.867 0-2.153 1.459-2.153 2.967v5.7h-3v-11h2.879v1.505h.04c.401-.757 1.379-1.557 2.833-1.557 3.027 0 3.587 1.991 3.587 4.579v6.473z"/>
-                  </svg>
-                </a>
-                <a 
-                  href="https://facebook.com/emonfinanceltd" // Placeholder
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-gray-600 hover:text-blue-600 transition-transform duration-300 transform hover:scale-110"
-                >
-                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                  </svg>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="bg-gray-50 p-8 rounded-xl shadow-sm animate-slide-right">
-            <h3 className="text-xl font-medium text-gray-900 mb-4">Get Started Today</h3>
-            <div className="space-y-4">
-              <input 
-                type="text" 
-                placeholder="Your Name" 
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
-              />
-              <input 
-                type="email" 
-                placeholder="Your Email" 
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
-              />
-              <textarea 
-                placeholder="Tell Us About Your Project" 
-                className="w-full p-3 border rounded-lg h-32 focus:outline-none focus:ring-2 focus:ring-blue-600 transition"
-              ></textarea>
-              <a 
-                href="mailto:support@emonfinanceltd.com?subject=New Project Inquiry" 
-                className="block bg-blue-600 text-white px-6 py-3 rounded-full text-center hover:bg-blue-700 transition-transform duration-300 transform hover:scale-105"
-              >
-                Send Your Vision
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-
-    const Footer = () => (
-      <footer className="bg-gray-900 text-gray-300 py-12 animate-slide-up">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="mb-4">© 2025 Emon Finance Ltd. Crafted with vision.</p>
-          <div className="flex justify-center space-x-6">
-            <a 
-              href="https://www.linkedin.com/company/emonfinanceltd" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-gray-300 hover:text-white transition-transform duration-300 transform hover:scale-110"
-            >
-              <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-1.337-.03-3.063-1.867-3.063-1.867 0-2.153 1.459-2.153 2.967v5.7h-3v-11h2.879v1.505h.04c.401-.757 1.379-1.557 2.833-1.557 3.027 0 3.587 1.991 3.587 4.579v6.473z"/>
-              </svg>
-            </a>
-            <a 
-              href="https://facebook.com/emonfinanceltd" // Placeholder
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-gray-300 hover:text-white transition-transform duration-300 transform hover:scale-110"
-            >
-              <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-              </svg>
-            </a>
-            <a 
-              href="mailto:support@emonfinanceltd.com" 
-              className="text-gray-300 hover:text-white transition-transform duration-300 transform hover:scale-110"
-            >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l9-6 9 6v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"></path>
-              </svg>
-            </a>
-          </div>
-        </div>
-      </footer>
-    );
-
-    const App = () => (
-      <div className="font-roboto bg-white">
-        <NavBar />
-        <Hero />
-        <About />
-        <Services />
-        <Contact />
-        <Footer />
-      </div>
-    );
-
-    console.log("Attempting to render React app");
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
-    console.log("Render completed");
+      `;
+    }
   </script>
 </body>
 </html>
