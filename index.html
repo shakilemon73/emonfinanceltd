@@ -4,28 +4,91 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Emon Finance Ltd. - Premium Performance Marketing Network</title>
+  <meta name="description" content="Connect with premium advertisers and publishers. High-converting traffic and offers with transparent reporting.">
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
+  
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af'
+            },
+            secondary: {
+              500: '#10b981',
+              600: '#059669'
+            },
+            dark: {
+              800: '#1f2937',
+              900: '#111827'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn {
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+    .hover-scale {
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .hover-scale:hover {
+      transform: scale(1.02);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    .gradient-text {
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hover-scale {
+        transition: none;
+      }
+      .hover-scale:hover {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body class="font-sans bg-gray-50 text-dark-900 antialiased scroll-smooth">
+  <div id="root"></div>
+
   <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7/babel.min.js"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-  <!-- Smartsupp Live Chat script -->
-  <script src="//code.tidio.co/yourcode.js" async></script>
-  <style>
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    .animate-fadeIn { animation: fadeIn 0.8s ease-out forwards; }
-    .hover-scale { transition: transform 0.3s; }
-    .hover-scale:hover { transform: scale(1.05); }
-    .emon-gradient { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); }
-    .publisher-gradient { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-    .advertiser-gradient { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
-    .stats-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); }
-  </style>
-</head>
-<body class="bg-gray-50 scroll-smooth">
-  <div id="root"></div>
+
   <script type="text/babel">
     const { useState, useEffect } = React;
+
+    // ========== COMPONENTS ========== //
 
     // Navigation Component
     const Navbar = () => {
@@ -39,94 +102,156 @@
       }, []);
 
       return (
-        <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-lg' : 'bg-white'}`}>
+        <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md' : 'bg-white'}`}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <div className="flex items-center">
+            <div className="flex justify-between h-16">
+              <div className="flex-shrink-0 flex items-center">
                 <img 
                   src="https://media.licdn.com/dms/image/v2/D560BAQGS4tCTdvEdGw/company-logo_100_100/B56ZZJf6fAHsAU-/0/1744989825409?e=1750291200&v=beta&t=Fi_TOPK-UtNdgjDNMtQzccX63GY3mY5_34v_bReHLjY" 
                   alt="Emon Finance Ltd. Logo" 
-                  className="h-10 w-auto"
+                  className="h-8 w-auto"
                 />
-                <span className="ml-2 text-xl font-bold text-blue-600">Emon Finance</span>
+                <span className="ml-2 text-xl font-bold gradient-text bg-gradient-to-r from-primary-600 to-primary-800">
+                  Emon Finance
+                </span>
               </div>
-              <div className="hidden md:flex space-x-8">
-                {['Advertisers', 'Publishers', 'Verticals', 'Resources', 'Contact'].map((item) => (
-                  <a 
-                    key={item} 
-                    href={`#${item.toLowerCase()}`} 
-                    className={`text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors`}
+              
+              {/* Desktop Navigation */}
+              <div className="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+                {['Advertisers', 'Publishers', 'Verticals', 'Resources'].map((item) => (
+                  <a
+                    key={item}
+                    href={`#${item.toLowerCase()}`}
+                    className="text-dark-900 hover:text-primary-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
                   >
                     {item}
                   </a>
                 ))}
-              </div>
-              <div className="hidden md:block">
-                <div className="flex space-x-4">
-                  <a href="#login" className="text-sm font-medium text-gray-800 hover:text-blue-600">Login</a>
-                  <a href="#signup" className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">Sign Up</a>
+                <div className="flex space-x-4 ml-8">
+                  <a href="#login" className="text-dark-900 hover:text-primary-600 px-3 py-2 text-sm font-medium">
+                    Login
+                  </a>
+                  <a 
+                    href="#signup" 
+                    className="bg-gradient-to-r from-primary-600 to-primary-800 text-white px-4 py-2 rounded-md text-sm font-medium hover:shadow-md transition-all duration-200"
+                    aria-label="Sign up"
+                  >
+                    Sign Up
+                  </a>
                 </div>
               </div>
-              <div className="md:hidden">
+              
+              {/* Mobile Navigation */}
+              <div className="md:hidden flex items-center">
                 <button 
-                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-                  className="text-gray-800"
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  className="text-dark-900 hover:text-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-md p-2"
+                  aria-label="Toggle navigation menu"
                 >
-                  <i className={`fas ${isMobileMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
+                  <i className={`fas ${isMobileMenuOpen ? 'fa-times' : 'fa-bars'} text-xl`}></i>
                 </button>
               </div>
             </div>
-            {isMobileMenuOpen && (
-              <div className="md:hidden pb-4">
-                <div className="flex flex-col space-y-4 pt-4">
-                  {['Advertisers', 'Publishers', 'Verticals', 'Resources', 'Contact'].map((item) => (
-                    <a 
-                      key={item} 
-                      href={`#${item.toLowerCase()}`} 
-                      className="text-sm font-medium text-gray-800 hover:text-blue-600"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      {item}
-                    </a>
-                  ))}
-                  <div className="pt-2">
-                    <a href="#login" className="block text-sm font-medium text-gray-800 hover:text-blue-600 mb-2">Login</a>
-                    <a href="#signup" className="block bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium text-center hover:bg-blue-700">Sign Up</a>
-                  </div>
+          </div>
+          
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden bg-white shadow-lg">
+              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                {['Advertisers', 'Publishers', 'Verticals', 'Resources'].map((item) => (
+                  <a
+                    key={item}
+                    href={`#${item.toLowerCase()}`}
+                    className="block px-3 py-2 text-base font-medium text-dark-900 hover:text-primary-600 hover:bg-gray-50 rounded-md"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item}
+                  </a>
+                ))}
+                <div className="pt-4 border-t border-gray-200">
+                  <a
+                    href="#login"
+                    className="block w-full px-4 py-2 text-base font-medium text-center text-primary-600 hover:bg-gray-50 rounded-md"
+                  >
+                    Login
+                  </a>
+                  <a
+                    href="#signup"
+                    className="block w-full mt-2 px-4 py-2 text-base font-medium text-center text-white bg-gradient-to-r from-primary-600 to-primary-800 rounded-md hover:shadow-md"
+                  >
+                    Sign Up
+                  </a>
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </nav>
       );
     };
 
     // Hero Section
     const Hero = () => (
-      <section className="emon-gradient text-white pt-32 pb-20">
+      <section className="bg-gradient-to-r from-primary-800 to-primary-600 text-white pt-24 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div className="animate-fadeIn">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-                Premium Performance Marketing Network
+              <h1 className="text-4xl md:text-5xl font-extrabold mb-6 leading-tight">
+                Premium Performance Marketing<br />
+                <span className="gradient-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+                  Done Right
+                </span>
               </h1>
-              <p className="text-xl mb-8 text-blue-100">
-                Connecting advertisers with premium publishers to maximize ROI through high-intent traffic
+              <p className="text-xl mb-8 text-blue-100 max-w-lg">
+                Join 500+ advertisers and publishers who trust our platform to deliver 
+                high-converting traffic and premium offers with transparent reporting.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <a href="#advertisers" className="bg-white text-blue-600 px-8 py-3 rounded-md text-lg font-semibold hover-scale shadow-lg">
-                  Advertisers
+                <a 
+                  href="#advertisers" 
+                  className="bg-white text-primary-800 px-8 py-3 rounded-lg text-lg font-bold hover:bg-gray-50 hover:shadow-lg transition-all duration-200 text-center"
+                  aria-label="Learn more for advertisers"
+                >
+                  Advertisers →
                 </a>
-                <a href="#publishers" className="bg-black bg-opacity-20 text-white px-8 py-3 rounded-md text-lg font-semibold hover-scale shadow-lg border border-white border-opacity-20">
-                  Publishers
+                <a 
+                  href="#publishers" 
+                  className="bg-black bg-opacity-20 text-white px-8 py-3 rounded-lg text-lg font-bold hover:bg-opacity-30 hover:shadow-lg transition-all duration-200 text-center border border-white border-opacity-20"
+                  aria-label="Learn more for publishers"
+                >
+                  Publishers →
                 </a>
+              </div>
+              
+              <div className="mt-8 flex items-center space-x-6">
+                <div className="flex -space-x-2">
+                  {[1,2,3,4].map((i) => (
+                    <img 
+                      key={i}
+                      src={`https://randomuser.me/api/portraits/${i%2===0?'women':'men'}/${i+20}.jpg`}
+                      alt="Happy customer"
+                      className="w-10 h-10 rounded-full border-2 border-white"
+                    />
+                  ))}
+                </div>
+                <div>
+                  <p className="text-sm text-blue-100">
+                    <span className="font-semibold">500+</span> happy partners
+                  </p>
+                  <div className="flex items-center">
+                    {[1,2,3,4,5].map((i) => (
+                      <i key={i} className="fas fa-star text-yellow-300 text-sm"></i>
+                    ))}
+                    <span className="ml-1 text-sm text-blue-100">5.0</span>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="animate-fadeIn" style={{ animationDelay: '0.2s' }}>
               <img 
                 src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
                 alt="Marketing Analytics Dashboard" 
-                className="rounded-xl shadow-2xl"
+                className="rounded-xl shadow-2xl border-4 border-white border-opacity-10 w-full"
+                loading="lazy"
               />
             </div>
           </div>
@@ -140,13 +265,19 @@
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { value: "10M+", label: "Daily Impressions" },
-              { value: "500+", label: "Active Campaigns" },
-              { value: "95%", label: "Uptime Guarantee" },
-              { value: "24/7", label: "Support" }
+              { value: "10M+", label: "Daily Impressions", icon: "fa-eye" },
+              { value: "500+", label: "Active Campaigns", icon: "fa-bullseye" },
+              { value: "95%", label: "Uptime Guarantee", icon: "fa-shield-alt" },
+              { value: "24/7", label: "Support", icon: "fa-headset" }
             ].map((stat, index) => (
-              <div key={index} className="stats-card p-6 rounded-lg text-center hover-scale border border-gray-200">
-                <p className="text-3xl font-bold text-blue-600 mb-2">{stat.value}</p>
+              <div 
+                key={index} 
+                className="bg-gray-50 p-6 rounded-lg text-center hover-scale border border-gray-200"
+              >
+                <div className="w-14 h-14 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <i className={`fas ${stat.icon} text-primary-600 text-xl`}></i>
+                </div>
+                <p className="text-3xl font-bold text-primary-600 mb-1">{stat.value}</p>
                 <p className="text-gray-600">{stat.label}</p>
               </div>
             ))}
@@ -160,9 +291,14 @@
       <section id="advertisers" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">For Advertisers</h2>
+            <span className="inline-block px-3 py-1 text-sm font-semibold text-secondary-600 bg-secondary-50 rounded-full mb-4">
+              For Advertisers
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold text-dark-900 mb-4">
+              Scale Your Customer Acquisition
+            </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Access premium traffic sources and scale your customer acquisition with performance-based solutions
+              Access premium traffic sources and maximize ROI with our performance-based solutions
             </p>
           </div>
           
@@ -171,7 +307,7 @@
               {
                 icon: "fa-bullseye",
                 title: "Targeted Traffic",
-                description: "Access to premium publishers with highly targeted audiences across all verticals"
+                description: "Access premium publishers with highly targeted audiences across all verticals"
               },
               {
                 icon: "fa-chart-line",
@@ -184,22 +320,30 @@
                 description: "Advanced anti-fraud technology to ensure quality traffic and conversions"
               }
             ].map((feature, index) => (
-              <div key={index} className="bg-gray-50 p-8 rounded-xl hover-scale border-l-4 border-blue-600">
-                <i className={`fas ${feature.icon} text-blue-600 text-3xl mb-4`}></i>
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">{feature.title}</h3>
+              <div 
+                key={index} 
+                className="bg-gray-50 p-8 rounded-xl hover-scale border-l-4 border-primary-600 transition-all duration-200"
+              >
+                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
+                  <i className={`fas ${feature.icon} text-primary-600 text-xl`}></i>
+                </div>
+                <h3 className="text-xl font-semibold text-dark-900 mb-2">{feature.title}</h3>
                 <p className="text-gray-600">{feature.description}</p>
               </div>
             ))}
           </div>
 
-          <div className="emon-gradient rounded-2xl p-8 md:p-12 text-white">
+          <div className="bg-gradient-to-r from-primary-600 to-primary-800 rounded-2xl p-8 md:p-12 text-white">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div>
                 <h3 className="text-2xl md:text-3xl font-bold mb-4">Ready to scale your customer acquisition?</h3>
                 <p className="text-blue-100 mb-6">
                   Join our network of premium advertisers and get access to high-converting traffic sources with transparent reporting.
                 </p>
-                <a href="#contact" className="bg-white text-blue-600 px-6 py-3 rounded-md font-semibold inline-block hover-scale">
+                <a 
+                  href="#contact" 
+                  className="bg-white text-primary-600 px-6 py-3 rounded-md font-semibold inline-block hover:bg-gray-50 hover:shadow-md transition-all duration-200"
+                >
                   Get Started
                 </a>
               </div>
@@ -210,7 +354,10 @@
                   { value: "$1.20", label: "Avg. CPC" },
                   { value: "48h", label: "Approval Time" }
                 ].map((stat, index) => (
-                  <div key={index} className="stats-card p-4 rounded-lg text-center">
+                  <div 
+                    key={index} 
+                    className="bg-white bg-opacity-10 p-4 rounded-lg text-center backdrop-filter backdrop-blur-sm"
+                  >
                     <p className="text-2xl font-bold">{stat.value}</p>
                     <p className="text-sm text-blue-100">{stat.label}</p>
                   </div>
@@ -227,7 +374,12 @@
       <section id="publishers" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">For Publishers</h2>
+            <span className="inline-block px-3 py-1 text-sm font-semibold text-secondary-600 bg-secondary-50 rounded-full mb-4">
+              For Publishers
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold text-dark-900 mb-4">
+              Maximize Your Revenue
+            </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Monetize your traffic with our high-converting offers and competitive payouts
             </p>
@@ -238,38 +390,42 @@
               <img 
                 src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
                 alt="Publisher Dashboard" 
-                className="rounded-xl shadow-lg"
+                className="rounded-xl shadow-lg w-full"
+                loading="lazy"
               />
             </div>
             <div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">Maximize Your Revenue</h3>
+              <h3 className="text-2xl font-bold text-dark-900 mb-4">Why Choose Emon Finance?</h3>
               <ul className="space-y-4 text-gray-600">
                 <li className="flex items-start">
-                  <i className="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                  <i className="fas fa-check-circle text-secondary-500 mt-1 mr-3"></i>
                   <span>Industry-leading payouts with weekly, bi-weekly, or monthly payments</span>
                 </li>
                 <li className="flex items-start">
-                  <i className="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                  <i className="fas fa-check-circle text-secondary-500 mt-1 mr-3"></i>
                   <span>Access to exclusive offers with proven conversion rates</span>
                 </li>
                 <li className="flex items-start">
-                  <i className="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                  <i className="fas fa-check-circle text-secondary-500 mt-1 mr-3"></i>
                   <span>Advanced tracking platform with real-time stats and reporting</span>
                 </li>
                 <li className="flex items-start">
-                  <i className="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                  <i className="fas fa-check-circle text-secondary-500 mt-1 mr-3"></i>
                   <span>AI-powered optimization tools to maximize your earnings</span>
                 </li>
               </ul>
               <div className="mt-8">
-                <a href="#contact" className="bg-green-600 text-white px-6 py-3 rounded-md font-semibold inline-block hover-scale">
+                <a 
+                  href="#contact" 
+                  className="bg-secondary-500 text-white px-6 py-3 rounded-md font-semibold inline-block hover:bg-secondary-600 hover:shadow-md transition-all duration-200"
+                >
                   Join as Publisher
                 </a>
               </div>
             </div>
           </div>
 
-          <div className="publisher-gradient rounded-2xl p-8 text-white">
+          <div className="bg-gradient-to-r from-secondary-500 to-secondary-600 rounded-2xl p-8 text-white">
             <h3 className="text-2xl font-bold mb-6 text-center">Supported Traffic Types</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               {[
@@ -278,7 +434,10 @@
                 { name: "Domain Redirect", icon: "fa-globe" },
                 { name: "Social Media", icon: "fa-thumbs-up" }
               ].map((type, index) => (
-                <div key={index} className="stats-card p-4 rounded-lg text-center hover-scale">
+                <div 
+                  key={index} 
+                  className="bg-white bg-opacity-10 p-4 rounded-lg text-center hover-scale backdrop-filter backdrop-blur-sm"
+                >
                   <i className={`fas ${type.icon} text-2xl mb-2`}></i>
                   <p className="font-medium">{type.name}</p>
                 </div>
@@ -294,7 +453,7 @@
       <section id="verticals" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Top Converting Verticals</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-dark-900 mb-4">Top Converting Verticals</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               We specialize in these high-performing verticals with proven results
             </p>
@@ -313,9 +472,14 @@
               { name: "Mobile Apps", icon: "fa-mobile-alt", color: "text-pink-500" },
               { name: "Home Services", icon: "fa-home", color: "text-teal-500" }
             ].map((vertical, index) => (
-              <div key={index} className="bg-gray-50 p-6 rounded-lg text-center hover-scale">
-                <i className={`fas ${vertical.icon} ${vertical.color} text-4xl mb-4`}></i>
-                <h3 className="text-lg font-semibold text-gray-800">{vertical.name}</h3>
+              <div 
+                key={index} 
+                className="bg-gray-50 p-6 rounded-lg text-center hover-scale transition-all duration-200"
+              >
+                <div className={`w-14 h-14 ${vertical.color.replace('text', 'bg')} bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4`}>
+                  <i className={`fas ${vertical.icon} ${vertical.color} text-xl`}></i>
+                </div>
+                <h3 className="text-lg font-semibold text-dark-900">{vertical.name}</h3>
               </div>
             ))}
           </div>
@@ -328,7 +492,7 @@
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Trusted by Advertisers & Publishers</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-dark-900 mb-4">Trusted by Advertisers & Publishers</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               What our partners say about working with us
             </p>
@@ -340,31 +504,44 @@
                 quote: "Emon Finance has been instrumental in scaling our customer acquisition. Their traffic quality is unmatched.",
                 name: "Sarah Johnson",
                 role: "Marketing Director",
-                rating: 5
+                rating: 5,
+                image: "https://randomuser.me/api/portraits/women/44.jpg"
               },
               {
                 quote: "As a publisher, I've never worked with a more transparent and reliable network. Payouts are always on time.",
                 name: "Michael Chen",
                 role: "Affiliate Marketer",
-                rating: 5
+                rating: 5,
+                image: "https://randomuser.me/api/portraits/men/32.jpg"
               },
               {
                 quote: "The level of support and optimization we receive is exceptional. Our ROI increased by 40% in 3 months.",
                 name: "David Wilson",
                 role: "Performance Marketing Manager",
-                rating: 5
+                rating: 5,
+                image: "https://randomuser.me/api/portraits/men/75.jpg"
               }
             ].map((testimonial, index) => (
-              <div key={index} className="bg-white p-8 rounded-xl shadow-sm hover-scale">
+              <div 
+                key={index} 
+                className="bg-white p-8 rounded-xl shadow-sm hover-scale transition-all duration-200"
+              >
                 <div className="flex mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <i key={i} className="fas fa-star text-yellow-400"></i>
                   ))}
                 </div>
                 <p className="text-gray-600 italic mb-6">"{testimonial.quote}"</p>
-                <div>
-                  <p className="font-semibold text-gray-800">{testimonial.name}</p>
-                  <p className="text-sm text-gray-500">{testimonial.role}</p>
+                <div className="flex items-center">
+                  <img 
+                    src={testimonial.image} 
+                    alt={testimonial.name} 
+                    className="w-12 h-12 rounded-full mr-4"
+                  />
+                  <div>
+                    <p className="font-semibold text-dark-900">{testimonial.name}</p>
+                    <p className="text-sm text-gray-500">{testimonial.role}</p>
+                  </div>
                 </div>
               </div>
             ))}
@@ -385,7 +562,7 @@
         consent: false 
       });
       
-      const [formStatus, setFormStatus] = useState('');
+      const [status, setStatus] = useState({ type: '', message: '' });
 
       const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -398,10 +575,10 @@
       const handleSubmit = async (e) => {
         e.preventDefault();
         if (!formData.consent) {
-          setFormStatus('Please agree to our terms and privacy policy.');
+          setStatus({ type: 'error', message: 'Please agree to our terms and privacy policy.' });
           return;
         }
-        setFormStatus('Submitting...');
+        setStatus({ type: 'loading', message: 'Sending your application...' });
         
         try {
           // Using FormSubmit.co to send form data to email
@@ -418,14 +595,14 @@
               website: formData.website,
               role: formData.role,
               message: formData.message,
-              _subject: "New Application Submission",
+              _subject: "New Application Submission - Emon Finance",
               _template: "table"
             })
           });
           
           const result = await response.json();
           if (result.success) {
-            setFormStatus('Thank you! Our team will contact you within 24 hours.');
+            setStatus({ type: 'success', message: 'Thank you! Our team will contact you within 24 hours.' });
             setFormData({ 
               name: '', 
               email: '', 
@@ -436,15 +613,15 @@
               consent: false 
             });
           } else {
-            setFormStatus('Submission failed. Please try again or contact us directly.');
+            setStatus({ type: 'error', message: 'Submission failed. Please try again or contact us directly.' });
           }
         } catch (error) {
-          setFormStatus('An error occurred. Please try again later.');
+          setStatus({ type: 'error', message: 'An error occurred. Please try again later.' });
         }
       };
 
       return (
-        <section id="contact" className="py-20 bg-blue-600 text-white">
+        <section id="contact" className="py-20 bg-primary-800 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               <div>
@@ -454,14 +631,14 @@
                 </p>
                 <div className="space-y-6">
                   <div className="flex items-start">
-                    <i className="fas fa-check-circle text-xl mt-1 mr-3 text-green-300"></i>
+                    <i className="fas fa-check-circle text-xl mt-1 mr-3 text-emerald-300"></i>
                     <div>
                       <h3 className="text-lg font-semibold">For Advertisers</h3>
                       <p className="text-blue-100">Get access to our premium publisher network and performance-based solutions.</p>
                     </div>
                   </div>
                   <div className="flex items-start">
-                    <i className="fas fa-check-circle text-xl mt-1 mr-3 text-green-300"></i>
+                    <i className="fas fa-check-circle text-xl mt-1 mr-3 text-emerald-300"></i>
                     <div>
                       <h3 className="text-lg font-semibold">For Publishers</h3>
                       <p className="text-blue-100">Monetize your traffic with our high-converting offers and competitive payouts.</p>
@@ -469,21 +646,21 @@
                   </div>
                 </div>
                 <div className="mt-8 flex space-x-4">
-                  <a href="#" className="text-white hover:text-blue-200">
+                  <a href="#" className="text-white hover:text-blue-200 transition-colors duration-200" aria-label="Facebook">
                     <i className="fab fa-facebook-f text-xl"></i>
                   </a>
-                  <a href="#" className="text-white hover:text-blue-200">
+                  <a href="#" className="text-white hover:text-blue-200 transition-colors duration-200" aria-label="Twitter">
                     <i className="fab fa-twitter text-xl"></i>
                   </a>
-                  <a href="#" className="text-white hover:text-blue-200">
+                  <a href="#" className="text-white hover:text-blue-200 transition-colors duration-200" aria-label="LinkedIn">
                     <i className="fab fa-linkedin-in text-xl"></i>
                   </a>
-                  <a href="#" className="text-white hover:text-blue-200">
+                  <a href="#" className="text-white hover:text-blue-200 transition-colors duration-200" aria-label="Instagram">
                     <i className="fab fa-instagram text-xl"></i>
                   </a>
                 </div>
               </div>
-              <div className="bg-white rounded-xl shadow-lg p-8 text-gray-800">
+              <div className="bg-white rounded-xl shadow-lg p-8 text-dark-900">
                 <h3 className="text-2xl font-bold mb-6">Apply Now</h3>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
@@ -493,7 +670,7 @@
                       name="role"
                       value={formData.role}
                       onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
+                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-600 focus:border-primary-600"
                       required
                     >
                       <option value="Publisher">Publisher/Affiliate</option>
@@ -508,7 +685,7 @@
                       value={formData.name}
                       onChange={handleChange}
                       placeholder="Full Name"
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
+                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-600 focus:border-primary-600"
                       required
                     />
                   </div>
@@ -519,7 +696,7 @@
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="Email Address"
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
+                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-600 focus:border-primary-600"
                       required
                     />
                   </div>
@@ -530,7 +707,7 @@
                       value={formData.company}
                       onChange={handleChange}
                       placeholder="Company Name"
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
+                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-600 focus:border-primary-600"
                     />
                   </div>
                   <div>
@@ -540,7 +717,7 @@
                       value={formData.website}
                       onChange={handleChange}
                       placeholder="Website URL"
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
+                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-600 focus:border-primary-600"
                     />
                   </div>
                   <div>
@@ -550,7 +727,7 @@
                       onChange={handleChange}
                       placeholder="Tell us about your business and goals"
                       rows="4"
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
+                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-600 focus:border-primary-600"
                     ></textarea>
                   </div>
                   <div className="flex items-start">
@@ -561,26 +738,38 @@
                         type="checkbox"
                         checked={formData.consent}
                         onChange={handleChange}
-                        className="focus:ring-blue-600 h-4 w-4 text-blue-600 border-gray-300 rounded"
+                        className="focus:ring-primary-600 h-4 w-4 text-primary-600 border-gray-300 rounded"
                         required
                       />
                     </div>
                     <div className="ml-3 text-sm">
                       <label htmlFor="consent" className="font-medium text-gray-700">
-                        I agree to the <a href="#terms" className="text-blue-600 hover:underline">Terms of Service</a> and <a href="#privacy" className="text-blue-600 hover:underline">Privacy Policy</a>
+                        I agree to the <a href="#terms" className="text-primary-600 hover:underline">Terms of Service</a> and <a href="#privacy" className="text-primary-600 hover:underline">Privacy Policy</a>
                       </label>
                     </div>
                   </div>
                   <button
                     type="submit"
-                    className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 font-medium"
+                    className="w-full bg-primary-600 text-white py-3 px-4 rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-600 font-medium transition-colors duration-200"
+                    disabled={status.type === 'loading'}
                   >
-                    Submit Application
+                    {status.type === 'loading' ? (
+                      <>
+                        <i className="fas fa-spinner fa-spin mr-2"></i>
+                        Processing...
+                      </>
+                    ) : (
+                      'Submit Application'
+                    )}
                   </button>
-                  {formStatus && (
-                    <p className={`text-sm text-center ${formStatus.includes('Thank you') ? 'text-green-600' : 'text-red-600'}`}>
-                      {formStatus}
-                    </p>
+                  {status.message && (
+                    <div className={`rounded-md p-4 ${
+                      status.type === 'error' ? 'bg-red-50 text-red-700 border border-red-200' :
+                      status.type === 'success' ? 'bg-green-50 text-green-700 border border-green-200' :
+                      'bg-blue-50 text-blue-700 border border-blue-200'
+                    }`}>
+                      {status.message}
+                    </div>
                   )}
                 </form>
               </div>
@@ -594,7 +783,7 @@
     const LegalPage = ({ title, content }) => (
       <section className="py-20 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 bg-white p-8 rounded-lg shadow-sm">
-          <h1 className="text-3xl font-bold text-gray-800 mb-8">{title}</h1>
+          <h1 className="text-3xl font-bold text-dark-900 mb-8">{title}</h1>
           <div className="prose max-w-none">
             {content}
           </div>
@@ -606,7 +795,7 @@
       const content = (
         <>
           <h2>1. Terms</h2>
-          <p>By accessing the website at <a href="https://emonfinanceltd.com">https://emonfinanceltd.com</a>, you are agreeing to be bound by these terms of service, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws.</p>
+          <p>By accessing the website at <a href="https://emonfinanceltd.com" className="text-primary-600 hover:underline">https://emonfinanceltd.com</a>, you are agreeing to be bound by these terms of service, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws.</p>
           
           <h2>2. Use License</h2>
           <p>Permission is granted to temporarily download one copy of the materials (information or software) on Emon Finance Ltd.'s website for personal, non-commercial transitory viewing only.</p>
@@ -679,7 +868,7 @@
 
     // Footer Component with Legal Links
     const Footer = () => (
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-dark-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
@@ -689,56 +878,56 @@
                   alt="Emon Finance Ltd. Logo" 
                   className="h-8 w-auto"
                 />
-                <span className="ml-2 text-xl font-bold text-blue-400">Emon Finance</span>
+                <span className="ml-2 text-xl font-bold text-primary-400">Emon Finance</span>
               </div>
               <p className="text-gray-400 text-sm">
                 Premium performance marketing network connecting advertisers with top publishers worldwide.
               </p>
               <div className="mt-4 flex space-x-4">
-                <a href="#" className="text-gray-400 hover:text-white">
+                <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200" aria-label="Facebook">
                   <i className="fab fa-facebook-f"></i>
                 </a>
-                <a href="#" className="text-gray-400 hover:text-white">
+                <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200" aria-label="Twitter">
                   <i className="fab fa-twitter"></i>
                 </a>
-                <a href="#" className="text-gray-400 hover:text-white">
+                <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200" aria-label="LinkedIn">
                   <i className="fab fa-linkedin-in"></i>
                 </a>
-                <a href="#" className="text-gray-400 hover:text-white">
+                <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200" aria-label="Instagram">
                   <i className="fab fa-instagram"></i>
                 </a>
               </div>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-blue-400 mb-4">Quick Links</h3>
+              <h3 className="text-lg font-semibold text-primary-400 mb-4">Quick Links</h3>
               <ul className="space-y-2">
-                <li><a href="#advertisers" className="text-gray-400 hover:text-white text-sm">Advertisers</a></li>
-                <li><a href="#publishers" className="text-gray-400 hover:text-white text-sm">Publishers</a></li>
-                <li><a href="#verticals" className="text-gray-400 hover:text-white text-sm">Verticals</a></li>
-                <li><a href="#contact" className="text-gray-400 hover:text-white text-sm">Contact</a></li>
+                <li><a href="#advertisers" className="text-gray-400 hover:text-white text-sm transition-colors duration-200">Advertisers</a></li>
+                <li><a href="#publishers" className="text-gray-400 hover:text-white text-sm transition-colors duration-200">Publishers</a></li>
+                <li><a href="#verticals" className="text-gray-400 hover:text-white text-sm transition-colors duration-200">Verticals</a></li>
+                <li><a href="#contact" className="text-gray-400 hover:text-white text-sm transition-colors duration-200">Contact</a></li>
               </ul>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-blue-400 mb-4">Legal</h3>
+              <h3 className="text-lg font-semibold text-primary-400 mb-4">Legal</h3>
               <ul className="space-y-2">
-                <li><a href="#terms" className="text-gray-400 hover:text-white text-sm">Terms of Service</a></li>
-                <li><a href="#privacy" className="text-gray-400 hover:text-white text-sm">Privacy Policy</a></li>
-                <li><a href="#cookies" className="text-gray-400 hover:text-white text-sm">Cookie Policy</a></li>
+                <li><a href="#terms" className="text-gray-400 hover:text-white text-sm transition-colors duration-200">Terms of Service</a></li>
+                <li><a href="#privacy" className="text-gray-400 hover:text-white text-sm transition-colors duration-200">Privacy Policy</a></li>
+                <li><a href="#cookies" className="text-gray-400 hover:text-white text-sm transition-colors duration-200">Cookie Policy</a></li>
               </ul>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-blue-400 mb-4">Contact Us</h3>
+              <h3 className="text-lg font-semibold text-primary-400 mb-4">Contact Us</h3>
               <ul className="space-y-2 text-gray-400 text-sm">
                 <li className="flex items-center">
-                  <i className="fas fa-envelope mr-2 text-blue-400"></i>
+                  <i className="fas fa-envelope mr-2 text-primary-400"></i>
                   <span>support@emonfinanceltd.com</span>
                 </li>
                 <li className="flex items-center">
-                  <i className="fas fa-phone-alt mr-2 text-blue-400"></i>
+                  <i className="fas fa-phone-alt mr-2 text-primary-400"></i>
                   <span>+1 (555) 123-4567</span>
                 </li>
                 <li className="flex items-center">
-                  <i className="fas fa-map-marker-alt mr-2 text-blue-400"></i>
+                  <i className="fas fa-map-marker-alt mr-2 text-primary-400"></i>
                   <span>123 Business Ave, Suite 500, New York, NY 10001</span>
                 </li>
               </ul>
@@ -765,9 +954,27 @@
 
       const renderPage = () => {
         switch(currentPage) {
-          case 'terms': return <TermsOfService />;
-          case 'privacy': return <PrivacyPolicy />;
-          case 'cookies': return <CookiePolicy />;
+          case 'terms': return (
+            <>
+              <Navbar />
+              <TermsOfService />
+              <Footer />
+            </>
+          );
+          case 'privacy': return (
+            <>
+              <Navbar />
+              <PrivacyPolicy />
+              <Footer />
+            </>
+          );
+          case 'cookies': return (
+            <>
+              <Navbar />
+              <CookiePolicy />
+              <Footer />
+            </>
+          );
           default: return (
             <>
               <Navbar />
@@ -789,6 +996,18 @@
 
     // Render the App
     ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+
+  <!-- Smartsupp Live Chat script -->
+  <script type="text/javascript">
+    var _smartsupp = _smartsupp || {};
+    _smartsupp.key = 'YOUR_SMARTSUPP_KEY';
+    window.smartsupp||(function(d) {
+      var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+      s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+      c.type='text/javascript';c.charset='utf-8';c.async=true;
+      c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+    })(document);
   </script>
 </body>
 </html>
