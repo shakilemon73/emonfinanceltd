@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Emon Finance Ltd. - Performance Marketing Network</title>
+  <title>Emon Finance Ltd. - Premium Performance Marketing Network</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -11,42 +11,16 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes slideDown { from { max-height: 0; opacity: 0; } to { max-height: 200px; opacity: 1; } }
     .animate-fadeIn { animation: fadeIn 0.8s ease-out forwards; }
     .hover-scale { transition: transform 0.3s; }
     .hover-scale:hover { transform: scale(1.05); }
-    .scroll-smooth { scroll-behavior: smooth; }
-    .emon-blue-text { color: #2563eb; }
-    .emon-blue-bg { background-color: #2563eb; }
-    .emon-blue-bg:hover { background-color: #1d4ed8; }
-    .accordion-toggle { display: none; }
-    .accordion-toggle:checked + .accordion-label + .accordion-content { 
-      display: block; 
-      animation: slideDown 0.3s ease-out forwards; 
-    }
-    .accordion-label { cursor: pointer; transition: color 0.3s; }
-    .accordion-label:hover { color: #2563eb; }
-    .accordion-content { display: none; overflow: hidden; }
-    .chat-bubble { 
-      position: fixed; 
-      bottom: 20px; 
-      right: 20px; 
-      background-color: #2563eb; 
-      color: white; 
-      padding: 15px; 
-      border-radius: 50px; 
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
-      cursor: pointer; 
-      transition: transform 0.3s; 
-    }
-    .chat-bubble:hover { transform: scale(1.1); }
-    .mobile-menu { transition: max-height 0.3s ease-out; }
-    .stats-card { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); }
-    .publisher-card { border-left: 4px solid #2563eb; }
-    .advertiser-card { border-left: 4px solid #10b981; }
+    .emon-gradient { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); }
+    .publisher-gradient { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+    .advertiser-gradient { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
+    .stats-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); }
   </style>
 </head>
-<body class="scroll-smooth">
+<body class="bg-gray-50 scroll-smooth">
   <div id="root"></div>
   <script type="text/babel">
     const { useState, useEffect } = React;
@@ -72,26 +46,24 @@
                   alt="Emon Finance Ltd. Logo" 
                   className="h-10 w-auto"
                 />
-                <span className="ml-2 text-xl font-bold emon-blue-text">Emon Finance</span>
+                <span className="ml-2 text-xl font-bold text-blue-600">Emon Finance</span>
               </div>
               <div className="hidden md:flex space-x-8">
-                {['Home', 'Advertisers', 'Publishers', 'Verticals', 'Resources', 'Contact'].map((item) => (
+                {['Advertisers', 'Publishers', 'Verticals', 'Resources', 'Contact'].map((item) => (
                   <a 
                     key={item} 
                     href={`#${item.toLowerCase()}`} 
-                    className={`text-sm font-medium text-gray-800 hover:text-emon-blue-text transition-colors`}
+                    className={`text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors`}
                   >
                     {item}
                   </a>
                 ))}
               </div>
               <div className="hidden md:block">
-                <a 
-                  href="#contact" 
-                  className="emon-blue-bg text-white px-6 py-2 rounded-md text-sm font-semibold hover-scale"
-                >
-                  Join Now
-                </a>
+                <div className="flex space-x-4">
+                  <a href="#login" className="text-sm font-medium text-gray-800 hover:text-blue-600">Login</a>
+                  <a href="#signup" className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">Sign Up</a>
+                </div>
               </div>
               <div className="md:hidden">
                 <button 
@@ -102,26 +74,26 @@
                 </button>
               </div>
             </div>
-            <div className={`md:hidden mobile-menu ${isMobileMenuOpen ? 'max-h-96' : 'max-h-0'} overflow-hidden`}>
-              <div className="flex flex-col space-y-4 py-4">
-                {['Home', 'Advertisers', 'Publishers', 'Verticals', 'Resources', 'Contact'].map((item) => (
-                  <a 
-                    key={item} 
-                    href={`#${item.toLowerCase()}`} 
-                    className="text-sm font-medium text-gray-800 hover:text-emon-blue-text transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item}
-                  </a>
-                ))}
-                <a 
-                  href="#contact" 
-                  className="emon-blue-bg text-white px-4 py-2 rounded-md text-sm font-semibold text-center hover-scale"
-                >
-                  Join Now
-                </a>
+            {isMobileMenuOpen && (
+              <div className="md:hidden pb-4">
+                <div className="flex flex-col space-y-4 pt-4">
+                  {['Advertisers', 'Publishers', 'Verticals', 'Resources', 'Contact'].map((item) => (
+                    <a 
+                      key={item} 
+                      href={`#${item.toLowerCase()}`} 
+                      className="text-sm font-medium text-gray-800 hover:text-blue-600"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {item}
+                    </a>
+                  ))}
+                  <div className="pt-2">
+                    <a href="#login" className="block text-sm font-medium text-gray-800 hover:text-blue-600 mb-2">Login</a>
+                    <a href="#signup" className="block bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium text-center hover:bg-blue-700">Sign Up</a>
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </nav>
       );
@@ -129,39 +101,30 @@
 
     // Hero Section
     const Hero = () => (
-      <section 
-        id="home" 
-        className="min-h-screen flex items-center justify-center bg-gray-50 relative pt-16"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div className="flex flex-col items-center md:items-start text-center md:text-left">
-              <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 mb-4 leading-tight">
+      <section className="emon-gradient text-white pt-32 pb-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div className="animate-fadeIn">
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
                 Premium Performance Marketing Network
               </h1>
-              <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-md">
-                Maximize your ROI with our high-converting offers and premium traffic sources.
+              <p className="text-xl mb-8 text-blue-100">
+                Connecting advertisers with premium publishers to maximize ROI through high-intent traffic
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <a 
-                  href="#advertisers" 
-                  className="emon-blue-bg text-white px-8 py-3 rounded-md text-lg font-semibold hover-scale shadow-lg"
-                >
+                <a href="#advertisers" className="bg-white text-blue-600 px-8 py-3 rounded-md text-lg font-semibold hover-scale shadow-lg">
                   Advertisers
                 </a>
-                <a 
-                  href="#publishers" 
-                  className="bg-gray-800 text-white px-8 py-3 rounded-md text-lg font-semibold hover-scale shadow-lg"
-                >
+                <a href="#publishers" className="bg-black bg-opacity-20 text-white px-8 py-3 rounded-md text-lg font-semibold hover-scale shadow-lg border border-white border-opacity-20">
                   Publishers
                 </a>
               </div>
             </div>
-            <div className="flex justify-center md:justify-end animate-fadeIn" style={{ animationDelay: '0.2s' }}>
+            <div className="animate-fadeIn" style={{ animationDelay: '0.2s' }}>
               <img 
                 src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                alt="Marketing Analytics" 
-                className="max-w-full h-auto rounded-lg shadow-xl"
+                alt="Marketing Analytics Dashboard" 
+                className="rounded-xl shadow-2xl"
               />
             </div>
           </div>
@@ -173,16 +136,16 @@
     const Stats = () => (
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               { value: "10M+", label: "Daily Impressions" },
               { value: "500+", label: "Active Campaigns" },
-              { value: "95%", label: "Uptime" },
+              { value: "95%", label: "Uptime Guarantee" },
               { value: "24/7", label: "Support" }
             ].map((stat, index) => (
-              <div key={index} className="stats-card p-6 rounded-lg text-white text-center hover-scale">
-                <p className="text-3xl sm:text-4xl font-bold mb-2">{stat.value}</p>
-                <p className="text-sm sm:text-base">{stat.label}</p>
+              <div key={index} className="stats-card p-6 rounded-lg text-center hover-scale border border-gray-200">
+                <p className="text-3xl font-bold text-blue-600 mb-2">{stat.value}</p>
+                <p className="text-gray-600">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -192,61 +155,66 @@
 
     // Advertisers Section
     const Advertisers = () => (
-      <section id="advertisers" className="py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
+      <section id="advertisers" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">For Advertisers</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Scale your customer acquisition with our premium publisher network and performance-based solutions.
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">For Advertisers</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Access premium traffic sources and scale your customer acquisition with performance-based solutions
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             {[
               {
                 icon: "fa-bullseye",
                 title: "Targeted Traffic",
-                description: "Access to premium publishers with highly targeted audiences across all verticals."
+                description: "Access to premium publishers with highly targeted audiences across all verticals"
               },
               {
                 icon: "fa-chart-line",
                 title: "Performance-Based",
-                description: "Pay only for results with our CPA, CPL, and CPS payment models."
+                description: "Pay only for results with our CPA, CPL, and CPS payment models"
               },
               {
                 icon: "fa-shield-alt",
                 title: "Fraud Protection",
-                description: "Advanced anti-fraud technology to ensure quality traffic and conversions."
-              },
-              {
-                icon: "fa-tachometer-alt",
-                title: "Real-Time Optimization",
-                description: "Our platform automatically optimizes campaigns for maximum performance."
-              },
-              {
-                icon: "fa-globe",
-                title: "Global Reach",
-                description: "Access to international markets with localized offers and landing pages."
-              },
-              {
-                icon: "fa-headset",
-                title: "Dedicated Support",
-                description: "Your personal account manager to help scale your campaigns."
+                description: "Advanced anti-fraud technology to ensure quality traffic and conversions"
               }
             ].map((feature, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-md hover-scale publisher-card">
-                <i className={`fas ${feature.icon} emon-blue-text text-3xl mb-4`}></i>
+              <div key={index} className="bg-gray-50 p-8 rounded-xl hover-scale border-l-4 border-blue-600">
+                <i className={`fas ${feature.icon} text-blue-600 text-3xl mb-4`}></i>
                 <h3 className="text-xl font-semibold text-gray-800 mb-2">{feature.title}</h3>
                 <p className="text-gray-600">{feature.description}</p>
               </div>
             ))}
           </div>
-          <div className="mt-16 text-center">
-            <a 
-              href="#contact" 
-              className="emon-blue-bg text-white px-8 py-3 rounded-md text-lg font-semibold hover-scale inline-block"
-            >
-              Get Started as Advertiser
-            </a>
+
+          <div className="emon-gradient rounded-2xl p-8 md:p-12 text-white">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              <div>
+                <h3 className="text-2xl md:text-3xl font-bold mb-4">Ready to scale your customer acquisition?</h3>
+                <p className="text-blue-100 mb-6">
+                  Join our network of premium advertisers and get access to high-converting traffic sources with transparent reporting.
+                </p>
+                <a href="#contact" className="bg-white text-blue-600 px-6 py-3 rounded-md font-semibold inline-block hover-scale">
+                  Get Started
+                </a>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { value: "3.5%", label: "Avg. CTR" },
+                  { value: "5.2%", label: "Conversion Rate" },
+                  { value: "$1.20", label: "Avg. CPC" },
+                  { value: "48h", label: "Approval Time" }
+                ].map((stat, index) => (
+                  <div key={index} className="stats-card p-4 rounded-lg text-center">
+                    <p className="text-2xl font-bold">{stat.value}</p>
+                    <p className="text-sm text-blue-100">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -254,61 +222,66 @@
 
     // Publishers Section
     const Publishers = () => (
-      <section id="publishers" className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
+      <section id="publishers" className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">For Publishers</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Monetize your traffic with our high-converting offers and competitive payouts.
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">For Publishers</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Monetize your traffic with our high-converting offers and competitive payouts
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-            {[
-              {
-                icon: "fa-wallet",
-                title: "Highest Payouts",
-                description: "Industry-leading payouts with weekly, bi-weekly, or monthly payments."
-              },
-              {
-                icon: "fa-rocket",
-                title: "High-Converting Offers",
-                description: "Access to exclusive offers with proven conversion rates."
-              },
-              {
-                icon: "fa-clock",
-                title: "Real-Time Tracking",
-                description: "Advanced tracking platform with real-time stats and reporting."
-              },
-              {
-                icon: "fa-cog",
-                title: "Smart Optimization",
-                description: "AI-powered optimization tools to maximize your earnings."
-              },
-              {
-                icon: "fa-hand-holding-usd",
-                title: "Multiple Payment Methods",
-                description: "PayPal, Wire Transfer, ACH, Payoneer, and more."
-              },
-              {
-                icon: "fa-users",
-                title: "Affiliate Managers",
-                description: "Dedicated support to help you scale your earnings."
-              }
-            ].map((feature, index) => (
-              <div key={index} className="bg-gray-50 p-6 rounded-lg shadow-md hover-scale advertiser-card">
-                <i className={`fas ${feature.icon} text-emerald-500 text-3xl mb-4`}></i>
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-16">
+            <div>
+              <img 
+                src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                alt="Publisher Dashboard" 
+                className="rounded-xl shadow-lg"
+              />
+            </div>
+            <div>
+              <h3 className="text-2xl font-bold text-gray-800 mb-4">Maximize Your Revenue</h3>
+              <ul className="space-y-4 text-gray-600">
+                <li className="flex items-start">
+                  <i className="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                  <span>Industry-leading payouts with weekly, bi-weekly, or monthly payments</span>
+                </li>
+                <li className="flex items-start">
+                  <i className="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                  <span>Access to exclusive offers with proven conversion rates</span>
+                </li>
+                <li className="flex items-start">
+                  <i className="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                  <span>Advanced tracking platform with real-time stats and reporting</span>
+                </li>
+                <li className="flex items-start">
+                  <i className="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                  <span>AI-powered optimization tools to maximize your earnings</span>
+                </li>
+              </ul>
+              <div className="mt-8">
+                <a href="#contact" className="bg-green-600 text-white px-6 py-3 rounded-md font-semibold inline-block hover-scale">
+                  Join as Publisher
+                </a>
               </div>
-            ))}
+            </div>
           </div>
-          <div className="mt-16 text-center">
-            <a 
-              href="#contact" 
-              className="emon-blue-bg text-white px-8 py-3 rounded-md text-lg font-semibold hover-scale inline-block"
-            >
-              Join as Publisher
-            </a>
+
+          <div className="publisher-gradient rounded-2xl p-8 text-white">
+            <h3 className="text-2xl font-bold mb-6 text-center">Supported Traffic Types</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { name: "Commerce Media", icon: "fa-shopping-cart" },
+                { name: "Search Traffic", icon: "fa-search" },
+                { name: "Domain Redirect", icon: "fa-globe" },
+                { name: "Social Media", icon: "fa-thumbs-up" }
+              ].map((type, index) => (
+                <div key={index} className="stats-card p-4 rounded-lg text-center hover-scale">
+                  <i className={`fas ${type.icon} text-2xl mb-2`}></i>
+                  <p className="font-medium">{type.name}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -316,28 +289,26 @@
 
     // Verticals Section
     const Verticals = () => (
-      <section id="verticals" className="py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
+      <section id="verticals" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">Top Converting Verticals</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              We specialize in these high-performing verticals with proven results.
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Top Converting Verticals</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              We specialize in these high-performing verticals with proven results
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
             {[
               { name: "Finance", icon: "fa-coins", color: "text-yellow-500" },
               { name: "Health", icon: "fa-heartbeat", color: "text-red-500" },
               { name: "Sweepstakes", icon: "fa-trophy", color: "text-blue-500" },
               { name: "E-commerce", icon: "fa-shopping-cart", color: "text-green-500" },
-              { name: "Mobile Apps", icon: "fa-mobile-alt", color: "text-purple-500" },
-              { name: "Insurance", icon: "fa-shield-alt", color: "text-indigo-500" },
-              { name: "Education", icon: "fa-graduation-cap", color: "text-cyan-500" },
-              { name: "Travel", icon: "fa-plane", color: "text-orange-500" }
+              { name: "Insurance", icon: "fa-shield-alt", color: "text-indigo-500" }
             ].map((vertical, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-md hover-scale text-center">
+              <div key={index} className="bg-gray-50 p-6 rounded-lg text-center hover-scale">
                 <i className={`fas ${vertical.icon} ${vertical.color} text-4xl mb-4`}></i>
-                <h3 className="text-xl font-semibold text-gray-800">{vertical.name}</h3>
+                <h3 className="text-lg font-semibold text-gray-800">{vertical.name}</h3>
               </div>
             ))}
           </div>
@@ -347,20 +318,21 @@
 
     // Testimonials Section
     const Testimonials = () => (
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">What Our Partners Say</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Trusted by advertisers and publishers worldwide
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Trusted by Advertisers & Publishers</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              What our partners say about working with us
             </p>
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
                 quote: "Emon Finance has been instrumental in scaling our customer acquisition. Their traffic quality is unmatched.",
                 name: "Sarah Johnson",
-                role: "Marketing Director, FinTech Company",
+                role: "Marketing Director",
                 rating: 5
               },
               {
@@ -376,7 +348,7 @@
                 rating: 5
               }
             ].map((testimonial, index) => (
-              <div key={index} className="bg-gray-50 p-8 rounded-lg shadow-sm">
+              <div key={index} className="bg-white p-8 rounded-xl shadow-sm hover-scale">
                 <div className="flex mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <i key={i} className="fas fa-star text-yellow-400"></i>
@@ -439,33 +411,33 @@
       };
 
       return (
-        <section id="contact" className="py-24 emon-blue-bg text-white">
+        <section id="contact" className="py-20 bg-blue-600 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-              <div className="animate-fadeIn">
-                <h2 className="text-3xl sm:text-4xl font-bold mb-6">Ready to Get Started?</h2>
-                <p className="text-lg mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              <div>
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Get Started?</h2>
+                <p className="text-xl text-blue-100 mb-8">
                   Join our performance marketing network today and start scaling your business with premium traffic or high-converting offers.
                 </p>
                 <div className="space-y-6">
                   <div className="flex items-start">
-                    <i className="fas fa-check-circle text-xl mt-1 mr-3 text-emerald-300"></i>
+                    <i className="fas fa-check-circle text-xl mt-1 mr-3 text-green-300"></i>
                     <div>
-                      <h3 className="font-semibold text-lg">For Advertisers</h3>
-                      <p className="text-gray-200">Get access to our premium publisher network and performance-based solutions.</p>
+                      <h3 className="text-lg font-semibold">For Advertisers</h3>
+                      <p className="text-blue-100">Get access to our premium publisher network and performance-based solutions.</p>
                     </div>
                   </div>
                   <div className="flex items-start">
-                    <i className="fas fa-check-circle text-xl mt-1 mr-3 text-emerald-300"></i>
+                    <i className="fas fa-check-circle text-xl mt-1 mr-3 text-green-300"></i>
                     <div>
-                      <h3 className="font-semibold text-lg">For Publishers</h3>
-                      <p className="text-gray-200">Monetize your traffic with our high-converting offers and competitive payouts.</p>
+                      <h3 className="text-lg font-semibold">For Publishers</h3>
+                      <p className="text-blue-100">Monetize your traffic with our high-converting offers and competitive payouts.</p>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="bg-white rounded-lg shadow-xl p-6 sm:p-8 animate-fadeIn" style={{ animationDelay: '0.2s' }}>
-                <h3 className="text-2xl font-bold text-gray-800 mb-6">Apply Now</h3>
+              <div className="bg-white rounded-xl shadow-lg p-8 text-gray-800">
+                <h3 className="text-2xl font-bold mb-6">Apply Now</h3>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">I am a</label>
@@ -474,7 +446,7 @@
                       name="role"
                       value={formData.role}
                       onChange={handleChange}
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emon-blue-text focus:border-emon-blue-text"
+                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
                       required
                     >
                       <option value="Publisher">Publisher/Affiliate</option>
@@ -489,7 +461,7 @@
                       value={formData.name}
                       onChange={handleChange}
                       placeholder="Full Name"
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emon-blue-text focus:border-emon-blue-text"
+                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
                       required
                     />
                   </div>
@@ -500,7 +472,7 @@
                       value={formData.email}
                       onChange={handleChange}
                       placeholder="Email Address"
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emon-blue-text focus:border-emon-blue-text"
+                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
                       required
                     />
                   </div>
@@ -511,7 +483,7 @@
                       value={formData.company}
                       onChange={handleChange}
                       placeholder="Company Name"
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emon-blue-text focus:border-emon-blue-text"
+                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
                     />
                   </div>
                   <div>
@@ -521,7 +493,7 @@
                       value={formData.website}
                       onChange={handleChange}
                       placeholder="Website URL"
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emon-blue-text focus:border-emon-blue-text"
+                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
                     />
                   </div>
                   <div>
@@ -531,7 +503,7 @@
                       onChange={handleChange}
                       placeholder="Tell us about your business and goals"
                       rows="4"
-                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-emon-blue-text focus:border-emon-blue-text"
+                      className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
                     ></textarea>
                   </div>
                   <div className="flex items-start">
@@ -542,24 +514,22 @@
                         type="checkbox"
                         checked={formData.consent}
                         onChange={handleChange}
-                        className="focus:ring-emon-blue-text h-4 w-4 text-emon-blue-text border-gray-300 rounded"
+                        className="focus:ring-blue-600 h-4 w-4 text-blue-600 border-gray-300 rounded"
                         required
                       />
                     </div>
                     <div className="ml-3 text-sm">
                       <label htmlFor="consent" className="font-medium text-gray-700">
-                        I agree to the <a href="#" className="emon-blue-text hover:underline">Terms of Service</a> and <a href="#" className="emon-blue-text hover:underline">Privacy Policy</a>
+                        I agree to the <a href="#" className="text-blue-600 hover:underline">Terms of Service</a> and <a href="#" className="text-blue-600 hover:underline">Privacy Policy</a>
                       </label>
                     </div>
                   </div>
-                  <div>
-                    <button
-                      type="submit"
-                      className="w-full emon-blue-bg text-white py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emon-blue-text font-medium"
-                    >
-                      Submit Application
-                    </button>
-                  </div>
+                  <button
+                    type="submit"
+                    className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 font-medium"
+                  >
+                    Submit Application
+                  </button>
                   {formStatus && (
                     <p className={`text-sm text-center ${formStatus.includes('Thank you') ? 'text-green-600' : 'text-red-600'}`}>
                       {formStatus}
@@ -570,55 +540,6 @@
             </div>
           </div>
         </section>
-      );
-    };
-
-    // Live Chat Component
-    const LiveChat = () => {
-      const [isChatOpen, setIsChatOpen] = useState(false);
-
-      return (
-        <div>
-          <div 
-            className="chat-bubble flex items-center space-x-2" 
-            onClick={() => setIsChatOpen(!isChatOpen)}
-          >
-            <i className="fas fa-comment-alt"></i>
-            <span className="text-sm sm:text-base">Live Chat</span>
-          </div>
-          {isChatOpen && (
-            <div className="fixed bottom-20 right-20 bg-white p-4 rounded-lg shadow-lg w-72 sm:w-96 z-50">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Emon Finance Support</h3>
-                <button 
-                  className="text-gray-500 hover:text-gray-700"
-                  onClick={() => setIsChatOpen(false)}
-                >
-                  <i className="fas fa-times"></i>
-                </button>
-              </div>
-              <div className="bg-gray-50 p-3 rounded mb-4 h-40 overflow-y-auto">
-                <div className="text-sm text-gray-600 mb-2">
-                  <p className="font-semibold">Support Agent:</p>
-                  <p>Hello! How can we help you today?</p>
-                </div>
-              </div>
-              <div className="flex">
-                <input 
-                  type="text" 
-                  placeholder="Type your message..." 
-                  className="flex-1 border border-gray-300 rounded-l-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-emon-blue-text"
-                />
-                <button 
-                  className="emon-blue-bg text-white px-4 rounded-r-md"
-                  onClick={() => alert('Our support team will respond shortly. Thank you!')}
-                >
-                  <i className="fas fa-paper-plane"></i>
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
       );
     };
 
@@ -634,16 +555,15 @@
                   alt="Emon Finance Ltd. Logo" 
                   className="h-8 w-auto"
                 />
-                <span className="ml-2 text-xl font-bold emon-blue-text">Emon Finance</span>
+                <span className="ml-2 text-xl font-bold text-blue-400">Emon Finance</span>
               </div>
               <p className="text-gray-400 text-sm">
                 Premium performance marketing network connecting advertisers with top publishers worldwide.
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold emon-blue-text mb-4">Quick Links</h3>
+              <h3 className="text-lg font-semibold text-blue-400 mb-4">Quick Links</h3>
               <ul className="space-y-2">
-                <li><a href="#home" className="text-gray-400 hover:text-white text-sm">Home</a></li>
                 <li><a href="#advertisers" className="text-gray-400 hover:text-white text-sm">Advertisers</a></li>
                 <li><a href="#publishers" className="text-gray-400 hover:text-white text-sm">Publishers</a></li>
                 <li><a href="#verticals" className="text-gray-400 hover:text-white text-sm">Verticals</a></li>
@@ -651,41 +571,29 @@
               </ul>
             </div>
             <div>
-              <h3 className="text-lg font-semibold emon-blue-text mb-4">Legal</h3>
+              <h3 className="text-lg font-semibold text-blue-400 mb-4">Legal</h3>
               <ul className="space-y-2">
                 <li><a href="#" className="text-gray-400 hover:text-white text-sm">Terms of Service</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white text-sm">Privacy Policy</a></li>
                 <li><a href="#" className="text-gray-400 hover:text-white text-sm">Cookie Policy</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-white text-sm">GDPR Compliance</a></li>
               </ul>
             </div>
             <div>
-              <h3 className="text-lg font-semibold emon-blue-text mb-4">Contact Us</h3>
+              <h3 className="text-lg font-semibold text-blue-400 mb-4">Contact Us</h3>
               <ul className="space-y-2 text-gray-400 text-sm">
                 <li className="flex items-center">
-                  <i className="fas fa-envelope mr-2 emon-blue-text"></i>
+                  <i className="fas fa-envelope mr-2 text-blue-400"></i>
                   <span>support@emonfinanceltd.com</span>
                 </li>
                 <li className="flex items-center">
-                  <i className="fas fa-phone-alt mr-2 emon-blue-text"></i>
+                  <i className="fas fa-phone-alt mr-2 text-blue-400"></i>
                   <span>+1 (555) 123-4567</span>
                 </li>
                 <li className="flex items-center">
-                  <i className="fas fa-map-marker-alt mr-2 emon-blue-text"></i>
+                  <i className="fas fa-map-marker-alt mr-2 text-blue-400"></i>
                   <span>123 Business Ave, Suite 500, New York, NY 10001</span>
                 </li>
               </ul>
-              <div className="mt-4 flex space-x-4">
-                <a href="#" className="text-gray-400 hover:text-white">
-                  <i className="fab fa-linkedin-in"></i>
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white">
-                  <i className="fab fa-twitter"></i>
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white">
-                  <i className="fab fa-facebook-f"></i>
-                </a>
-              </div>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
@@ -697,7 +605,7 @@
 
     // Main App Component
     const App = () => (
-      <div className="bg-white">
+      <div>
         <Navbar />
         <Hero />
         <Stats />
@@ -706,7 +614,6 @@
         <Verticals />
         <Testimonials />
         <Contact />
-        <LiveChat />
         <Footer />
       </div>
     );
