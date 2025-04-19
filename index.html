@@ -11,13 +11,36 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideDown { from { max-height: 0; opacity: 0; } to { max-height: 200px; opacity: 1; } }
     .animate-fadeIn { animation: fadeIn 0.8s ease-out forwards; }
     .hover-scale { transition: transform 0.3s; }
     .hover-scale:hover { transform: scale(1.05); }
     .scroll-smooth { scroll-behavior: smooth; }
-    .teal-blue-text { color: #1A73E8; }
-    .teal-blue-bg { background-color: #1A73E8; }
-    .teal-blue-bg:hover { background-color: #1557b0; }
+    .shopwave-blue-text { color: #4A90E2; }
+    .shopwave-blue-bg { background-color: #4A90E2; }
+    .shopwave-blue-bg:hover { background-color: #3a7bc8; }
+    .accordion-toggle { display: none; }
+    .accordion-toggle:checked + .accordion-label + .accordion-content { 
+      display: block; 
+      animation: slideDown 0.3s ease-out forwards; 
+    }
+    .accordion-label { cursor: pointer; transition: color 0.3s; }
+    .accordion-label:hover { color: #4A90E2; }
+    .accordion-content { display: none; overflow: hidden; }
+    .chat-bubble { 
+      position: fixed; 
+      bottom: 20px; 
+      right: 20px; 
+      background-color: #4A90E2; 
+      color: white; 
+      padding: 15px; 
+      border-radius: 50px; 
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+      cursor: pointer; 
+      transition: transform 0.3s; 
+    }
+    .chat-bubble:hover { transform: scale(1.1); }
+    .mobile-menu { transition: max-height 0.3s ease-out; }
   </style>
 </head>
 <body class="scroll-smooth">
@@ -28,6 +51,7 @@
     // Navigation Component
     const Navbar = () => {
       const [isScrolled, setIsScrolled] = useState(false);
+      const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
       useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -51,14 +75,33 @@
                   <a 
                     key={item} 
                     href={`#${item.toLowerCase().replace(' ', '-')}`} 
-                    className={`text-sm font-medium text-gray-800 hover:text-teal-blue-text transition-colors`}
+                    className={`text-sm font-medium text-gray-800 hover:text-shopwave-blue-text transition-colors`}
                   >
                     {item}
                   </a>
                 ))}
               </div>
               <div className="md:hidden">
-                <button className="text-gray-800"><i className="fas fa-bars"></i></button>
+                <button 
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
+                  className="text-gray-800"
+                >
+                  <i className={`fas ${isMobileMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
+                </button>
+              </div>
+            </div>
+            <div className={`md:hidden mobile-menu ${isMobileMenuOpen ? 'max-h-96' : 'max-h-0'} overflow-hidden`}>
+              <div className="flex flex-col space-y-4 py-4">
+                {['Home', 'About', 'Solutions', 'Partnerships', 'Case Studies', 'Contact'].map((item) => (
+                  <a 
+                    key={item} 
+                    href={`#${item.toLowerCase().replace(' ', '-')}`} 
+                    className="text-sm font-medium text-gray-800 hover:text-shopwave-blue-text transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item}
+                  </a>
+                ))}
               </div>
             </div>
           </div>
@@ -83,145 +126,120 @@
               </p>
               <a 
                 href="#partnerships" 
-                className="teal-blue-bg text-white px-8 py-3 rounded-md text-lg font-semibold hover-scale shadow-lg"
+                className="shopwave-blue-bg text-white px-8 py-3 rounded-md text-lg font-semibold hover-scale shadow-lg"
               >
                 Start Partnering Now
               </a>
             </div>
             <div className="flex justify-center md:justify-end animate-fadeIn" style={{ animationDelay: '0.2s' }}>
               <img 
-                src="https://images.unsplash.com/photo-1551288049-b1b0b0b2c6b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                alt="Marketing Professional with Dashboard" 
+                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                alt="Marketing Dashboard" 
                 className="max-w-full h-auto rounded-lg"
               />
             </div>
           </div>
+          <div className="mt-12 flex flex-wrap justify-center gap-4 sm:gap-8">
+            {['https://via.placeholder.com/100x40.png?text=Google+Ads', 'https://via.placeholder.com/100x40.png?text=Microsoft+Ads', 'https://via.placeholder.com/100x40.png?text=Yahoo+Ads', 'https://via.placeholder.com/100x40.png?text=System1', 'https://via.placeholder.com/100x40.png?text=Tonic.com'].map((logo, index) => (
+              <img key={index} src={logo} alt="Partner Logo" className="h-8 sm:h-10 opacity-70 hover:opacity-100 transition-opacity" />
+            ))}
+          </div>
         </div>
       </section>
     );
 
-    // About Section
+    // About Section (What Sets Us Apart)
     const About = () => (
-      <section id="about" className="py-24 bg-white">
+      <section id="about" className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
-          <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">Who We Are</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div>
-              <h3 className="text-2xl font-semibold teal-blue-text mb-4">Our Mission</h3>
-              <p className="text-gray-600 leading-relaxed">
-                We empower brands with data-driven strategies for measurable success.
-              </p>
-              <h3 className="text-2xl font-semibold teal-blue-text mt-6 mb-4">Our Story</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Since 2020, Emon Finance Ltd. has connected advertisers with high-intent traffic, helping businesses worldwide grow through smarter marketing.
-              </p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-12 text-center">What Sets Us Apart</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            <div className="bg-white p-6 rounded-lg shadow-md hover-scale">
+              <i className="fas fa-eye text-shopwave-blue-text text-4xl mb-4"></i>
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">Customizable Campaigns</h3>
+              <p className="text-gray-600 text-sm sm:text-base">Tailor your marketing strategy with flexible tools and real-time adjustments.</p>
             </div>
-            <div>
-              <h3 className="text-2xl font-semibold teal-blue-text mb-4">Our Expertise</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Our experts in PPC, traffic monetization, and compliance deliver top-tier results for every client.
-              </p>
-              <h3 className="text-2xl font-semibold teal-blue-text mt-6 mb-4">Our Values</h3>
-              <ul className="space-y-2 text-gray-600">
-                <li><strong>Transparency:</strong> We provide clear reporting to earn your trust.</li>
-                <li><strong>Quality:</strong> We craft campaigns that meet the highest standards.</li>
-                <li><strong>Partnership:</strong> We build lasting relationships for mutual growth.</li>
-              </ul>
+            <div className="bg-white p-6 rounded-lg shadow-md hover-scale">
+              <i className="fas fa-chart-line text-shopwave-blue-text text-4xl mb-4"></i>
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">Real-Time Analytics</h3>
+              <p className="text-gray-600 text-sm sm:text-base">Access live data and insights to make informed decisions fast.</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-md hover-scale">
+              <i className="fas fa-plug text-shopwave-blue-text text-4xl mb-4"></i>
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">Seamless Integration</h3>
+              <p className="text-gray-600 text-sm sm:text-base">Connect with top ad platforms to streamline operations.</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-md hover-scale">
+              <i className="fas fa-users text-shopwave-blue-text text-4xl mb-4"></i>
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">User-Friendly Interface</h3>
+              <p className="text-gray-600 text-sm sm:text-base">Navigate with ease using our intuitive design.</p>
             </div>
           </div>
         </div>
       </section>
     );
 
-    // Solutions Section
+    // Solutions Section (Streamline Operations)
     const Solutions = () => (
-      <section id="solutions" className="py-24 bg-gray-50">
+      <section id="solutions" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
-          <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">Solutions for Your Goals</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-12 text-center">Streamline Your Operations</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
             {[
               { 
-                icon: 'fa-bullseye', 
-                title: 'Drive Sales with PPC', 
-                desc: 'Boost ROI with precision targeting and real-time insights.' 
+                icon: 'fa-robot', 
+                title: 'Automated Workflows', 
+                desc: 'Simplify tasks with automated campaign management.' 
               },
               { 
-                icon: 'fa-chart-line', 
-                title: 'Monetize Traffic', 
-                desc: 'Turn traffic into revenue with strategic partnerships.' 
+                icon: 'fa-file-alt', 
+                title: 'Custom Reporting', 
+                desc: 'Generate reports tailored to your needs.' 
               },
               { 
-                icon: 'fa-code', 
-                title: 'Scale with Programmatic', 
-                desc: 'Scale campaigns with automated bidding and premium inventory.' 
-              },
-              { 
-                icon: 'fa-users', 
-                title: 'Lead Generation', 
-                desc: 'Attract high-quality leads tailored to your goals.' 
+                icon: 'fa-globe', 
+                title: 'Multi-Channel Insights', 
+                desc: 'Track performance across all platforms.' 
               }
             ].map((solution, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-md hover-scale">
-                <i className={`fas ${solution.icon} text-teal-blue-text text-4xl mb-4`}></i>
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">{solution.title}</h3>
-                <p className="text-gray-600">{solution.desc}</p>
+              <div key={index} className="text-center">
+                <i className={`fas ${solution.icon} text-shopwave-blue-text text-4xl mb-4`}></i>
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2">{solution.title}</h3>
+                <p className="text-gray-600 text-sm sm:text-base">{solution.desc}</p>
               </div>
             ))}
           </div>
-          <div className="mt-12 text-center">
-            <h3 className="text-2xl font-semibold teal-blue-text mb-4">Industries We Serve</h3>
-            <p className="text-gray-600">Finance – Drive loan and investment leads.</p>
-            <p className="text-gray-600">E-commerce – Increase sales and conversions.</p>
-            <p className="text-gray-600">Healthcare – Connect with high-intent patients.</p>
-            <p className="text-gray-600">Technology – Promote SaaS and tech solutions.</p>
-          </div>
-          <div className="mt-12 text-center">
-            <h3 className="text-2xl font-semibold teal-blue-text mb-4">Technical Capabilities</h3>
-            <p className="text-gray-600">Integrate seamlessly with APIs, OpenRTB, and major ad platforms.</p>
-            <p className="text-gray-600">Gain insights with advanced tracking and attribution tools.</p>
-            <p className="text-gray-600">Optimize conversions with custom, high-performing landing pages.</p>
-          </div>
         </div>
       </section>
     );
 
-    // Partnerships Section
+    // Partnerships Section (How It Works)
     const Partnerships = () => (
-      <section id="partnerships" className="py-24 bg-white">
+      <section id="partnerships" className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
-          <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">Partner with Us</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-12 text-center">How It Works</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-2xl font-semibold teal-blue-text mb-4">Why Partner with Us?</h3>
-              <ul className="space-y-4 text-gray-600">
-                <li className="flex items-center"><i className="fas fa-check-circle teal-blue-text mr-2"></i> Get audiences that convert—boost your campaigns.</li>
-                <li className="flex items-center"><i className="fas fa-check-circle teal-blue-text mr-2"></i> Years of success with high-spend ad accounts.</li>
-                <li className="flex items-center"><i className="fas fa-check-circle teal-blue-text mr-2"></i> GDPR/CCPA-compliant—partner with confidence.</li>
-              </ul>
-              <h3 className="text-2xl font-semibold teal-blue-text mt-6 mb-4">Our Metrics</h3>
+              <h3 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">Our Partnership Process</h3>
+              <ol className="space-y-4 text-gray-600">
+                <li className="flex items-center"><span className="shopwave-blue-bg text-white rounded-full w-6 h-6 flex items-center justify-center mr-2">1</span> Apply: Share your goals with us.</li>
+                <li className="flex items-center"><span className="shopwave-blue-bg text-white rounded-full w-6 h-6 flex items-center justify-center mr-2">2</span> Review: We’ll assess alignment in 48 hours.</li>
+                <li className="flex items-center"><span className="shopwave-blue-bg text-white rounded-full w-6 h-6 flex items-center justify-center mr-2">3</span> Onboard: Start with a tailored setup.</li>
+              </ol>
+              <a 
+                href="#contact" 
+                className="mt-6 inline-block shopwave-blue-bg text-white px-6 py-3 rounded-md hover-scale"
+              >
+                Apply Now
+              </a>
+            </div>
+            <div>
+              <h3 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">Our Metrics</h3>
               <ul className="space-y-2 text-gray-600">
                 <li>CTR: 2.5% average across campaigns</li>
                 <li>Monthly Impressions: 10M+</li>
                 <li>Conversion Rate: 5%+ on optimized campaigns</li>
               </ul>
-            </div>
-            <div>
-              <h3 className="text-2xl font-semibold teal-blue-text mb-4">How It Works</h3>
-              <ol className="space-y-4 text-gray-600">
-                <li className="flex items-center"><span className="teal-blue-bg text-white rounded-full w-6 h-6 flex items-center justify-center mr-2">1</span> Apply: Share your goals with us.</li>
-                <li className="flex items-center"><span className="teal-blue-bg text-white rounded-full w-6 h-6 flex items-center justify-center mr-2">2</span> Review: We’ll assess alignment in 48 hours.</li>
-                <li className="flex items-center"><span className="teal-blue-bg text-white rounded-full w-6 h-6 flex items-center justify-center mr-2">3</span> Onboard: Start with a tailored setup.</li>
-              </ol>
-              <a 
-                href="#contact" 
-                className="mt-6 inline-block teal-blue-bg text-white px-6 py-3 rounded-md hover-scale"
-              >
-                Apply Now
-              </a>
-              <h3 className="text-2xl font-semibold teal-blue-text mt-6 mb-4">Our Partners</h3>
-              <p className="text-gray-600"><strong>Google Ads:</strong> Maximize ROI with high-spend PPC expertise.</p>
-              <p className="text-gray-600"><strong>System1:</strong> Scale campaigns with performance-driven traffic.</p>
-              <p className="text-gray-600"><strong>Tonic.com:</strong> Increase CPC/CPM with targeted traffic.</p>
             </div>
           </div>
         </div>
@@ -230,10 +248,10 @@
 
     // Case Studies Section
     const CaseStudies = () => (
-      <section id="case-studies" className="py-24 bg-gray-50">
+      <section id="case-studies" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
-          <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">Success Stories</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-12 text-center">Success Stories</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             {[
               {
                 title: 'Fintech Growth',
@@ -243,16 +261,116 @@
               },
               {
                 title: 'E-commerce Success',
-                challenge: 'An e-commerce feeds low ad click-through rates.',
+                challenge: 'An e-commerce brand faced low ad click-through rates.',
                 solution: 'We revamped ad creatives and refined targeting.',
                 results: '30% higher CTR, 2x monthly revenue.'
               }
             ].map((caseStudy, index) => (
-              <div key={index} className="bg-white p-8 rounded-lg shadow-md hover-scale">
-                <h3 className="text-xl font-semibold teal-blue-text mb-4">{caseStudy.title}</h3>
-                <p className="text-gray-600 mb-2"><strong>Challenge:</strong> {caseStudy.challenge}</p>
-                <p className="text-gray-600 mb-2"><strong>Solution:</strong> {caseStudy.solution}</p>
-                <p className="text-gray-600"><strong>Results:</strong> {caseStudy.results}</p>
+              <div key={index} className="bg-gray-50 p-6 sm:p-8 rounded-lg shadow-md hover-scale">
+                <h3 className="text-lg sm:text-xl font-semibold shopwave-blue-text mb-4">{caseStudy.title}</h3>
+                <p className="text-gray-600 text-sm sm:text-base mb-2"><strong>Challenge:</strong> {caseStudy.challenge}</p>
+                <p className="text-gray-600 text-sm sm:text-base mb-2"><strong>Solution:</strong> {caseStudy.solution}</p>
+                <p className="text-gray-600 text-sm sm:text-base"><strong>Results:</strong> {caseStudy.results}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+
+    // Integrations Section
+    const Integrations = () => (
+      <section id="integrations" className="py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-12 text-center">Expand Your Reach</h2>
+          <p className="text-center text-gray-600 mb-8 text-sm sm:text-base">Integrate with top advertising platforms to boost efficiency.</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 sm:gap-8">
+            {['https://via.placeholder.com/100x40.png?text=Google+Ads', 'https://via.placeholder.com/100x40.png?text=Microsoft+Ads', 'https://via.placeholder.com/100x40.png?text=Yahoo+Ads', 'https://via.placeholder.com/100x40.png?text=System1', 'https://via.placeholder.com/100x40.png?text=Tonic.com'].map((logo, index) => (
+              <img key={index} src={logo} alt="Partner Logo" className="h-8 sm:h-10 opacity-70 hover:opacity-100 transition-opacity mx-auto" />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+
+    // Pricing Section
+    const Pricing = () => {
+      const [plan, setPlan] = useState('monthly');
+
+      return (
+        <section id="pricing" className="py-24 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-12 text-center">Flexible Plans for Every Need</h2>
+            <div className="flex justify-center mb-8">
+              <button 
+                onClick={() => setPlan('monthly')} 
+                className={`px-4 py-2 rounded-l-md ${plan === 'monthly' ? 'bg-shopwave-blue-bg text-white' : 'bg-gray-200 text-gray-800'}`}
+              >
+                Monthly
+              </button>
+              <button 
+                onClick={() => setPlan('yearly')} 
+                className={`px-4 py-2 rounded-r-md ${plan === 'yearly' ? 'bg-shopwave-blue-bg text-white' : 'bg-gray-200 text-gray-800'}`}
+              >
+                Yearly
+              </button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+              <div className="bg-gray-50 p-6 rounded-lg shadow-md hover-scale">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Free</h3>
+                <p className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">$0<span className="text-sm font-normal">/month</span></p>
+                <ul className="text-gray-600 text-sm sm:text-base space-y-2 mb-6">
+                  <li>Access to basic features</li>
+                  <li>Up to 10 campaigns</li>
+                  <li>Email support</li>
+                </ul>
+                <a href="#contact" className="block text-center shopwave-blue-bg text-white px-4 py-2 rounded-md hover-scale">Get Started</a>
+              </div>
+              <div className="bg-gray-50 p-6 rounded-lg shadow-md hover-scale">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Pro</h3>
+                <p className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">$49<span className="text-sm font-normal">/month</span></p>
+                <ul className="text-gray-600 text-sm sm:text-base space-y-2 mb-6">
+                  <li>Access to all features</li>
+                  <li>Unlimited campaigns</li>
+                  <li>Priority support</li>
+                </ul>
+                <a href="#contact" className="block text-center shopwave-blue-bg text-white px-4 py-2 rounded-md hover-scale">Get Started</a>
+              </div>
+              <div className="bg-gray-50 p-6 rounded-lg shadow-md hover-scale">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">Enterprise</h3>
+                <p className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">Custom</p>
+                <ul className="text-gray-600 text-sm sm:text-base space-y-2 mb-6">
+                  <li>Fully custom solutions</li>
+                  <li>Dedicated account manager</li>
+                  <li>Team-wide access</li>
+                </ul>
+                <a href="#contact" className="block text-center shopwave-blue-bg text-white px-4 py-2 rounded-md hover-scale">Contact Us</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    // FAQ Section
+    const FAQ = () => (
+      <section id="faq" className="py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-12 text-center">All Your Questions, Answered</h2>
+          <div className="space-y-4">
+            {[
+              { question: 'What kind of analytics do you provide?', answer: 'We offer real-time analytics including CTR, impressions, and conversion rates.' },
+              { question: 'How does Emon Finance ensure compliance?', answer: 'We adhere to GDPR, CCPA, and platform-specific standards.' },
+              { question: 'Can I integrate with multiple ad platforms?', answer: 'Yes, we support integrations with Google Ads, Microsoft Ads, and more.' },
+              { question: 'How do I contact customer support?', answer: 'Reach us via email at support@emonfinanceltd.com or phone at +1-800-123-4567.' }
+            ].map((faq, index) => (
+              <div key={index} className="border-b border-gray-200">
+                <input type="checkbox" id={`faq-${index}`} className="accordion-toggle hidden" />
+                <label htmlFor={`faq-${index}`} className="accordion-label flex justify-between items-center py-4 text-gray-800 font-semibold cursor-pointer text-sm sm:text-base">
+                  {faq.question}
+                  <i className="fas fa-chevron-down"></i>
+                </label>
+                <div className="accordion-content pb-4 text-gray-600 text-sm sm:text-base">{faq.answer}</div>
               </div>
             ))}
           </div>
@@ -263,18 +381,57 @@
     // Contact Section
     const Contact = () => {
       const [formData, setFormData] = useState({ name: '', email: '', company: '', message: '', partnership: 'Advertiser', consent: false });
+      const [formStatus, setFormStatus] = useState('');
 
       const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
       };
 
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!formData.consent) {
+          setFormStatus('Please agree to the Privacy Policy.');
+          return;
+        }
+        setFormStatus('Submitting...');
+        // Mock API call
+        setTimeout(() => {
+          setFormStatus('Form submitted successfully!');
+          setFormData({ name: '', email: '', company: '', message: '', partnership: 'Advertiser', consent: false });
+        }, 1000);
+      };
+
       return (
-        <section id="contact" className="py-24 bg-white">
+        <section id="contact" className="py-24 bg-shopwave-blue-bg text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 animate-fadeIn">
-            <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">Get in Touch</h2>
-            <div className="max-w-lg mx-auto">
-              <div className="space-y-6">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-12 text-center">Take Control of Your Marketing Today!</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              <div>
+                <p className="text-lg text-white mb-8">Streamline your campaigns, track performance, and maximize ROI.</p>
+                <ul className="text-white space-y-2 text-sm sm:text-base">
+                  <li>75% Efficiency Boost</li>
+                  <li>50+ Happy Clients</li>
+                  <li>99% Uptime Guarantee</li>
+                </ul>
+                <a 
+                  href="#contact" 
+                  className="mt-6 inline-block bg-white text-shopwave-blue-text px-6 py-3 rounded-md hover-scale"
+                >
+                  Request a Demo
+                </a>
+              </div>
+              <div className="flex justify-center">
+                <img 
+                  src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                  alt="Marketing Dashboard" 
+                  className="max-w-full h-auto rounded-lg"
+                />
+              </div>
+            </div>
+            <div className="mt-12 max-w-lg mx-auto">
+              <h3 className="text-xl sm:text-2xl font-semibold text-white mb-6 text-center">Get in Touch</h3>
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <input 
                     type="text" 
@@ -282,7 +439,7 @@
                     value={formData.name} 
                     onChange={handleChange} 
                     placeholder="Enter your name" 
-                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-blue-text" 
+                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-white text-gray-800 text-sm sm:text-base" 
                     required 
                   />
                 </div>
@@ -293,7 +450,7 @@
                     value={formData.email} 
                     onChange={handleChange} 
                     placeholder="Enter your email" 
-                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-blue-text" 
+                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-white text-gray-800 text-sm sm:text-base" 
                     required 
                   />
                 </div>
@@ -304,7 +461,7 @@
                     value={formData.company} 
                     onChange={handleChange} 
                     placeholder="Enter your company name" 
-                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-blue-text" 
+                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-white text-gray-800 text-sm sm:text-base" 
                     required 
                   />
                 </div>
@@ -314,7 +471,7 @@
                     value={formData.message} 
                     onChange={handleChange} 
                     placeholder="Tell us about your goals" 
-                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-blue-text" 
+                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-white text-gray-800 text-sm sm:text-base" 
                     rows="4" 
                     required
                   ></textarea>
@@ -324,7 +481,7 @@
                     name="partnership" 
                     value={formData.partnership} 
                     onChange={handleChange} 
-                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-blue-text"
+                    className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-white text-gray-800 text-sm sm:text-base"
                   >
                     <option>Advertiser</option>
                     <option>Publisher</option>
@@ -340,27 +497,61 @@
                     className="mr-2" 
                     required 
                   />
-                  <label className="text-gray-600 text-sm">
-                    I agree to the <a href="/privacy" className="teal-blue-text">Privacy Policy</a>
+                  <label className="text-white text-sm">
+                    I agree to the <a href="/privacy" className="underline">Privacy Policy</a>
                   </label>
                 </div>
                 <button 
-                  type="button" 
-                  className="w-full teal-blue-bg text-white p-3 rounded-md hover-scale"
-                  onClick={() => alert('Form submitted!')}
+                  type="submit" 
+                  className="w-full bg-white text-shopwave-blue-text p-3 rounded-md hover-scale text-sm sm:text-base"
                 >
                   Send Message
                 </button>
-              </div>
-              <div className="mt-8 text-center">
-                <p className="text-gray-600">Ready to grow? <a href="#" className="teal-blue-text">Chat with us now!</a></p>
-                <p className="text-gray-600 mt-2">Email: <a href="mailto:support@emonfinanceltd.com" className="teal-blue-text">support@emonfinanceltd.com</a></p>
-                <p className="text-gray-600">Phone: <a href="tel:+18001234567" className="teal-blue-text">+1-800-123-4567</a></p>
-                <p className="text-gray-600">Address: 123 Marketing Drive, Suite 456, City, State, ZIP</p>
-              </div>
+                {formStatus && <p className="text-center text-white mt-4">{formStatus}</p>}
+              </form>
             </div>
           </div>
         </section>
+      );
+    };
+
+    // Live Chat Component (Mock)
+    const LiveChat = () => {
+      const [isChatOpen, setIsChatOpen] = useState(false);
+
+      return (
+        <div>
+          <div 
+            className="chat-bubble flex items-center space-x-2" 
+            onClick={() => setIsChatOpen(!isChatOpen)}
+          >
+            <i className="fas fa-comment-alt"></i>
+            <span className="text-sm sm:text-base">Chat with Us</span>
+          </div>
+          {isChatOpen && (
+            <div className="fixed bottom-20 right-20 bg-white p-4 rounded-lg shadow-lg w-72 sm:w-96">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">Live Chat</h3>
+              <p className="text-gray-600 text-sm sm:text-base mb-4">Welcome! How can we help you today?</p>
+              <textarea 
+                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-shopwave-blue-text text-sm sm:text-base" 
+                rows="3" 
+                placeholder="Type your message..."
+              ></textarea>
+              <button 
+                className="mt-2 w-full shopwave-blue-bg text-white p-2 rounded-md hover-scale text-sm sm:text-base"
+                onClick={() => alert('Message sent! A representative will respond soon.')}
+              >
+                Send
+              </button>
+              <button 
+                className="absolute top-2 right-2 text-gray-600" 
+                onClick={() => setIsChatOpen(false)}
+              >
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+          )}
+        </div>
       );
     };
 
@@ -368,35 +559,35 @@
     const Footer = () => (
       <footer className="bg-gray-800 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-6 sm:gap-8">
             <div>
-              <h3 className="text-lg font-semibold teal-blue-text mb-4">Emon Finance Ltd.</h3>
-              <p className="text-gray-400">Serving 50+ global clients since 2020</p>
-              <p className="text-gray-400">Certified Google Ads, Microsoft Ads, and Yahoo Ads partner</p>
-              <p className="text-gray-400">$10M+ in annual ad spend managed</p>
+              <h3 className="text-lg font-semibold shopwave-blue-text mb-4">Emon Finance Ltd.</h3>
+              <p className="text-gray-400 text-sm sm:text-base">Serving 50+ global clients since 2020</p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold teal-blue-text mb-4">Quick Links</h3>
-              <p><a href="#about" className="text-gray-400 hover:text-teal-blue-text">About</a></p>
-              <p><a href="#solutions" className="text-gray-400 hover:text-teal-blue-text">Solutions</a></p>
-              <p><a href="#contact" className="text-gray-400 hover:text-teal-blue-text">Contact</a></p>
+              <h3 className="text-lg font-semibold shopwave-blue-text mb-4">Product</h3>
+              <p><a href="#solutions" className="text-gray-400 hover:text-shopwave-blue-text text-sm sm:text-base">Solutions</a></p>
+              <p><a href="#pricing" className="text-gray-400 hover:text-shopwave-blue-text text-sm sm:text-base">Pricing</a></p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold teal-blue-text mb-4">Legal</h3>
-              <p><a href="/privacy" className="text-gray-400 hover:text-teal-blue-text">Privacy Policy</a></p>
-              <p><a href="/terms" className="text-gray-400 hover:text-teal-blue-text">Terms of Service</a></p>
+              <h3 className="text-lg font-semibold shopwave-blue-text mb-4">Resources</h3>
+              <p><a href="#faq" className="text-gray-400 hover:text-shopwave-blue-text text-sm sm:text-base">FAQ</a></p>
+              <p><a href="#case-studies" className="text-gray-400 hover:text-shopwave-blue-text text-sm sm:text-base">Case Studies</a></p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold teal-blue-text mb-4">Contact Info</h3>
-              <p className="text-gray-400">support@emonfinanceltd.com</p>
-              <p className="text-gray-400">+1-800-123-4567</p>
+              <h3 className="text-lg font-semibold shopwave-blue-text mb-4">Company</h3>
+              <p><a href="#about" className="text-gray-400 hover:text-shopwave-blue-text text-sm sm:text-base">About</a></p>
+              <p><a href="#contact" className="text-gray-400 hover:text-shopwave-blue-text text-sm sm:text-base">Contact Us</a></p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold shopwave-blue-text mb-4">Follow Us</h3>
               <div className="mt-4">
-                <a href="https://www.linkedin.com/company/emon-finance-ltd" className="text-gray-400 hover:text-teal-blue-text mx-2"><i className="fab fa-linkedin"></i></a>
-                <a href="https://twitter.com/EmonFinanceLtd" className="text-gray-400 hover:text-teal-blue-text mx-2"><i className="fab fa-x-twitter"></i></a>
+                <a href="https://www.linkedin.com/company/emon-finance-ltd" className="text-gray-400 hover:text-shopwave-blue-text mx-2"><i className="fab fa-linkedin"></i></a>
+                <a href="https://twitter.com/EmonFinanceLtd" className="text-gray-400 hover:text-shopwave-blue-text mx-2"><i className="fab fa-x-twitter"></i></a>
               </div>
             </div>
           </div>
-          <p className="text-center text-gray-400 mt-8">© 2025 Emon Finance Ltd. All rights reserved.</p>
+          <p className="text-center text-gray-400 mt-8 text-sm sm:text-base">© 2025 Emon Finance Ltd. All rights reserved.</p>
         </div>
       </footer>
     );
@@ -410,7 +601,11 @@
         <Solutions />
         <Partnerships />
         <CaseStudies />
+        <Integrations />
+        <Pricing />
+        <FAQ />
         <Contact />
+        <LiveChat />
         <Footer />
       </div>
     );
