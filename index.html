@@ -3,146 +3,224 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Emon Finance Ltd - Empowering Wealth Creation</title>
-  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <title>Emon Finance Ltd. - Marketing Solutions</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Inter', sans-serif; margin: 0; }
-    .hero-bg {
-      background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1556740714-7f3e7e8e7b1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
-      background-size: cover;
-      background-position: center;
-    }
-    .gradient-text {
-      background: linear-gradient(90deg, #3b82f6, #10b981);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .scrollbar-hide::-webkit-scrollbar { display: none; }
-    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-    .fade-in { animation: fadeIn 1s ease-in; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    .hover-scale { transition: transform 0.3s; }
-    .hover-scale:hover { transform: scale(1.05); }
-  </style>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
   <div id="root"></div>
-  <script>
-    // Check if React is loaded
-    if (!window.React || !window.ReactDOM) {
-      document.getElementById('root').innerHTML = `
-        <div class="text-center p-12 text-red-600">
-          <h1 class="text-3xl">Error: Failed to load dependencies</h1>
-          <p>Please check your internet connection and try again.</p>
-        </div>
-      `;
-      throw new Error("React not loaded");
-    }
-
+  <script type="text/babel">
     const { useState } = React;
 
-    // Simplified Navbar Component
-    const Navbar = () => {
-      const [isOpen, setIsOpen] = useState(false);
+    // Navigation Component
+    const Navbar = () => (
+      <nav className="bg-gray-800 text-white sticky top-0 z-50 shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16">
+            <div className="flex items-center">
+              <img 
+                src="https://media.licdn.com/dms/image/v2/D560BAQGS4tCTdvEdGw/company-logo_100_100/B56ZZJf6fAHsAU-/0/1744989825409?e=1750291200&v=beta&t=Fi_TOPK-UtNdgjDNMtQzccX63GY3mY5_34v_bReHLjY" 
+                alt="Emon Finance Ltd. Logo" 
+                className="h-10 w-auto"
+              />
+            </div>
+            <div className="flex items-center space-x-4">
+              <a href="#home" className="hover:text-green-400">Home</a>
+              <a href="#about" className="hover:text-green-400">About</a>
+              <a href="#services" className="hover:text-green-400">Services</a>
+              <a href="#partnerships" className="hover:text-green-400">Partnerships</a>
+              <a href="#case-studies" className="hover:text-green-400">Case Studies</a>
+              <a href="#contact" className="hover:text-green-400">Contact</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    );
 
-      return React.createElement(
-        'nav',
-        { className: 'bg-white shadow-lg sticky top-0 z-50' },
-        React.createElement(
-          'div',
-          { className: 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8' },
-          React.createElement(
-            'div',
-            { className: 'flex justify-between h-16 items-center' },
-            React.createElement(
-              'div',
-              { className: 'flex items-center' },
-              React.createElement('span', { className: 'ml-3 text-2xl font-bold text-gray-800' }, 'Emon Finance Ltd')
-            ),
-            React.createElement(
-              'button',
-              { 
-                onClick: () => setIsOpen(!isOpen),
-                className: 'md:hidden text-gray-600 hover:text-blue-600 focus:outline-none'
-              },
-              React.createElement('svg', { className: 'h-6 w-6', fill: 'none', stroke: 'currentColor', viewBox: '0 0 24 24' },
-                React.createElement('path', {
-                  strokeLinecap: 'round',
-                  strokeLinejoin: 'round',
-                  strokeWidth: '2',
-                  d: isOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'
-                })
-              )
-            )
-          ),
-          isOpen && React.createElement(
-            'div',
-            { className: 'md:hidden bg-white pb-3 fade-in' },
-            React.createElement(
-              'div',
-              { className: 'px-2 pt-2 space-y-1' },
-              ['Home', 'Services', 'About', 'Contact'].map(item => 
-                React.createElement(
-                  'a',
-                  { 
-                    href: `#${item.toLowerCase()}`, 
-                    className: 'block text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium'
-                  },
-                  item
-                )
-              )
-            )
-          )
-        )
-      );
-    };
+    // Hero Section
+    const Hero = () => (
+      <section id="home" className="bg-gray-100 py-20 text-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1556740714-7a75a1b3e842?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Partner with Emon Finance Ltd. for Performance-Driven Marketing</h1>
+          <p className="text-lg md:text-xl text-white mb-6">Drive high-quality traffic and maximize ROI with our advertising solutions.</p>
+          <a href="#partnerships" className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600">Explore Partnership Opportunities</a>
+        </div>
+      </section>
+    );
 
-    // Simplified Hero Component
-    const Hero = () => {
-      return React.createElement(
-        'section',
-        { id: 'home', className: 'hero-bg h-screen flex items-center justify-center text-center text-white' },
-        React.createElement(
-          'div',
-          { className: 'max-w-4xl mx-auto px-4 fade-in' },
-          React.createElement('h1', { className: 'text-5xl sm:text-6xl font-bold mb-6 gradient-text' }, 'Shape Your Financial Destiny'),
-          React.createElement('p', { className: 'text-xl sm:text-2xl mb-8 text-gray-200' }, 'Discover innovative financial solutions tailored to your goals.'),
-          React.createElement(
-            'div',
-            { className: 'flex justify-center space-x-4' },
-            React.createElement('a', { href: '#services', className: 'bg-blue-600 text-white px-8 py-3 rounded-md text-lg font-medium hover:bg-blue-700 transition' }, 'Explore Services')
-          )
-        )
-      );
-    };
+    // About Section
+    const About = () => (
+      <section id="about" className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">About Emon Finance Ltd.</h2>
+          <p className="text-lg text-gray-600 mb-6">Emon Finance Ltd. empowers brands with data-driven advertising solutions. Founded in 2020, our mission is to deliver high-intent traffic and optimize ad spend for maximum ROI.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-xl font-semibold text-gray-800">Our Team</h3>
+              <p className="text-gray-600">Our team of marketing experts brings decades of experience in PPC, programmatic advertising, and traffic monetization.</p>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold text-gray-800">Our Values</h3>
+              <p className="text-gray-600">Transparency, quality, and long-term partnerships are at the core of everything we do.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+
+    // Services Section
+    const Services = () => (
+      <section id="services" className="py-16 bg-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Our Services</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <i className="fas fa-bullseye text-green-500 text-3xl mb-4"></i>
+              <h3 className="text-xl font-semibold text-gray-800">PPC Campaign Management</h3>
+              <p className="text-gray-600">Optimize ad spend with AI-driven targeting for platforms like Google Ads and Microsoft Ads.</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <i className="fas fa-chart-line text-green-500 text-3xl mb-4"></i>
+              <h3 className="text-xl font-semibold text-gray-800">Traffic Monetization</h3>
+              <p className="text-gray-600">Maximize revenue with high-quality traffic for Tonic.com and System1 campaigns.</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <i className="fas fa-code text-green-500 text-3xl mb-4"></i>
+              <h3 className="text-xl font-semibold text-gray-800">Programmatic Advertising</h3>
+              <p className="text-gray-600">Leverage OpenRTB and API integrations for scalable ad solutions.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+
+    // Partnerships Section
+    const Partnerships = () => (
+      <section id="partnerships" className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Partner with Us</h2>
+          <p className="text-lg text-gray-600 mb-6 text-center">Deliver high-intent traffic to maximize conversions for platforms like Google Ads, Tonic, and System1.</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-xl font-semibold text-gray-800">Why Partner?</h3>
+              <ul className="list-disc list-inside text-gray-600">
+                <li>Proven track record with $10M+ ad spend managed.</li>
+                <li>Compliance with GDPR, CCPA, and ad quality standards.</li>
+                <li>High CTR and conversion rates across finance and e-commerce verticals.</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold text-gray-800">Partnership Process</h3>
+              <ol className="list-decimal list-inside text-gray-600">
+                <li>Submit your application via our contact form.</li>
+                <li>Our team reviews your proposal within 48 hours.</li>
+                <li>Onboard with tailored campaign strategies.</li>
+              </ol>
+              <a href="#contact" className="mt-4 inline-block bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600">Apply Now</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+
+    // Case Studies Section
+    const CaseStudies = () => (
+      <section id="case-studies" className="py-16 bg-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Case Studies</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold text-gray-800">Finance Client Success</h3>
+              <p className="text-gray-600"><strong>Challenge:</strong> Low conversion rates on PPC campaigns.</p>
+              <p className="text-gray-600"><strong>Solution:</strong> Implemented AI-driven targeting and landing page optimization.</p>
+              <p className="text-gray-600"><strong>Results:</strong> Increased conversions by 35% in 3 months.</p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h3 className="text-xl font-semibold text-gray-800">E-commerce Traffic Boost</h3>
+              <p className="text-gray-600"><strong>Challenge:</strong> High CPA for Tonic.com campaigns.</p>
+              <p className="text-gray-600"><strong>Solution:</strong> Refined audience segmentation and ad creatives.</p>
+              <p className="text-gray-600"><strong>Results:</strong> Reduced CPA by 20% and delivered 2M impressions.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+
+    // Contact Section
+    const Contact = () => (
+      <section id="contact" className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Get in Touch</h2>
+          <form action="https://formspree.io/f/{your-form-id}" method="POST" className="max-w-lg mx-auto">
+            <div className="mb-4">
+              <label className="block text-gray-700">Name</label>
+              <input type="text" name="name" className="w-full p-2 border rounded" required />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Email</label>
+              <input type="email" name="email" className="w-full p-2 border rounded" required />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Company</label>
+              <input type="text" name="company" className="w-full p-2 border rounded" />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Message</label>
+              <textarea name="message" className="w-full p-2 border rounded" rows="4" required></textarea>
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Partnership Type</label>
+              <select name="partnership" className="w-full p-2 border rounded">
+                <option>Advertiser</option>
+                <option>Publisher</option>
+                <option>Agency</option>
+              </select>
+            </div>
+            <div className="mb-4">
+              <label className="flex items-center">
+                <input type="checkbox" name="privacy" required className="mr-2" />
+                <span className="text-gray-700">I agree to the <a href="/privacy" className="text-green-500">Privacy Policy</a></span>
+              </label>
+            </div>
+            <button type="submit" className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600">Submit</button>
+          </form>
+          <div className="mt-8 text-center">
+            <p className="text-gray-600">Email: <a href="mailto:support@emonfinanceltd.com" className="text-green-500">support@emonfinanceltd.com</a></p>
+            <p className="text-gray-600">Follow us: <a href="https://linkedin.com" className="text-green-500">LinkedIn</a> | <a href="https://x.com" className="text-green-500">X</a></p>
+          </div>
+        </div>
+      </section>
+    );
+
+    // Footer Component
+    const Footer = () => (
+      <footer className="bg-gray-800 text-white py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p>© 2025 Emon Finance Ltd. All rights reserved.</p>
+          <p><a href="/privacy" className="text-green-400">Privacy Policy</a> | <a href="/terms" className="text-green-400">Terms of Service</a></p>
+        </div>
+      </footer>
+    );
 
     // Main App Component
-    const App = () => {
-      return React.createElement(
-        React.Fragment,
-        null,
-        React.createElement(Navbar),
-        React.createElement(Hero)
-      );
-    };
+    const App = () => (
+      <div>
+        <Navbar />
+        <Hero />
+        <About />
+        <Services />
+        <Partnerships />
+        <CaseStudies />
+        <Contact />
+        <Footer />
+      </div>
+    );
 
     // Render the App
-    try {
-      const rootElement = document.getElementById('root');
-      const root = ReactDOM.createRoot(rootElement);
-      root.render(React.createElement(App));
-    } catch (error) {
-      console.error('Rendering error:', error);
-      document.getElementById('root').innerHTML = `
-        <div class="text-center p-12 text-red-600">
-          <h1 class="text-3xl">Error Rendering Application</h1>
-          <p>${error.message}</p>
-        </div>
-      `;
-    }
+    ReactDOM.render(<App />, document.getElementById('root'));
   </script>
 </body>
 </html>
