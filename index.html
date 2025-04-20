@@ -68,6 +68,43 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+    .prose {
+      color: #374151;
+      max-width: 65ch;
+    }
+    .prose h2 {
+      color: #111827;
+      font-weight: 600;
+      font-size: 1.5rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+    .prose h3 {
+      color: #111827;
+      font-weight: 600;
+      font-size: 1.25rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .prose p {
+      margin-bottom: 1rem;
+      line-height: 1.625;
+    }
+    .prose ul {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+      list-style-type: disc;
+    }
+    .prose li {
+      margin-bottom: 0.5rem;
+    }
+    .prose a {
+      color: #2563eb;
+      text-decoration: underline;
+    }
+    .prose a:hover {
+      color: #1d4ed8;
+    }
     @media (prefers-reduced-motion: reduce) {
       .hover-scale {
         transition: none;
@@ -91,7 +128,7 @@
     // ========== COMPONENTS ========== //
 
     // Navigation Component
-    const Navbar = () => {
+    const Navbar = ({ currentPage }) => {
       const [isScrolled, setIsScrolled] = useState(false);
       const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -101,19 +138,27 @@
         return () => window.removeEventListener('scroll', handleScroll);
       }, []);
 
+      const isLegalPage = ['terms', 'privacy', 'cookies', 'resources'].includes(currentPage);
+
       return (
         <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md' : 'bg-white'}`}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16">
               <div className="flex-shrink-0 flex items-center">
-                <img 
-                  src="https://media.licdn.com/dms/image/v2/D560BAQGS4tCTdvEdGw/company-logo_100_100/B56ZZJf6fAHsAU-/0/1744989825409?e=1750291200&v=beta&t=Fi_TOPK-UtNdgjDNMtQzccX63GY3mY5_34v_bReHLjY" 
-                  alt="Emon Finance Ltd. Logo" 
-                  className="h-8 w-auto"
-                />
-                <span className="ml-2 text-xl font-bold gradient-text bg-gradient-to-r from-primary-600 to-primary-800">
-                  Emon Finance
-                </span>
+                <a href="/" onClick={(e) => {
+                  e.preventDefault();
+                  window.history.pushState({}, '', '/');
+                  window.dispatchEvent(new Event('popstate'));
+                }}>
+                  <img 
+                    src="https://media.licdn.com/dms/image/v2/D560BAQGS4tCTdvEdGw/company-logo_100_100/B56ZZJf6fAHsAU-/0/1744989825409?e=1750291200&v=beta&t=Fi_TOPK-UtNdgjDNMtQzccX63GY3mY5_34v_bReHLjY" 
+                    alt="Emon Finance Ltd. Logo" 
+                    className="h-8 w-auto"
+                  />
+                  <span className="ml-2 text-xl font-bold gradient-text bg-gradient-to-r from-primary-600 to-primary-800">
+                    Emon Finance
+                  </span>
+                </a>
               </div>
               
               {/* Desktop Navigation */}
@@ -121,18 +166,36 @@
                 {['Advertisers', 'Publishers', 'Verticals', 'Resources'].map((item) => (
                   <a
                     key={item}
-                    href={`#${item.toLowerCase()}`}
-                    className="text-dark-900 hover:text-primary-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
+                    href={`/${item.toLowerCase()}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.history.pushState({}, '', `/${item.toLowerCase()}`);
+                      window.dispatchEvent(new Event('popstate'));
+                    }}
+                    className={`${currentPage === item.toLowerCase() ? 'text-primary-600 font-semibold' : 'text-dark-900'} hover:text-primary-600 px-3 py-2 text-sm font-medium transition-colors duration-200`}
                   >
                     {item}
                   </a>
                 ))}
                 <div className="flex space-x-4 ml-8">
-                  <a href="#login" className="text-dark-900 hover:text-primary-600 px-3 py-2 text-sm font-medium">
+                  <a 
+                    href="/login" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.history.pushState({}, '', '/login');
+                      window.dispatchEvent(new Event('popstate'));
+                    }}
+                    className="text-dark-900 hover:text-primary-600 px-3 py-2 text-sm font-medium"
+                  >
                     Login
                   </a>
                   <a 
-                    href="#signup" 
+                    href="/signup" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.history.pushState({}, '', '/signup');
+                      window.dispatchEvent(new Event('popstate'));
+                    }}
                     className="bg-gradient-to-r from-primary-600 to-primary-800 text-white px-4 py-2 rounded-md text-sm font-medium hover:shadow-md transition-all duration-200"
                     aria-label="Sign up"
                   >
@@ -161,22 +224,39 @@
                 {['Advertisers', 'Publishers', 'Verticals', 'Resources'].map((item) => (
                   <a
                     key={item}
-                    href={`#${item.toLowerCase()}`}
-                    className="block px-3 py-2 text-base font-medium text-dark-900 hover:text-primary-600 hover:bg-gray-50 rounded-md"
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    href={`/${item.toLowerCase()}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.history.pushState({}, '', `/${item.toLowerCase()}`);
+                      window.dispatchEvent(new Event('popstate'));
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className={`block px-3 py-2 text-base font-medium ${currentPage === item.toLowerCase() ? 'text-primary-600 bg-gray-50' : 'text-dark-900'} hover:text-primary-600 hover:bg-gray-50 rounded-md`}
                   >
                     {item}
                   </a>
                 ))}
                 <div className="pt-4 border-t border-gray-200">
                   <a
-                    href="#login"
+                    href="/login"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.history.pushState({}, '', '/login');
+                      window.dispatchEvent(new Event('popstate'));
+                      setIsMobileMenuOpen(false);
+                    }}
                     className="block w-full px-4 py-2 text-base font-medium text-center text-primary-600 hover:bg-gray-50 rounded-md"
                   >
                     Login
                   </a>
                   <a
-                    href="#signup"
+                    href="/signup"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.history.pushState({}, '', '/signup');
+                      window.dispatchEvent(new Event('popstate'));
+                      setIsMobileMenuOpen(false);
+                    }}
                     className="block w-full mt-2 px-4 py-2 text-base font-medium text-center text-white bg-gradient-to-r from-primary-600 to-primary-800 rounded-md hover:shadow-md"
                   >
                     Sign Up
@@ -550,6 +630,121 @@
       </section>
     );
 
+    // Resources Section
+    const Resources = () => (
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-dark-900 mb-4">Resources & Guides</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Learn how to maximize your performance with our expert resources
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            {[
+              {
+                title: "Performance Marketing Guide",
+                description: "Learn the fundamentals of performance marketing and how to optimize your campaigns.",
+                icon: "fa-book",
+                category: "Advertisers"
+              },
+              {
+                title: "Affiliate Marketing Playbook",
+                description: "Discover strategies to maximize your earnings as a publisher.",
+                icon: "fa-play-circle",
+                category: "Publishers"
+              },
+              {
+                title: "Fraud Prevention Handbook",
+                description: "Understand how we protect your campaigns from fraudulent traffic.",
+                icon: "fa-shield-alt",
+                category: "Both"
+              },
+              {
+                title: "Creative Best Practices",
+                description: "Get inspired with high-converting ad creatives and landing pages.",
+                icon: "fa-paint-brush",
+                category: "Advertisers"
+              },
+              {
+                title: "Traffic Optimization Guide",
+                description: "Learn how to optimize your traffic sources for maximum revenue.",
+                icon: "fa-chart-line",
+                category: "Publishers"
+              },
+              {
+                title: "API Documentation",
+                description: "Technical documentation for integrating with our platform.",
+                icon: "fa-code",
+                category: "Both"
+              }
+            ].map((resource, index) => (
+              <div 
+                key={index} 
+                className="bg-gray-50 p-6 rounded-xl hover-scale transition-all duration-200 border border-gray-200"
+              >
+                <div className="flex items-center mb-4">
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center mr-3 ${
+                    resource.category === 'Advertisers' ? 'bg-blue-100 text-blue-600' :
+                    resource.category === 'Publishers' ? 'bg-green-100 text-green-600' :
+                    'bg-purple-100 text-purple-600'
+                  }`}>
+                    <i className={`fas ${resource.icon}`}></i>
+                  </div>
+                  <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
+                    resource.category === 'Advertisers' ? 'bg-blue-50 text-blue-600' :
+                    resource.category === 'Publishers' ? 'bg-green-50 text-green-600' :
+                    'bg-purple-50 text-purple-600'
+                  }`}>
+                    {resource.category}
+                  </span>
+                </div>
+                <h3 className="text-xl font-semibold text-dark-900 mb-2">{resource.title}</h3>
+                <p className="text-gray-600 mb-4">{resource.description}</p>
+                <a 
+                  href="#" 
+                  className="text-primary-600 hover:text-primary-800 font-medium inline-flex items-center"
+                >
+                  Download Resource <i className="fas fa-arrow-right ml-2"></i>
+                </a>
+              </div>
+            ))}
+          </div>
+
+          <div className="bg-gradient-to-r from-primary-600 to-primary-800 rounded-2xl p-8 text-white">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              <div>
+                <h3 className="text-2xl font-bold mb-4">Subscribe to Our Newsletter</h3>
+                <p className="text-blue-100 mb-6">
+                  Get the latest performance marketing insights, tips, and exclusive offers delivered to your inbox.
+                </p>
+              </div>
+              <div>
+                <form className="flex flex-col sm:flex-row gap-3">
+                  <input 
+                    type="email" 
+                    placeholder="Your email address" 
+                    className="flex-grow px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-white text-dark-900"
+                    required
+                  />
+                  <button 
+                    type="submit" 
+                    className="bg-white text-primary-600 px-6 py-3 rounded-md font-semibold hover:bg-gray-50 hover:shadow-md transition-all duration-200"
+                  >
+                    Subscribe
+                  </button>
+                </form>
+                <p className="text-blue-100 text-xs mt-2">
+                  We respect your privacy. Unsubscribe at any time.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+
     // Contact Section with Form Submission to Email
     const Contact = () => {
       const [formData, setFormData] = useState({ 
@@ -582,7 +777,7 @@
         
         try {
           // Using FormSubmit.co to send form data to email
-          const response = await fetch("https://formsubmit.co/ajax/shakil@emonfinanceltd.com", {
+          const response = await fetch("https://formsubmit.co/ajax/inshakil@emonfinanceltd.com", {
             method: "POST",
             headers: { 
               'Content-Type': 'application/json',
@@ -744,7 +939,7 @@
                     </div>
                     <div className="ml-3 text-sm">
                       <label htmlFor="consent" className="font-medium text-gray-700">
-                        I agree to the <a href="#terms" className="text-primary-600 hover:underline">Terms of Service</a> and <a href="#privacy" className="text-primary-600 hover:underline">Privacy Policy</a>
+                        I agree to the <a href="/terms" className="text-primary-600 hover:underline">Terms of Service</a> and <a href="/privacy" className="text-primary-600 hover:underline">Privacy Policy</a>
                       </label>
                     </div>
                   </div>
@@ -783,6 +978,19 @@
     const LegalPage = ({ title, content }) => (
       <section className="py-20 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 bg-white p-8 rounded-lg shadow-sm">
+          <div className="mb-8">
+            <a 
+              href="/" 
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.pushState({}, '', '/');
+                window.dispatchEvent(new Event('popstate'));
+              }}
+              className="inline-flex items-center text-primary-600 hover:text-primary-800"
+            >
+              <i className="fas fa-arrow-left mr-2"></i> Back to Home
+            </a>
+          </div>
           <h1 className="text-3xl font-bold text-dark-900 mb-8">{title}</h1>
           <div className="prose max-w-none">
             {content}
@@ -794,20 +1002,73 @@
     const TermsOfService = () => {
       const content = (
         <>
-          <h2>1. Terms</h2>
-          <p>By accessing the website at <a href="https://emonfinanceltd.com" className="text-primary-600 hover:underline">https://emonfinanceltd.com</a>, you are agreeing to be bound by these terms of service, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws.</p>
+          <p><strong>Last Updated:</strong> January 1, 2023</p>
           
-          <h2>2. Use License</h2>
-          <p>Permission is granted to temporarily download one copy of the materials (information or software) on Emon Finance Ltd.'s website for personal, non-commercial transitory viewing only.</p>
+          <h2>1. Acceptance of Terms</h2>
+          <p>By accessing or using the services provided by Emon Finance Ltd. ("we," "us," or "our"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, you may not use our services.</p>
           
-          <h2>3. Disclaimer</h2>
-          <p>The materials on Emon Finance Ltd.'s website are provided on an 'as is' basis. Emon Finance Ltd. makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.</p>
+          <h2>2. Description of Service</h2>
+          <p>Emon Finance Ltd. operates a performance marketing network that connects advertisers with publishers. Our services include but are not limited to:</p>
+          <ul>
+            <li>Providing a platform for advertisers to promote offers</li>
+            <li>Enabling publishers to monetize their traffic</li>
+            <li>Tracking and reporting on campaign performance</li>
+            <li>Facilitating payments between parties</li>
+          </ul>
           
-          <h2>4. Limitations</h2>
-          <p>In no event shall Emon Finance Ltd. or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on Emon Finance Ltd.'s website.</p>
+          <h2>3. Account Registration</h2>
+          <p>To use our services, you must register for an account. You agree to:</p>
+          <ul>
+            <li>Provide accurate, current, and complete information</li>
+            <li>Maintain the security of your password</li>
+            <li>Accept all risks of unauthorized access to your account</li>
+            <li>Notify us immediately of any unauthorized use of your account</li>
+          </ul>
           
-          <h2>5. Governing Law</h2>
-          <p>These terms and conditions are governed by and construed in accordance with the laws of United Kingdom and you irrevocably submit to the exclusive jurisdiction of the courts in that State or location.</p>
+          <h2>4. Advertiser Responsibilities</h2>
+          <p>Advertisers using our platform agree to:</p>
+          <ul>
+            <li>Provide accurate information about offers</li>
+            <li>Honor all commitments made to publishers</li>
+            <li>Comply with all applicable laws and regulations</li>
+            <li>Not engage in fraudulent or deceptive practices</li>
+          </ul>
+          
+          <h2>5. Publisher Responsibilities</h2>
+          <p>Publishers using our platform agree to:</p>
+          <ul>
+            <li>Generate traffic through legal means</li>
+            <li>Not use prohibited traffic sources</li>
+            <li>Comply with all offer requirements</li>
+            <li>Not engage in fraudulent activities</li>
+          </ul>
+          
+          <h2>6. Payment Terms</h2>
+          <p>Payments to publishers are made according to the following terms:</p>
+          <ul>
+            <li>Minimum payment threshold: $100</li>
+            <li>Payment schedule: Net-30 (payments issued 30 days after month-end)</li>
+            <li>Payment methods: Bank transfer, PayPal, or other approved methods</li>
+            <li>Chargebacks may be assessed for invalid leads/sales</li>
+          </ul>
+          
+          <h2>7. Intellectual Property</h2>
+          <p>All content and materials available on our platform, including but not limited to text, graphics, logos, and software, are the property of Emon Finance Ltd. or its licensors and are protected by copyright and other intellectual property laws.</p>
+          
+          <h2>8. Termination</h2>
+          <p>We may terminate or suspend your account immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach these Terms.</p>
+          
+          <h2>9. Limitation of Liability</h2>
+          <p>In no event shall Emon Finance Ltd. be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the services.</p>
+          
+          <h2>10. Governing Law</h2>
+          <p>These Terms shall be governed and construed in accordance with the laws of the United Kingdom, without regard to its conflict of law provisions.</p>
+          
+          <h2>11. Changes to Terms</h2>
+          <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. We will provide notice of any changes by posting the new Terms on this page.</p>
+          
+          <h2>12. Contact Us</h2>
+          <p>If you have any questions about these Terms, please contact us at legal@emonfinanceltd.com.</p>
         </>
       );
       return <LegalPage title="Terms of Service" content={content} />;
@@ -816,28 +1077,83 @@
     const PrivacyPolicy = () => {
       const content = (
         <>
+          <p><strong>Last Updated:</strong> January 1, 2023</p>
+          
           <h2>1. Introduction</h2>
-          <p>Emon Finance Ltd. ("us", "we", or "our") operates the https://emonfinanceltd.com website (the "Service"). This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our Service and the choices you have associated with that data.</p>
+          <p>Emon Finance Ltd. ("we," "us," or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our performance marketing network services.</p>
           
-          <h2>2. Information Collection And Use</h2>
-          <p>We collect several different types of information for various purposes to provide and improve our Service to you. This may include, but is not limited to, your email address, name, phone number, and usage data.</p>
+          <h2>2. Information We Collect</h2>
+          <p>We may collect the following types of information:</p>
+          <h3>Personal Information</h3>
+          <ul>
+            <li>Name and contact details (email, phone number, address)</li>
+            <li>Business information (company name, tax ID, payment details)</li>
+            <li>Account credentials (username, password)</li>
+          </ul>
+          <h3>Technical Information</h3>
+          <ul>
+            <li>IP address and device information</li>
+            <li>Browser type and version</li>
+            <li>Pages visited and time spent on our platform</li>
+          </ul>
+          <h3>Performance Data</h3>
+          <ul>
+            <li>Campaign performance metrics</li>
+            <li>Conversion data</li>
+            <li>Traffic sources and quality</li>
+          </ul>
           
-          <h2>3. Use of Data</h2>
-          <p>Emon Finance Ltd. uses the collected data for various purposes:
-            <ul>
-              <li>To provide and maintain our Service</li>
-              <li>To notify you about changes to our Service</li>
-              <li>To allow you to participate in interactive features of our Service</li>
-              <li>To provide customer support</li>
-              <li>To gather analysis or valuable information so that we can improve our Service</li>
-            </ul>
-          </p>
+          <h2>3. How We Use Your Information</h2>
+          <p>We use the information we collect for the following purposes:</p>
+          <ul>
+            <li>To provide and maintain our services</li>
+            <li>To process payments and prevent fraud</li>
+            <li>To communicate with you about your account</li>
+            <li>To improve and optimize our platform</li>
+            <li>To comply with legal obligations</li>
+          </ul>
           
-          <h2>4. Data Security</h2>
-          <p>The security of your data is important to us, but remember that no method of transmission over the Internet, or method of electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your Personal Data, we cannot guarantee its absolute security.</p>
+          <h2>4. Information Sharing and Disclosure</h2>
+          <p>We may share your information in the following situations:</p>
+          <ul>
+            <li><strong>With Service Providers:</strong> We may share information with third-party vendors who perform services on our behalf.</li>
+            <li><strong>For Legal Reasons:</strong> We may disclose information if required by law or in response to valid requests by public authorities.</li>
+            <li><strong>Business Transfers:</strong> In connection with any merger, sale of company assets, or acquisition.</li>
+          </ul>
           
-          <h2>5. Changes To This Privacy Policy</h2>
-          <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "effective date" at the top of this Privacy Policy.</p>
+          <h2>5. Data Security</h2>
+          <p>We implement appropriate technical and organizational measures to protect your personal information, including:</p>
+          <ul>
+            <li>Encryption of sensitive data</li>
+            <li>Regular security assessments</li>
+            <li>Access controls to personal information</li>
+          </ul>
+          
+          <h2>6. Your Data Protection Rights</h2>
+          <p>Depending on your location, you may have the following rights regarding your personal information:</p>
+          <ul>
+            <li><strong>Access:</strong> Request copies of your personal data.</li>
+            <li><strong>Rectification:</strong> Request correction of inaccurate data.</li>
+            <li><strong>Erasure:</strong> Request deletion of your personal data.</li>
+            <li><strong>Restriction:</strong> Request restriction of processing.</li>
+            <li><strong>Objection:</strong> Object to our processing of your data.</li>
+            <li><strong>Portability:</strong> Request transfer of your data.</li>
+          </ul>
+          
+          <h2>7. International Data Transfers</h2>
+          <p>Your information may be transferred to — and maintained on — computers located outside of your state, province, country or other governmental jurisdiction where the data protection laws may differ from those of your jurisdiction.</p>
+          
+          <h2>8. Cookies and Tracking Technologies</h2>
+          <p>We use cookies and similar tracking technologies to track activity on our platform. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.</p>
+          
+          <h2>9. Children's Privacy</h2>
+          <p>Our services are not intended for use by children under the age of 18. We do not knowingly collect personally identifiable information from children under 18.</p>
+          
+          <h2>10. Changes to This Privacy Policy</h2>
+          <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.</p>
+          
+          <h2>11. Contact Us</h2>
+          <p>If you have any questions about this Privacy Policy, please contact us at privacy@emonfinanceltd.com.</p>
         </>
       );
       return <LegalPage title="Privacy Policy" content={content} />;
@@ -846,28 +1162,66 @@
     const CookiePolicy = () => {
       const content = (
         <>
+          <p><strong>Last Updated:</strong> January 1, 2023</p>
+          
           <h2>1. What Are Cookies</h2>
-          <p>Cookies are small pieces of text sent to your web browser by a website you visit. A cookie file is stored in your web browser and allows the Service or a third-party to recognize you and make your next visit easier and the Service more useful to you.</p>
+          <p>Cookies are small text files that are placed on your computer or mobile device when you visit a website. They are widely used to make websites work more efficiently, as well as to provide information to the website owners.</p>
           
           <h2>2. How We Use Cookies</h2>
-          <p>We use cookies for the following purposes:
-            <ul>
-              <li>To enable certain functions of the Service</li>
-              <li>To provide analytics</li>
-              <li>To store your preferences</li>
-              <li>To enable advertisements delivery, including behavioral advertising</li>
-            </ul>
-          </p>
+          <p>We use cookies for the following purposes:</p>
+          <h3>Essential Cookies</h3>
+          <p>These cookies are necessary for the website to function and cannot be switched off in our systems.</p>
+          <h3>Performance Cookies</h3>
+          <p>These cookies allow us to count visits and traffic sources so we can measure and improve the performance of our site.</p>
+          <h3>Functional Cookies</h3>
+          <p>These cookies enable the website to provide enhanced functionality and personalization.</p>
+          <h3>Targeting Cookies</h3>
+          <p>These cookies may be set through our site by our advertising partners to build a profile of your interests.</p>
           
-          <h2>3. Your Choices Regarding Cookies</h2>
-          <p>If you'd like to delete cookies or instruct your web browser to delete or refuse cookies, please visit the help pages of your web browser. Please note, however, that if you delete cookies or refuse to accept them, you might not be able to use all of the features we offer.</p>
+          <h2>3. Types of Cookies We Use</h2>
+          <p>The table below explains the cookies we use and why:</p>
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cookie Name</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Purpose</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">session_id</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Maintain user session</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Session</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">_ga</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Google Analytics</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2 years</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">_gid</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Google Analytics</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">24 hours</td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <h2>4. Managing Cookies</h2>
+          <p>You can control and/or delete cookies as you wish. You can delete all cookies that are already on your computer and you can set most browsers to prevent them from being placed.</p>
+          
+          <h2>5. Changes to This Cookie Policy</h2>
+          <p>We may update our Cookie Policy from time to time. We will notify you of any changes by posting the new Cookie Policy on this page.</p>
+          
+          <h2>6. Contact Us</h2>
+          <p>If you have any questions about this Cookie Policy, please contact us at privacy@emonfinanceltd.com.</p>
         </>
       );
       return <LegalPage title="Cookie Policy" content={content} />;
     };
 
     // Footer Component with Legal Links
-    const Footer = () => (
+    const Footer = ({ currentPage }) => (
       <footer className="bg-dark-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -901,18 +1255,74 @@
             <div>
               <h3 className="text-lg font-semibold text-primary-400 mb-4">Quick Links</h3>
               <ul className="space-y-2">
-                <li><a href="#advertisers" className="text-gray-400 hover:text-white text-sm transition-colors duration-200">Advertisers</a></li>
-                <li><a href="#publishers" className="text-gray-400 hover:text-white text-sm transition-colors duration-200">Publishers</a></li>
-                <li><a href="#verticals" className="text-gray-400 hover:text-white text-sm transition-colors duration-200">Verticals</a></li>
-                <li><a href="#contact" className="text-gray-400 hover:text-white text-sm transition-colors duration-200">Contact</a></li>
+                <li><a 
+                  href="/advertisers" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.history.pushState({}, '', '/advertisers');
+                    window.dispatchEvent(new Event('popstate'));
+                  }}
+                  className={`text-gray-400 hover:text-white text-sm transition-colors duration-200 ${currentPage === 'advertisers' ? 'text-white font-medium' : ''}`}
+                >Advertisers</a></li>
+                <li><a 
+                  href="/publishers" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.history.pushState({}, '', '/publishers');
+                    window.dispatchEvent(new Event('popstate'));
+                  }}
+                  className={`text-gray-400 hover:text-white text-sm transition-colors duration-200 ${currentPage === 'publishers' ? 'text-white font-medium' : ''}`}
+                >Publishers</a></li>
+                <li><a 
+                  href="/verticals" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.history.pushState({}, '', '/verticals');
+                    window.dispatchEvent(new Event('popstate'));
+                  }}
+                  className={`text-gray-400 hover:text-white text-sm transition-colors duration-200 ${currentPage === 'verticals' ? 'text-white font-medium' : ''}`}
+                >Verticals</a></li>
+                <li><a 
+                  href="/resources" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.history.pushState({}, '', '/resources');
+                    window.dispatchEvent(new Event('popstate'));
+                  }}
+                  className={`text-gray-400 hover:text-white text-sm transition-colors duration-200 ${currentPage === 'resources' ? 'text-white font-medium' : ''}`}
+                >Resources</a></li>
               </ul>
             </div>
             <div>
               <h3 className="text-lg font-semibold text-primary-400 mb-4">Legal</h3>
               <ul className="space-y-2">
-                <li><a href="#terms" className="text-gray-400 hover:text-white text-sm transition-colors duration-200">Terms of Service</a></li>
-                <li><a href="#privacy" className="text-gray-400 hover:text-white text-sm transition-colors duration-200">Privacy Policy</a></li>
-                <li><a href="#cookies" className="text-gray-400 hover:text-white text-sm transition-colors duration-200">Cookie Policy</a></li>
+                <li><a 
+                  href="/terms" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.history.pushState({}, '', '/terms');
+                    window.dispatchEvent(new Event('popstate'));
+                  }}
+                  className={`text-gray-400 hover:text-white text-sm transition-colors duration-200 ${currentPage === 'terms' ? 'text-white font-medium' : ''}`}
+                >Terms of Service</a></li>
+                <li><a 
+                  href="/privacy" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.history.pushState({}, '', '/privacy');
+                    window.dispatchEvent(new Event('popstate'));
+                  }}
+                  className={`text-gray-400 hover:text-white text-sm transition-colors duration-200 ${currentPage === 'privacy' ? 'text-white font-medium' : ''}`}
+                >Privacy Policy</a></li>
+                <li><a 
+                  href="/cookies" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.history.pushState({}, '', '/cookies');
+                    window.dispatchEvent(new Event('popstate'));
+                  }}
+                  className={`text-gray-400 hover:text-white text-sm transition-colors duration-200 ${currentPage === 'cookies' ? 'text-white font-medium' : ''}`}
+                >Cookie Policy</a></li>
               </ul>
             </div>
             <div>
@@ -945,39 +1355,79 @@
       const [currentPage, setCurrentPage] = useState('home');
       
       useEffect(() => {
-        const hash = window.location.hash.substring(1);
-        if (hash === 'terms') setCurrentPage('terms');
-        else if (hash === 'privacy') setCurrentPage('privacy');
-        else if (hash === 'cookies') setCurrentPage('cookies');
-        else setCurrentPage('home');
+        const handlePopState = () => {
+          const path = window.location.pathname.substring(1) || 'home';
+          setCurrentPage(path);
+        };
+
+        // Initial page load
+        handlePopState();
+
+        // Listen for back/forward navigation
+        window.addEventListener('popstate', handlePopState);
+
+        return () => {
+          window.removeEventListener('popstate', handlePopState);
+        };
       }, []);
 
       const renderPage = () => {
         switch(currentPage) {
           case 'terms': return (
             <>
-              <Navbar />
+              <Navbar currentPage={currentPage} />
               <TermsOfService />
-              <Footer />
+              <Footer currentPage={currentPage} />
             </>
           );
           case 'privacy': return (
             <>
-              <Navbar />
+              <Navbar currentPage={currentPage} />
               <PrivacyPolicy />
-              <Footer />
+              <Footer currentPage={currentPage} />
             </>
           );
           case 'cookies': return (
             <>
-              <Navbar />
+              <Navbar currentPage={currentPage} />
               <CookiePolicy />
-              <Footer />
+              <Footer currentPage={currentPage} />
+            </>
+          );
+          case 'resources': return (
+            <>
+              <Navbar currentPage={currentPage} />
+              <Resources />
+              <Footer currentPage={currentPage} />
+            </>
+          );
+          case 'advertisers': return (
+            <>
+              <Navbar currentPage={currentPage} />
+              <Hero />
+              <Advertisers />
+              <Footer currentPage={currentPage} />
+            </>
+          );
+          case 'publishers': return (
+            <>
+              <Navbar currentPage={currentPage} />
+              <Hero />
+              <Publishers />
+              <Footer currentPage={currentPage} />
+            </>
+          );
+          case 'verticals': return (
+            <>
+              <Navbar currentPage={currentPage} />
+              <Hero />
+              <Verticals />
+              <Footer currentPage={currentPage} />
             </>
           );
           default: return (
             <>
-              <Navbar />
+              <Navbar currentPage={currentPage} />
               <Hero />
               <Stats />
               <Advertisers />
@@ -985,7 +1435,7 @@
               <Verticals />
               <Testimonials />
               <Contact />
-              <Footer />
+              <Footer currentPage={currentPage} />
             </>
           );
         }
