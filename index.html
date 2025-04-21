@@ -168,6 +168,33 @@
         transform: none;
       }
     }
+    /* New animations */
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .gradient-bg-animate {
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+    /* Smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+    /* Focus styles for accessibility */
+    button:focus, a:focus, input:focus, textarea:focus, select:focus {
+      outline: 2px solid #0ea5e9;
+      outline-offset: 2px;
+    }
+    /* Loading spinner */
+    .spinner {
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body class="font-sans bg-gray-50 text-dark-900 antialiased scroll-smooth">
@@ -186,6 +213,7 @@
     const Navbar = ({ currentPage }) => {
       const [isScrolled, setIsScrolled] = useState(false);
       const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+      const [isLoading, setIsLoading] = useState(false);
 
       useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -195,10 +223,12 @@
 
       const handleLinkClick = (e, path) => {
         e.preventDefault();
+        setIsLoading(true);
         window.history.pushState({}, '', path);
         window.dispatchEvent(new Event('popstate'));
         setIsMobileMenuOpen(false);
         window.scrollTo(0, 0);
+        setTimeout(() => setIsLoading(false), 500); // Simulate loading
       };
 
       return (
@@ -246,7 +276,7 @@
                   <a 
                     href="/signup" 
                     onClick={(e) => handleLinkClick(e, '/signup')}
-                    className="bg-gradient-to-r from-primary-600 to-primary-800 text-white px-4 py-2 rounded-md text-sm font-medium hover:shadow-md transition-all duration-200 hover:opacity-90"
+                    className="bg-gradient-to-r from-primary-600 to-primary-800 text-white px-4 py-2 rounded-md text-sm font-medium hover:shadow-md transition-all duration-200 hover:opacity-90 hover-scale"
                     aria-label="Sign up"
                   >
                     Sign Up
@@ -297,7 +327,7 @@
                   <a
                     href="/signup"
                     onClick={(e) => handleLinkClick(e, '/signup')}
-                    className="block w-full mt-2 px-4 py-2 text-base font-medium text-center text-white bg-gradient-to-r from-primary-600 to-primary-800 rounded-md hover:shadow-md hover:opacity-90"
+                    className="block w-full mt-2 px-4 py-2 text-base font-medium text-center text-white bg-gradient-to-r from-primary-600 to-primary-800 rounded-md hover:shadow-md hover:opacity-90 hover-scale"
                   >
                     Sign Up
                   </a>
@@ -305,12 +335,17 @@
               </div>
             </div>
           )}
+          
+          {/* Loading bar */}
+          {isLoading && (
+            <div className="absolute bottom-0 left-0 right-0 h-1 bg-primary-500 animate-pulse"></div>
+          )}
         </nav>
       );
     };
 
     // Page Layout Component
-    const PageLayout = ({ children, title, subtitle, bgColor = 'bg-white', textColor = 'text-dark-900' }) => {
+    const PageLayout = ({ children, title, subtitle, bgColor = 'bg-white', textColor = 'text-dark-900', padding = 'py-12' }) => {
       return (
         <>
           <div className={`${bgColor} ${textColor} pt-24 pb-12`}>
@@ -321,7 +356,7 @@
               {subtitle && <p className="text-xl opacity-90 max-w-3xl mx-auto">{subtitle}</p>}
             </div>
           </div>
-          <div className="bg-white py-12">
+          <div className={`bg-white ${padding}`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               {children}
             </div>
@@ -337,6 +372,7 @@
           title={title} 
           bgColor="bg-gradient-to-br from-gray-900 to-gray-700"
           textColor="text-white"
+          padding="py-16"
         >
           <div className="prose mx-auto">
             {content}
@@ -449,8 +485,15 @@
       };
 
       return (
-        <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-md overflow-hidden p-8">
+        <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-md overflow-hidden p-8 hover-scale">
           <div className="text-center mb-6">
+            <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i className={`fas ${
+                formType === 'advertiser' ? 'fa-bullhorn text-primary-600' :
+                formType === 'publisher' ? 'fa-globe text-green-600' :
+                'fa-envelope text-blue-600'
+              } text-2xl`}></i>
+            </div>
             <h2 className="text-2xl font-bold mb-2">{getFormTitle()}</h2>
             <p className="text-gray-600">{getFormDescription()}</p>
           </div>
@@ -628,7 +671,7 @@
               <button
                 type="submit"
                 disabled={status.type === 'loading'}
-                className="w-full bg-gradient-to-r from-primary-600 to-primary-800 text-white py-3 px-4 rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 font-medium transition-colors duration-200"
+                className="w-full bg-gradient-to-r from-primary-600 to-primary-800 text-white py-3 px-4 rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 font-medium transition-colors duration-200 hover-scale"
               >
                 {status.type === 'loading' ? (
                   <>
@@ -654,6 +697,7 @@
           title={title} 
           bgColor="bg-gradient-to-br from-primary-800 to-primary-600"
           textColor="text-white"
+          padding="py-16"
         >
           <div className="prose max-w-4xl mx-auto">
             {content}
@@ -833,7 +877,7 @@
               </div>
             </div>
             <div>
-              <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl border border-blue-100">
+              <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl border border-blue-100 hover-scale">
                 <img 
                   src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
                   alt="Advertiser dashboard" 
@@ -860,7 +904,7 @@
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
             <div>
-              <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-xl border border-green-100">
+              <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-xl border border-green-100 hover-scale">
                 <img 
                   src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
                   alt="Publisher dashboard" 
@@ -972,7 +1016,7 @@
                 <h3 className="text-xl font-semibold mb-2">{vertical.title}</h3>
                 <p className="text-gray-600 mb-4">{vertical.description}</p>
                 <button
-                  onClick={() => onLearnMore(vertical.title.toLowerCase())}
+                  onClick={() => onLearnMore(vertical.title.toLowerCase().replace(' & ', '-').replace(' ', '-'))}
                   className="text-primary-600 hover:text-primary-800 font-medium inline-flex items-center"
                 >
                   Learn More <i className="fas fa-arrow-right ml-2"></i>
@@ -1065,15 +1109,22 @@
 
     // Footer Component with Legal Links
     const Footer = ({ currentPage }) => {
+      const [isLoading, setIsLoading] = useState(false);
+
       const handleLinkClick = (e, path) => {
         e.preventDefault();
+        setIsLoading(true);
         window.history.pushState({}, '', path);
         window.dispatchEvent(new Event('popstate'));
         window.scrollTo(0, 0);
+        setTimeout(() => setIsLoading(false), 500);
       };
 
       return (
-        <footer className="bg-dark-900 text-white py-12">
+        <footer className="bg-dark-900 text-white py-12 relative">
+          {isLoading && (
+            <div className="absolute top-0 left-0 right-0 h-1 bg-primary-500 animate-pulse"></div>
+          )}
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               <div>
@@ -1416,7 +1467,7 @@
             bgColor="bg-gradient-to-br from-blue-900 to-blue-700"
             textColor="text-white"
           >
-            <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden p-8">
+            <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden p-8 hover-scale">
               <div className="text-center mb-6">
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <i className="fas fa-lock text-blue-600 text-2xl"></i>
@@ -1481,7 +1532,7 @@
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white py-3 px-4 rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 font-medium transition-colors duration-200"
+                    className="w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white py-3 px-4 rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 font-medium transition-colors duration-200 hover-scale"
                   >
                     {isLoading ? (
                       <>
@@ -1623,7 +1674,7 @@
             textColor="text-white"
           >
             <div className="max-w-2xl mx-auto">
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+              <div className="bg-white rounded-xl shadow-lg overflow-hidden hover-scale">
                 <div className="md:flex">
                   <div className="md:w-1/2 bg-gradient-to-br from-blue-50 to-blue-100 p-8 flex items-center">
                     <div>
@@ -1766,7 +1817,7 @@
                       <button
                         type="submit"
                         disabled={status.type === 'loading'}
-                        className="w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white py-3 px-4 rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 font-medium transition-colors duration-200"
+                        className="w-full bg-gradient-to-r from-blue-600 to-blue-800 text-white py-3 px-4 rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 font-medium transition-colors duration-200 hover-scale"
                       >
                         {status.type === 'loading' ? (
                           <>
@@ -1972,7 +2023,7 @@
             </ul>
           </>
         ),
-        health: (
+        "health-wellness": (
           <>
             <h2>Health & Wellness Vertical</h2>
             <p>Our health vertical focuses on products and services that improve quality of life and wellbeing.</p>
@@ -2003,7 +2054,29 @@
             </ul>
           </>
         ),
-        'case-study': (
+        ecommerce: (
+          <>
+            <h2>E-commerce Vertical</h2>
+            <p>Our e-commerce vertical helps direct-to-consumer brands scale profitably.</p>
+            
+            <h3>Top Performing Offers</h3>
+            <ul>
+              <li>Subscription Boxes</li>
+              <li>Dropshipping Stores</li>
+              <li>Digital Products</li>
+              <li>Membership Programs</li>
+              <li>Flash Sales</li>
+            </ul>
+            
+            <h3>Performance Benchmarks</h3>
+            <ul>
+              <li><strong>Average Conversion Rate:</strong> 4.3%</li>
+              <li><strong>Average EPC:</strong> $1.92</li>
+              <li><strong>Average ROAS:</strong> 3.5x</li>
+            </ul>
+          </>
+        ),
+        "case-study": (
           <>
             <h2>Case Study: Financial Services Brand</h2>
             <h3>Client Overview</h3>
@@ -2047,9 +2120,87 @@
       );
 
       return <ContentDetail 
-        title={`${vertical.charAt(0).toUpperCase() + vertical.slice(1)} Vertical`} 
+        title={`${vertical.charAt(0).toUpperCase() + vertical.slice(1).replace('-', ' ')} Vertical`} 
         content={contentMap[vertical] || defaultContent} 
       />;
+    };
+
+    // Resources Page
+    const ResourcesPage = () => {
+      const content = (
+        <>
+          <h2>Marketing Resources</h2>
+          <p>Access our library of resources to help you maximize your performance marketing results.</p>
+          
+          <h3>Guides & Whitepapers</h3>
+          <ul>
+            <li><strong>Performance Marketing 101:</strong> A beginner's guide to performance-based advertising</li>
+            <li><strong>Traffic Quality Optimization:</strong> How to improve your traffic quality and conversion rates</li>
+            <li><strong>Publisher Monetization Strategies:</strong> Best practices for maximizing your earnings</li>
+            <li><strong>Ad Fraud Prevention:</strong> How to protect your campaigns from invalid traffic</li>
+          </ul>
+          
+          <h3>Webinars & Videos</h3>
+          <ul>
+            <li><strong>Mastering Performance Marketing:</strong> A recorded webinar with industry experts</li>
+            <li><strong>Case Study Deep Dives:</strong> Learn from successful campaigns in our network</li>
+            <li><strong>Platform Tutorials:</strong> Step-by-step guides to using our tools effectively</li>
+          </ul>
+          
+          <h3>Tools & Calculators</h3>
+          <ul>
+            <li><strong>ROI Calculator:</strong> Estimate your potential return on investment</li>
+            <li><strong>Traffic Value Estimator:</strong> Determine the potential value of your traffic sources</li>
+            <li><strong>Conversion Rate Optimizer:</strong> Tools to help improve your conversion funnel</li>
+          </ul>
+          
+          <h3>Industry Reports</h3>
+          <ul>
+            <li><strong>Annual Performance Marketing Trends:</strong> Insights into the latest industry developments</li>
+            <li><strong>Vertical-Specific Benchmarks:</strong> See how your performance compares to industry standards</li>
+            <li><strong>Emerging Traffic Sources:</strong> Analysis of new and growing traffic opportunities</li>
+          </ul>
+        </>
+      );
+      return <ContentDetail title="Resources" content={content} />;
+    };
+
+    // About Page
+    const AboutPage = () => {
+      const content = (
+        <>
+          <h2>About Emon Finance Ltd.</h2>
+          <p>We are a premium performance marketing network connecting advertisers with top publishers worldwide.</p>
+          
+          <h3>Our Story</h3>
+          <p>Founded in 2015, Emon Finance Ltd. began as a small team of performance marketing experts with a vision to create a more transparent and results-driven advertising ecosystem. Over the years, we've grown into a trusted partner for hundreds of advertisers and publishers across multiple verticals.</p>
+          
+          <h3>Our Mission</h3>
+          <p>To deliver exceptional value to both advertisers and publishers through innovative technology, premium traffic sources, and performance-based solutions that drive measurable results.</p>
+          
+          <h3>Our Team</h3>
+          <p>We're a diverse team of marketing experts, data scientists, and technology professionals dedicated to helping our partners succeed. With decades of combined experience in performance marketing, we understand what it takes to create successful campaigns and monetize traffic effectively.</p>
+          
+          <h3>Our Values</h3>
+          <ul>
+            <li><strong>Transparency:</strong> We believe in open communication and clear reporting</li>
+            <li><strong>Innovation:</strong> We continuously invest in technology to improve results</li>
+            <li><strong>Partnership:</strong> We view our relationships as long-term partnerships</li>
+            <li><strong>Integrity:</strong> We adhere to the highest ethical standards in all our dealings</li>
+          </ul>
+          
+          <h3>Our Technology</h3>
+          <p>Our proprietary platform combines advanced tracking, real-time optimization, and fraud detection to ensure the highest quality traffic and maximum ROI for our partners. Key features include:</p>
+          <ul>
+            <li>Real-time conversion tracking</li>
+            <li>AI-powered traffic optimization</li>
+            <li>Comprehensive fraud detection</li>
+            <li>Customizable reporting dashboards</li>
+            <li>API integration capabilities</li>
+          </ul>
+        </>
+      );
+      return <ContentDetail title="About Us" content={content} />;
     };
 
     // Home Page Component
@@ -2071,11 +2222,14 @@
       const [formType, setFormType] = useState('contact');
       const [contentType, setContentType] = useState('');
       const [contentVertical, setContentVertical] = useState('');
+      const [isLoading, setIsLoading] = useState(false);
       
       useEffect(() => {
         const handlePopState = () => {
           const path = window.location.pathname.substring(1) || 'home';
+          setIsLoading(true);
           setCurrentPage(path);
+          setTimeout(() => setIsLoading(false), 500); // Simulate loading
         };
 
         // Initial page load
@@ -2096,21 +2250,21 @@
       };
 
       const handleLearnMore = (type) => {
-        if (['finance', 'health', 'case-study'].includes(type)) {
+        if (['finance', 'health-wellness', 'ecommerce', 'case-study'].includes(type)) {
           setContentVertical(type);
           setCurrentPage('vertical-content');
-          window.history.pushState({}, '', '/vertical-content');
+          window.history.pushState({}, '', `/verticals/${type}`);
         } else {
           setContentType(type);
           setCurrentPage('content');
-          window.history.pushState({}, '', '/content');
+          window.history.pushState({}, '', `/${type}`);
         }
       };
 
       const handleContact = () => {
         setFormType('contact');
         setCurrentPage('form');
-        window.history.pushState({}, '', '/form');
+        window.history.pushState({}, '', '/contact');
       };
 
       const renderPage = () => {
@@ -2150,7 +2304,8 @@
               <Footer currentPage={currentPage} />
             </>
           );
-          case 'form': return (
+          case 'form':
+          case 'contact': return (
             <>
               <Navbar currentPage={currentPage} />
               <PageLayout 
@@ -2168,17 +2323,75 @@
               <Footer currentPage={currentPage} />
             </>
           );
-          case 'content': return (
+          case 'content':
+          case 'advertisers': return (
             <>
               <Navbar currentPage={currentPage} />
-              {contentType === 'advertiser' ? <AdvertisersContent /> : <PublishersContent />}
+              {contentType === 'advertiser' || currentPage === 'advertisers' ? <AdvertisersContent /> : 
+               contentType === 'publisher' || currentPage === 'publishers' ? <PublishersContent /> :
+               contentType === 'resources' || currentPage === 'resources' ? <ResourcesPage /> :
+               contentType === 'about' || currentPage === 'about' ? <AboutPage /> :
+               <AdvertisersContent />}
               <Footer currentPage={currentPage} />
             </>
           );
-          case 'vertical-content': return (
+          case 'vertical-content':
+          case 'verticals': return (
             <>
               <Navbar currentPage={currentPage} />
-              <VerticalContent vertical={contentVertical} />
+              {contentVertical ? <VerticalContent vertical={contentVertical} /> : 
+               <ContentDetail 
+                 title="Our Verticals" 
+                 content={(
+                   <>
+                     <h2>Our Specialized Verticals</h2>
+                     <p>We focus on these high-performing verticals where we have proven expertise and results.</p>
+                     
+                     <h3>Finance</h3>
+                     <p>Credit cards, loans, banking products, and investment services with high lifetime value.</p>
+                     
+                     <h3>Health & Wellness</h3>
+                     <p>Supplements, telehealth, insurance, and fitness products with strong conversion rates.</p>
+                     
+                     <h3>E-commerce</h3>
+                     <p>Dropshipping, subscription boxes, and direct-to-consumer brands with proven funnels.</p>
+                     
+                     <h3>Insurance</h3>
+                     <p>Auto, home, life, and health insurance products with qualified lead generation.</p>
+                   </>
+                 )} 
+               />}
+              <Footer currentPage={currentPage} />
+            </>
+          );
+          case 'case-studies': return (
+            <>
+              <Navbar currentPage={currentPage} />
+              <ContentDetail 
+                title="Case Studies" 
+                content={(
+                  <>
+                    <h2>Success Stories</h2>
+                    <p>Real-world results from our advertisers and publishers.</p>
+                    
+                    <h3>Financial Services Brand 3X ROAS</h3>
+                    <p>How a leading fintech company scaled customer acquisition while maintaining profitability.</p>
+                    
+                    <h3>Publisher Increases Earnings by 82%</h3>
+                    <p>Content network optimizes traffic mix with our AI-powered recommendations.</p>
+                    
+                    <h3>Health Supplement Company Reduces CPA by 60%</h3>
+                    <p>Targeted traffic sources and optimized funnels drive better results.</p>
+                  </>
+                )} 
+              />
+              <Footer currentPage={currentPage} />
+            </>
+          );
+          case 'about': return (
+            <>
+              <Navbar currentPage={currentPage} />
+              <AboutPage />
               <Footer currentPage={currentPage} />
             </>
           );
@@ -2196,7 +2409,16 @@
         }
       };
 
-      return renderPage();
+      return (
+        <>
+          {isLoading && (
+            <div className="fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50">
+              <div className="w-16 h-16 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          )}
+          {renderPage()}
+        </>
+      );
     };
 
     // Render the App
