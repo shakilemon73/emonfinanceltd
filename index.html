@@ -220,7 +220,7 @@
               
               {/* Desktop Navigation */}
               <div className="hidden md:ml-6 md:flex md:items-center md:space-x-8">
-                {['Advertisers', 'Publishers', 'Verticals', 'Resources', 'Case Study', 'About'].map((item) => {
+                {['Advertisers', 'Publishers', 'Verticals', 'Resources', 'Case Studies', 'About'].map((item) => {
                   const path = item.toLowerCase().replace(' ', '-');
                   return (
                     <a
@@ -271,7 +271,7 @@
           {isMobileMenuOpen && (
             <div className="md:hidden bg-white shadow-lg">
               <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                {['Advertisers', 'Publishers', 'Verticals', 'Resources', 'Case Study', 'About'].map((item) => {
+                {['Advertisers', 'Publishers', 'Verticals', 'Resources', 'Case Studies', 'About'].map((item) => {
                   const path = item.toLowerCase().replace(' ', '-');
                   return (
                     <a
@@ -345,19 +345,37 @@
       );
     };
 
-    // Contact Form Component
-    const ContactForm = ({ formType = 'general' }) => {
+    // Dynamic Form Component
+    const DynamicForm = ({ formType }) => {
       const [formData, setFormData] = useState({
         name: '',
         email: '',
         company: '',
         phone: '',
+        website: '',
+        trafficSources: '',
+        monthlyBudget: '',
         message: '',
-        role: formType === 'advertiser' ? 'Advertiser' : formType === 'publisher' ? 'Publisher' : '',
         consent: false
       });
       
       const [status, setStatus] = useState({ type: '', message: '' });
+
+      useEffect(() => {
+        // Reset form when formType changes
+        setFormData({
+          name: '',
+          email: '',
+          company: '',
+          phone: '',
+          website: '',
+          trafficSources: '',
+          monthlyBudget: '',
+          message: '',
+          consent: false
+        });
+        setStatus({ type: '', message: '' });
+      }, [formType]);
 
       const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -384,6 +402,7 @@
             },
             body: JSON.stringify({
               ...formData,
+              formType: formType,
               _subject: `New ${formType} Inquiry - Emon Finance`,
               _template: "table"
             })
@@ -397,8 +416,10 @@
               email: '',
               company: '',
               phone: '',
+              website: '',
+              trafficSources: '',
+              monthlyBudget: '',
               message: '',
-              role: formType === 'advertiser' ? 'Advertiser' : formType === 'publisher' ? 'Publisher' : '',
               consent: false
             });
           } else {
@@ -409,9 +430,30 @@
         }
       };
 
+      const getFormTitle = () => {
+        switch(formType) {
+          case 'advertiser': return 'Advertiser Application';
+          case 'publisher': return 'Publisher Application';
+          case 'contact': return 'Contact Our Team';
+          default: return 'Get In Touch';
+        }
+      };
+
+      const getFormDescription = () => {
+        switch(formType) {
+          case 'advertiser': return 'Fill out this form to start advertising with our premium publisher network.';
+          case 'publisher': return 'Join our network of premium publishers and monetize your traffic.';
+          case 'contact': return 'Have questions? Our team is ready to help you.';
+          default: return 'Send us a message and we\'ll get back to you shortly.';
+        }
+      };
+
       return (
         <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-md overflow-hidden p-8">
-          <h2 className="text-2xl font-bold mb-6 text-center">Contact Our Team</h2>
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold mb-2">{getFormTitle()}</h2>
+            <p className="text-gray-600">{getFormDescription()}</p>
+          </div>
           
           {status.message && (
             <div className={`rounded-md p-4 mb-6 ${
@@ -424,29 +466,9 @@
           )}
           
           <form onSubmit={handleSubmit} className="space-y-4">
-            {formType === 'general' && (
-              <div>
-                <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">I am a</label>
-                <select
-                  id="role"
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                  required
-                >
-                  <option value="">Select your role</option>
-                  <option value="Advertiser">Advertiser</option>
-                  <option value="Publisher">Publisher/Affiliate</option>
-                  <option value="Agency">Agency</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-            )}
-            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
                 <input
                   type="text"
                   id="name"
@@ -458,7 +480,7 @@
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
                 <input
                   type="email"
                   id="email"
@@ -496,8 +518,82 @@
               </div>
             </div>
             
+            {formType === 'advertiser' && (
+              <>
+                <div>
+                  <label htmlFor="website" className="block text-sm font-medium text-gray-700 mb-1">Website URL *</label>
+                  <input
+                    type="url"
+                    id="website"
+                    name="website"
+                    value={formData.website}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="monthlyBudget" className="block text-sm font-medium text-gray-700 mb-1">Monthly Advertising Budget *</label>
+                  <select
+                    id="monthlyBudget"
+                    name="monthlyBudget"
+                    value={formData.monthlyBudget}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    required
+                  >
+                    <option value="">Select budget range</option>
+                    <option value="<$5k">Less than $5,000</option>
+                    <option value="$5k-$20k">$5,000 - $20,000</option>
+                    <option value="$20k-$50k">$20,000 - $50,000</option>
+                    <option value="$50k+">$50,000+</option>
+                  </select>
+                </div>
+              </>
+            )}
+            
+            {formType === 'publisher' && (
+              <>
+                <div>
+                  <label htmlFor="website" className="block text-sm font-medium text-gray-700 mb-1">Website/Platform URL *</label>
+                  <input
+                    type="url"
+                    id="website"
+                    name="website"
+                    value={formData.website}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="trafficSources" className="block text-sm font-medium text-gray-700 mb-1">Primary Traffic Sources *</label>
+                  <select
+                    id="trafficSources"
+                    name="trafficSources"
+                    value={formData.trafficSources}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                    required
+                  >
+                    <option value="">Select traffic source</option>
+                    <option value="Organic">Organic/Search</option>
+                    <option value="Social">Social Media</option>
+                    <option value="Email">Email Marketing</option>
+                    <option value="PPC">PPC/Paid Ads</option>
+                    <option value="Native">Native Ads</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+              </>
+            )}
+            
             <div>
-              <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+              <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+                {formType === 'advertiser' ? 'Tell us about your campaign goals' : 
+                 formType === 'publisher' ? 'Tell us about your traffic and audience' : 
+                 'Your Message'} *
+              </label>
               <textarea
                 id="message"
                 name="message"
@@ -540,6 +636,8 @@
                     Sending...
                   </>
                 ) : (
+                  formType === 'advertiser' ? 'Submit Application' :
+                  formType === 'publisher' ? 'Join Our Network' :
                   'Send Message'
                 )}
               </button>
@@ -549,8 +647,23 @@
       );
     };
 
+    // Content Detail Component
+    const ContentDetail = ({ title, content }) => {
+      return (
+        <PageLayout 
+          title={title} 
+          bgColor="bg-gradient-to-br from-primary-800 to-primary-600"
+          textColor="text-white"
+        >
+          <div className="prose max-w-4xl mx-auto">
+            {content}
+          </div>
+        </PageLayout>
+      );
+    };
+
     // Hero Section
-    const Hero = () => (
+    const Hero = ({ onGetStarted }) => (
       <section className="bg-gradient-to-br from-primary-800 to-primary-600 text-white pt-24 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -566,30 +679,20 @@
                 high-converting traffic and premium offers with transparent reporting.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <a 
-                  href="/advertisers" 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.history.pushState({}, '', '/advertisers');
-                    window.dispatchEvent(new Event('popstate'));
-                  }}
+                <button
+                  onClick={() => onGetStarted('advertiser')}
                   className="bg-white text-primary-800 px-8 py-3 rounded-lg text-lg font-bold hover:bg-gray-50 hover:shadow-lg transition-all duration-200 text-center hover-scale"
-                  aria-label="Learn more for advertisers"
+                  aria-label="Get started for advertisers"
                 >
                   Advertisers →
-                </a>
-                <a 
-                  href="/publishers" 
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.history.pushState({}, '', '/publishers');
-                    window.dispatchEvent(new Event('popstate'));
-                  }}
+                </button>
+                <button
+                  onClick={() => onGetStarted('publisher')}
                   className="bg-black bg-opacity-20 text-white px-8 py-3 rounded-lg text-lg font-bold hover:bg-opacity-30 hover:shadow-lg transition-all duration-200 text-center border border-white border-opacity-20 hover-scale"
-                  aria-label="Learn more for publishers"
+                  aria-label="Get started for publishers"
                 >
                   Publishers →
-                </a>
+                </button>
               </div>
               
               <div className="mt-8 flex items-center space-x-6">
@@ -661,18 +764,20 @@
       </section>
     );
 
-    // Advertisers Page
-    const AdvertisersPage = () => (
-      <>
-        <PageLayout 
-          title="Advertiser Solutions" 
-          subtitle="Scale your customer acquisition with our premium traffic sources and performance-based solutions."
-          bgColor="bg-gradient-to-br from-blue-900 to-blue-700"
-          textColor="text-white"
-        >
+    // Advertisers Section
+    const AdvertisersSection = ({ onLearnMore, onGetStarted }) => (
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Advertiser Solutions</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Scale your customer acquisition with our premium traffic sources and performance-based solutions.
+            </p>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
             <div>
-              <h2 className="text-3xl font-bold mb-6">Maximize Your ROI with Premium Traffic</h2>
+              <h3 className="text-2xl font-bold mb-6">Maximize Your ROI with Premium Traffic</h3>
               <p className="text-lg text-gray-600 mb-6">
                 At Emon Finance, we connect advertisers with high-quality publishers to deliver targeted traffic that converts. 
                 Our performance-based model ensures you only pay for results that matter to your business.
@@ -712,12 +817,20 @@
                   </div>
                 </div>
               </div>
-              <a 
-                href="#contact" 
-                className="inline-flex items-center bg-gradient-to-r from-blue-600 to-blue-800 text-white px-6 py-3 rounded-md font-semibold hover:shadow-md transition-all duration-200 hover-scale"
-              >
-                Get Started <i className="fas fa-arrow-right ml-2"></i>
-              </a>
+              <div className="flex flex-wrap gap-4">
+                <button
+                  onClick={() => onGetStarted('advertiser')}
+                  className="bg-gradient-to-r from-blue-600 to-blue-800 text-white px-6 py-3 rounded-md font-semibold hover:shadow-md transition-all duration-200 hover-scale"
+                >
+                  Get Started
+                </button>
+                <button
+                  onClick={() => onLearnMore('advertiser')}
+                  className="bg-white text-blue-600 px-6 py-3 rounded-md font-semibold border border-blue-600 hover:bg-blue-50 transition-all duration-200 hover-scale"
+                >
+                  Learn More
+                </button>
+              </div>
             </div>
             <div>
               <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl border border-blue-100">
@@ -730,96 +843,21 @@
               </div>
             </div>
           </div>
-
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-8 text-center">How It Works</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                {
-                  step: "1",
-                  title: "Submit Your Campaign",
-                  description: "Tell us about your offer, target audience, and KPIs. Our team will review and approve within 24-48 hours.",
-                  icon: "fa-paper-plane"
-                },
-                {
-                  step: "2",
-                  title: "We Match You with Publishers",
-                  description: "Our algorithm identifies the best publishers for your offer based on historical performance data.",
-                  icon: "fa-users"
-                },
-                {
-                  step: "3",
-                  title: "Scale & Optimize",
-                  description: "Monitor performance in real-time and work with our optimization team to maximize results.",
-                  icon: "fa-chart-line"
-                }
-              ].map((step, index) => (
-                <div 
-                  key={index} 
-                  className="bg-white p-8 rounded-xl feature-card hover-scale"
-                >
-                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xl mb-4">
-                    <i className={`fas ${step.icon}`}></i>
-                  </div>
-                  <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">Step {step.step}</span>
-                  <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-                  <p className="text-gray-600">{step.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div id="contact" className="mb-16">
-            <h2 className="text-3xl font-bold mb-8 text-center">Ready to Get Started?</h2>
-            <ContactForm formType="advertiser" />
-          </div>
-
-          <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-8 md:p-12 text-white">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              <div>
-                <h3 className="text-2xl md:text-3xl font-bold mb-4">Still Have Questions?</h3>
-                <p className="text-blue-100 mb-6">
-                  Our team is available 24/7 to help you understand how our platform can help you achieve your marketing goals.
-                </p>
-                <div className="flex items-center">
-                  <i className="fas fa-headset text-2xl mr-3"></i>
-                  <div>
-                    <p className="font-semibold">+1 (555) 123-4567</p>
-                    <p className="text-sm text-blue-100">support@emonfinanceltd.com</p>
-                  </div>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { value: "3.5%", label: "Avg. CTR" },
-                  { value: "5.2%", label: "Conversion Rate" },
-                  { value: "$1.20", label: "Avg. CPC" },
-                  { value: "48h", label: "Approval Time" }
-                ].map((stat, index) => (
-                  <div 
-                    key={index} 
-                    className="glass-card p-4 rounded-lg text-center"
-                  >
-                    <p className="text-2xl font-bold">{stat.value}</p>
-                    <p className="text-sm text-blue-100">{stat.label}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </PageLayout>
-      </>
+        </div>
+      </section>
     );
 
-    // Publishers Page
-    const PublishersPage = () => (
-      <>
-        <PageLayout 
-          title="Publisher Network" 
-          subtitle="Monetize your traffic with our high-converting offers and competitive payouts."
-          bgColor="bg-gradient-to-br from-green-900 to-green-700"
-          textColor="text-white"
-        >
+    // Publishers Section
+    const PublishersSection = ({ onLearnMore, onGetStarted }) => (
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Publisher Network</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Monetize your traffic with our high-converting offers and competitive payouts.
+            </p>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
             <div>
               <div className="bg-gradient-to-br from-green-50 to-white p-6 rounded-xl border border-green-100">
@@ -832,7 +870,7 @@
               </div>
             </div>
             <div>
-              <h2 className="text-3xl font-bold mb-6">Earn More From Your Traffic</h2>
+              <h3 className="text-2xl font-bold mb-6">Earn More From Your Traffic</h3>
               <p className="text-lg text-gray-600 mb-6">
                 Whether you're a content publisher, social media influencer, or ad network, we have premium offers that 
                 convert across all verticals. Our platform makes it easy to track performance and maximize your earnings.
@@ -872,782 +910,484 @@
                   </div>
                 </div>
               </div>
-              <a 
-                href="#contact" 
-                className="inline-flex items-center bg-gradient-to-r from-green-600 to-green-800 text-white px-6 py-3 rounded-md font-semibold hover:shadow-md transition-all duration-200 hover-scale"
-              >
-                Join Now <i className="fas fa-arrow-right ml-2"></i>
-              </a>
-            </div>
-          </div>
-
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-8 text-center">Supported Traffic Types</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
-              {[
-                { name: "Content Websites", icon: "fa-newspaper", color: "bg-blue-100 text-blue-600" },
-                { name: "Social Media", icon: "fa-thumbs-up", color: "bg-purple-100 text-purple-600" },
-                { name: "Email Lists", icon: "fa-envelope", color: "bg-red-100 text-red-600" },
-                { name: "Push Notifications", icon: "fa-bell", color: "bg-yellow-100 text-yellow-600" },
-                { name: "Native Ads", icon: "fa-ad", color: "bg-green-100 text-green-600" },
-                { name: "Search Traffic", icon: "fa-search", color: "bg-indigo-100 text-indigo-600" },
-                { name: "Domain Redirect", icon: "fa-globe", color: "bg-pink-100 text-pink-600" },
-                { name: "In-App Ads", icon: "fa-mobile-alt", color: "bg-orange-100 text-orange-600" },
-                { name: "Video Traffic", icon: "fa-video", color: "bg-teal-100 text-teal-600" },
-                { name: "PPC Campaigns", icon: "fa-mouse-pointer", color: "bg-cyan-100 text-cyan-600" }
-              ].map((type, index) => (
-                <div 
-                  key={index} 
-                  className="bg-white p-6 rounded-lg text-center hover-scale feature-card"
+              <div className="flex flex-wrap gap-4">
+                <button
+                  onClick={() => onGetStarted('publisher')}
+                  className="bg-gradient-to-r from-green-600 to-green-800 text-white px-6 py-3 rounded-md font-semibold hover:shadow-md transition-all duration-200 hover-scale"
                 >
-                  <div className={`w-14 h-14 ${type.color} rounded-full flex items-center justify-center mx-auto mb-4 text-xl`}>
-                    <i className={`fas ${type.icon}`}></i>
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900">{type.name}</h3>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div id="contact" className="mb-16">
-            <h2 className="text-3xl font-bold mb-8 text-center">Apply to Join Our Network</h2>
-            <ContactForm formType="publisher" />
-          </div>
-
-          <div className="bg-gradient-to-r from-green-600 to-green-800 rounded-2xl p-8 text-white">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              <div>
-                <h3 className="text-2xl font-bold mb-4">Publisher Success Stories</h3>
-                <div className="space-y-4">
-                  <div className="bg-white bg-opacity-10 p-4 rounded-lg">
-                    <div className="flex items-center mb-2">
-                      <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Publisher" className="w-10 h-10 rounded-full mr-3" />
-                      <div>
-                        <p className="font-semibold">Sarah Johnson</p>
-                        <p className="text-sm text-green-100">Content Publisher</p>
-                      </div>
-                    </div>
-                    <p className="text-green-100 italic">"Since joining Emon Finance, my earnings have increased by 65% with the same traffic volume. The offers convert better and the support team is always helpful."</p>
-                  </div>
-                  <div className="bg-white bg-opacity-10 p-4 rounded-lg">
-                    <div className="flex items-center mb-2">
-                      <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Publisher" className="w-10 h-10 rounded-full mr-3" />
-                      <div>
-                        <p className="font-semibold">Michael Chen</p>
-                        <p className="text-sm text-green-100">Affiliate Marketer</p>
-                      </div>
-                    </div>
-                    <p className="text-green-100 italic">"The real-time tracking and optimization tools have helped me maximize my ROI. Payments are always on time and the dashboard is easy to use."</p>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold mb-4">Publisher Earnings</h3>
-                <div className="bg-white bg-opacity-10 p-6 rounded-lg">
-                  <h4 className="text-lg font-semibold mb-3">Average Performance Metrics</h4>
-                  <div className="space-y-4">
-                    <div>
-                      <p className="text-sm text-green-100 mb-1">EPC (Earnings Per Click)</p>
-                      <div className="w-full bg-white bg-opacity-20 rounded-full h-2">
-                        <div className="bg-white h-2 rounded-full" style={{width: '85%'}}></div>
-                      </div>
-                      <p className="text-right text-sm mt-1">$1.42</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-green-100 mb-1">Conversion Rate</p>
-                      <div className="w-full bg-white bg-opacity-20 rounded-full h-2">
-                        <div className="bg-white h-2 rounded-full" style={{width: '72%'}}></div>
-                      </div>
-                      <p className="text-right text-sm mt-1">4.8%</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-green-100 mb-1">Payment Approval Rate</p>
-                      <div className="w-full bg-white bg-opacity-20 rounded-full h-2">
-                        <div className="bg-white h-2 rounded-full" style={{width: '95%'}}></div>
-                      </div>
-                      <p className="text-right text-sm mt-1">98%</p>
-                    </div>
-                  </div>
-                </div>
+                  Join Now
+                </button>
+                <button
+                  onClick={() => onLearnMore('publisher')}
+                  className="bg-white text-green-600 px-6 py-3 rounded-md font-semibold border border-green-600 hover:bg-green-50 transition-all duration-200 hover-scale"
+                >
+                  Learn More
+                </button>
               </div>
             </div>
           </div>
-        </PageLayout>
-      </>
+        </div>
+      </section>
     );
 
-    // Verticals Page
-    const VerticalsPage = () => (
-      <>
-        <PageLayout 
-          title="Top Converting Verticals" 
-          subtitle="We specialize in these high-performing verticals with proven results."
-          bgColor="bg-gradient-to-br from-purple-900 to-purple-700"
-          textColor="text-white"
-        >
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-8 text-center">Our Specialized Verticals</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto text-center mb-12">
-              We've developed deep expertise in these verticals, with optimized offers and traffic sources that deliver 
-              consistent results for both advertisers and publishers.
+    // Verticals Section
+    const VerticalsSection = ({ onLearnMore }) => (
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Top Converting Verticals</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              We specialize in these high-performing verticals with proven results.
             </p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-              {[
-                {
-                  title: "Finance",
-                  description: "Credit cards, loans, banking products, and investment services with high lifetime value.",
-                  icon: "fa-coins",
-                  color: "bg-yellow-100 text-yellow-600"
-                },
-                {
-                  title: "Health & Wellness",
-                  description: "Supplements, telehealth, insurance, and fitness products with strong conversion rates.",
-                  icon: "fa-heartbeat",
-                  color: "bg-red-100 text-red-600"
-                },
-                {
-                  title: "E-commerce",
-                  description: "Dropshipping, subscription boxes, and direct-to-consumer brands with proven funnels.",
-                  icon: "fa-shopping-cart",
-                  color: "bg-green-100 text-green-600"
-                },
-                {
-                  title: "Insurance",
-                  description: "Auto, home, life, and health insurance products with qualified leads.",
-                  icon: "fa-shield-alt",
-                  color: "bg-indigo-100 text-indigo-600"
-                }
-              ].map((vertical, index) => (
-                <div 
-                  key={index} 
-                  className="bg-white p-8 rounded-xl feature-card hover-scale"
-                >
-                  <div className={`w-12 h-12 ${vertical.color} rounded-lg flex items-center justify-center text-xl mb-4`}>
-                    <i className={`fas ${vertical.icon}`}></i>
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">{vertical.title}</h3>
-                  <p className="text-gray-600 mb-4">{vertical.description}</p>
-                  <a 
-                    href="#contact" 
-                    className="text-purple-600 hover:text-purple-800 font-medium inline-flex items-center"
-                  >
-                    Learn More <i className="fas fa-arrow-right ml-2"></i>
-                  </a>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            {[
+              {
+                title: "Finance",
+                description: "Credit cards, loans, banking products, and investment services with high lifetime value.",
+                icon: "fa-coins",
+                color: "bg-yellow-100 text-yellow-600"
+              },
+              {
+                title: "Health & Wellness",
+                description: "Supplements, telehealth, insurance, and fitness products with strong conversion rates.",
+                icon: "fa-heartbeat",
+                color: "bg-red-100 text-red-600"
+              },
+              {
+                title: "E-commerce",
+                description: "Dropshipping, subscription boxes, and direct-to-consumer brands with proven funnels.",
+                icon: "fa-shopping-cart",
+                color: "bg-green-100 text-green-600"
+              }
+            ].map((vertical, index) => (
+              <div 
+                key={index} 
+                className="bg-white p-8 rounded-xl feature-card hover-scale"
+              >
+                <div className={`w-12 h-12 ${vertical.color} rounded-lg flex items-center justify-center text-xl mb-4`}>
+                  <i className={`fas ${vertical.icon}`}></i>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-8 text-center">Emerging Verticals</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
-              {[
-                { name: "Sweepstakes", icon: "fa-trophy", color: "bg-blue-100 text-blue-600" },
-                { name: "Legal Services", icon: "fa-gavel", color: "bg-purple-100 text-purple-600" },
-                { name: "Education", icon: "fa-graduation-cap", color: "bg-green-100 text-green-600" },
-                { name: "Travel", icon: "fa-plane", color: "bg-red-100 text-red-600" },
-                { name: "Mobile Apps", icon: "fa-mobile-alt", color: "bg-indigo-100 text-indigo-600" },
-                { name: "Home Services", icon: "fa-home", color: "bg-yellow-100 text-yellow-600" },
-                { name: "Beauty", icon: "fa-spa", color: "bg-pink-100 text-pink-600" },
-                { name: "Gaming", icon: "fa-gamepad", color: "bg-orange-100 text-orange-600" },
-                { name: "CBD", icon: "fa-leaf", color: "bg-teal-100 text-teal-600" },
-                { name: "Cryptocurrency", icon: "fa-coins", color: "bg-cyan-100 text-cyan-600" }
-              ].map((vertical, index) => (
-                <div 
-                  key={index} 
-                  className="bg-white p-6 rounded-lg text-center hover-scale feature-card"
+                <h3 className="text-xl font-semibold mb-2">{vertical.title}</h3>
+                <p className="text-gray-600 mb-4">{vertical.description}</p>
+                <button
+                  onClick={() => onLearnMore(vertical.title.toLowerCase())}
+                  className="text-primary-600 hover:text-primary-800 font-medium inline-flex items-center"
                 >
-                  <div className={`w-14 h-14 ${vertical.color} rounded-full flex items-center justify-center mx-auto mb-4 text-xl`}>
-                    <i className={`fas ${vertical.icon}`}></i>
-                  </div>
-                  <h3 className="text-lg font-semibold text-gray-900">{vertical.name}</h3>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div id="contact" className="mb-16">
-            <h2 className="text-3xl font-bold mb-8 text-center">Interested in Our Verticals?</h2>
-            <ContactForm />
-          </div>
-
-          <div className="bg-gradient-to-r from-purple-600 to-purple-800 rounded-2xl p-8 text-white">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              <div>
-                <h3 className="text-2xl font-bold mb-4">Not Seeing Your Vertical?</h3>
-                <p className="text-purple-100 mb-6">
-                  We're constantly expanding into new verticals. If you don't see your industry listed, contact our team 
-                  to discuss how we can help you achieve your performance marketing goals.
-                </p>
-                <a 
-                  href="#contact" 
-                  className="bg-white text-purple-600 px-6 py-3 rounded-md font-semibold inline-block hover:bg-gray-50 hover:shadow-md transition-all duration-200 hover-scale"
-                >
-                  Contact Us
-                </a>
+                  Learn More <i className="fas fa-arrow-right ml-2"></i>
+                </button>
               </div>
-              <div>
-                <div className="bg-white bg-opacity-10 p-6 rounded-lg">
-                  <h4 className="text-lg font-semibold mb-3">Vertical Performance Benchmarks</h4>
-                  <div className="space-y-3">
-                    <div>
-                      <div className="flex justify-between mb-1">
-                        <span>Finance</span>
-                        <span>6.8% CR</span>
-                      </div>
-                      <div className="w-full bg-white bg-opacity-20 rounded-full h-2">
-                        <div className="bg-white h-2 rounded-full" style={{width: '68%'}}></div>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex justify-between mb-1">
-                        <span>Health</span>
-                        <span>5.2% CR</span>
-                      </div>
-                      <div className="w-full bg-white bg-opacity-20 rounded-full h-2">
-                        <div className="bg-white h-2 rounded-full" style={{width: '52%'}}></div>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex justify-between mb-1">
-                        <span>E-commerce</span>
-                        <span>4.5% CR</span>
-                      </div>
-                      <div className="w-full bg-white bg-opacity-20 rounded-full h-2">
-                        <div className="bg-white h-2 rounded-full" style={{width: '45%'}}></div>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="flex justify-between mb-1">
-                        <span>Insurance</span>
-                        <span>3.9% CR</span>
-                      </div>
-                      <div className="w-full bg-white bg-opacity-20 rounded-full h-2">
-                        <div className="bg-white h-2 rounded-full" style={{width: '39%'}}></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
-        </PageLayout>
-      </>
+        </div>
+      </section>
     );
 
-    // Resources Page
-    const ResourcesPage = () => (
-      <>
-        <PageLayout 
-          title="Resources & Guides" 
-          subtitle="Learn how to maximize your performance with our expert resources."
-          bgColor="bg-gradient-to-br from-indigo-900 to-indigo-700"
-          textColor="text-white"
-        >
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-8 text-center">Featured Resources</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-              {[
-                {
-                  title: "Performance Marketing Guide",
-                  description: "Learn the fundamentals of performance marketing and how to optimize your campaigns.",
-                  icon: "fa-book",
-                  category: "Advertisers",
-                  type: "PDF Guide",
-                  length: "15 min read"
-                },
-                {
-                  title: "Affiliate Marketing Playbook",
-                  description: "Discover strategies to maximize your earnings as a publisher.",
-                  icon: "fa-play-circle",
-                  category: "Publishers",
-                  type: "eBook",
-                  length: "45 min read"
-                },
-                {
-                  title: "Fraud Prevention Handbook",
-                  description: "Understand how we protect your campaigns from fraudulent traffic.",
-                  icon: "fa-shield-alt",
-                  category: "Both",
-                  type: "Whitepaper",
-                  length: "30 min read"
-                }
-              ].map((resource, index) => (
-                <div 
-                  key={index} 
-                  className="bg-white p-8 rounded-xl feature-card hover-scale"
-                >
-                  <div className="flex items-center mb-4">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center mr-3 ${
-                      resource.category === 'Advertisers' ? 'bg-blue-100 text-blue-600' :
-                      resource.category === 'Publishers' ? 'bg-green-100 text-green-600' :
-                      'bg-purple-100 text-purple-600'
-                    }`}>
-                      <i className={`fas ${resource.icon}`}></i>
-                    </div>
-                    <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
-                      resource.category === 'Advertisers' ? 'bg-blue-50 text-blue-600' :
-                      resource.category === 'Publishers' ? 'bg-green-50 text-green-600' :
-                      'bg-purple-50 text-purple-600'
-                    }`}>
-                      {resource.category}
-                    </span>
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">{resource.title}</h3>
-                  <p className="text-gray-600 mb-4">{resource.description}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-500">{resource.type} • {resource.length}</span>
-                    <a 
-                      href="#" 
-                      className="text-indigo-600 hover:text-indigo-800 font-medium inline-flex items-center"
-                    >
-                      Download <i className="fas fa-download ml-2"></i>
-                    </a>
-                  </div>
-                </div>
-              ))}
-            </div>
+    // Case Studies Section
+    const CaseStudiesSection = ({ onLearnMore }) => (
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Success Stories</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Real-world results from our advertisers and publishers.
+            </p>
           </div>
-
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-8 text-center">Latest Blog Posts</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {[
-                {
-                  title: "How to Optimize Your Landing Pages for Maximum Conversions",
-                  excerpt: "Learn the key elements of high-converting landing pages and how to test different variations.",
-                  date: "May 15, 2023",
-                  readTime: "8 min read",
-                  category: "Advertisers",
-                  image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                },
-                {
-                  title: "Top 5 Traffic Sources for Affiliates in 2023",
-                  excerpt: "Discover the most profitable traffic sources for affiliate marketers this year.",
-                  date: "April 28, 2023",
-                  readTime: "6 min read",
-                  category: "Publishers",
-                  image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                }
-              ].map((post, index) => (
-                <div 
-                  key={index} 
-                  className="bg-white rounded-xl overflow-hidden shadow-sm hover-scale feature-card"
-                >
-                  <img 
-                    src={post.image} 
-                    alt={post.title} 
-                    className="w-full h-48 object-cover"
-                    loading="lazy"
-                  />
-                  <div className="p-6">
-                    <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
-                      post.category === 'Advertisers' ? 'bg-blue-50 text-blue-600' :
-                      'bg-green-50 text-green-600'
-                    }`}>
-                      {post.category}
-                    </span>
-                    <h3 className="text-xl font-semibold mt-2 mb-2">{post.title}</h3>
-                    <p className="text-gray-600 mb-4">{post.excerpt}</p>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-500">{post.date} • {post.readTime}</span>
-                      <a 
-                        href="#" 
-                        className="text-indigo-600 hover:text-indigo-800 font-medium inline-flex items-center"
-                      >
-                        Read More <i className="fas fa-arrow-right ml-2"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div id="contact" className="mb-16">
-            <h2 className="text-3xl font-bold mb-8 text-center">Need Custom Advice?</h2>
-            <ContactForm />
-          </div>
-
-          <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-2xl p-8 text-white">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              <div>
-                <h3 className="text-2xl font-bold mb-4">Subscribe to Our Newsletter</h3>
-                <p className="text-indigo-100 mb-6">
-                  Get the latest performance marketing insights, tips, and exclusive offers delivered to your inbox.
-                </p>
-              </div>
-              <div>
-                <form className="flex flex-col sm:flex-row gap-3">
-                  <input 
-                    type="email" 
-                    placeholder="Your email address" 
-                    className="flex-grow px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-white text-dark-900"
-                    required
-                  />
-                  <button 
-                    type="submit" 
-                    className="bg-white text-indigo-600 px-6 py-3 rounded-md font-semibold hover:bg-gray-50 hover:shadow-md transition-all duration-200 hover-scale"
-                  >
-                    Subscribe
-                  </button>
-                </form>
-                <p className="text-indigo-100 text-xs mt-2">
-                  We respect your privacy. Unsubscribe at any time.
-                </p>
-              </div>
-            </div>
-          </div>
-        </PageLayout>
-      </>
-    );
-
-    // Case Study Page
-    const CaseStudyPage = () => (
-      <>
-        <PageLayout 
-          title="Case Studies" 
-          subtitle="Real-world success stories from our advertisers and publishers."
-          bgColor="bg-gradient-to-br from-orange-900 to-orange-700"
-          textColor="text-white"
-        >
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-8 text-center">Featured Case Studies</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {[
-                {
-                  title: "Financial Services Brand 3X ROAS",
-                  excerpt: "How a leading fintech company scaled customer acquisition while maintaining profitability.",
-                  stats: "3X ROAS • 45% lower CPA • 6-month campaign",
-                  category: "Finance",
-                  image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                },
-                {
-                  title: "Publisher Increases Earnings by 82%",
-                  excerpt: "Content network optimizes traffic mix with our AI-powered recommendations.",
-                  stats: "82% revenue increase • 3.5% CR • 90-day period",
-                  category: "Publishing",
-                  image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                }
-              ].map((study, index) => (
-                <div 
-                  key={index} 
-                  className="bg-white rounded-xl overflow-hidden shadow-lg hover-scale feature-card"
-                >
-                  <img 
-                    src={study.image} 
-                    alt={study.title} 
-                    className="w-full h-48 object-cover"
-                    loading="lazy"
-                  />
-                  <div className="p-6">
-                    <span className="inline-block bg-orange-100 text-orange-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">
-                      {study.category}
-                    </span>
-                    <h3 className="text-xl font-semibold mb-2">{study.title}</h3>
-                    <p className="text-gray-600 mb-4">{study.excerpt}</p>
-                    <div className="bg-orange-50 p-3 rounded-lg mb-4">
-                      <p className="text-orange-800 font-medium text-sm">{study.stats}</p>
-                    </div>
-                    <a 
-                      href="#" 
-                      className="text-orange-600 hover:text-orange-800 font-medium inline-flex items-center"
-                    >
-                      Read Full Case Study <i className="fas fa-arrow-right ml-2"></i>
-                    </a>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-8 text-center">Vertical Success Stories</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                {
-                  title: "Health Supplement Brand",
-                  result: "2.8X ROAS",
-                  vertical: "Health",
-                  icon: "fa-heartbeat"
-                },
-                {
-                  title: "E-commerce Store",
-                  result: "4.1% CR",
-                  vertical: "E-commerce",
-                  icon: "fa-shopping-cart"
-                },
-                {
-                  title: "Insurance Provider",
-                  result: "$12 CPA",
-                  vertical: "Insurance",
-                  icon: "fa-shield-alt"
-                },
-                {
-                  title: "Travel Company",
-                  result: "3.2X ROAS",
-                  vertical: "Travel",
-                  icon: "fa-plane"
-                },
-                {
-                  title: "Education Platform",
-                  result: "5.7% CR",
-                  vertical: "Education",
-                  icon: "fa-graduation-cap"
-                },
-                {
-                  title: "Sweepstakes Offer",
-                  result: "$0.78 CPA",
-                  vertical: "Sweepstakes",
-                  icon: "fa-trophy"
-                }
-              ].map((story, index) => (
-                <div 
-                  key={index} 
-                  className="bg-white p-6 rounded-lg hover-scale feature-card"
-                >
-                  <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 text-xl mb-4">
-                    <i className={`fas ${story.icon}`}></i>
-                  </div>
-                  <h3 className="text-lg font-semibold mb-1">{story.title}</h3>
-                  <p className="text-sm text-gray-500 mb-2">{story.vertical}</p>
-                  <p className="text-orange-600 font-bold">{story.result}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div id="contact" className="mb-16">
-            <h2 className="text-3xl font-bold mb-8 text-center">Want Similar Results?</h2>
-            <ContactForm />
-          </div>
-
-          <div className="bg-gradient-to-r from-orange-600 to-orange-800 rounded-2xl p-8 text-white">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              <div>
-                <h3 className="text-2xl font-bold mb-4">Ready to Create Your Success Story?</h3>
-                <p className="text-orange-100 mb-6">
-                  Whether you're an advertiser looking to scale or a publisher wanting to maximize earnings, our team 
-                  can help you achieve your performance marketing goals.
-                </p>
-                <a 
-                  href="#contact" 
-                  className="bg-white text-orange-600 px-6 py-3 rounded-md font-semibold inline-block hover:bg-gray-50 hover:shadow-md transition-all duration-200 hover-scale"
-                >
-                  Get Started
-                </a>
-              </div>
-              <div>
-                <div className="bg-white bg-opacity-10 p-6 rounded-lg">
-                  <h4 className="text-lg font-semibold mb-3">Average Results Across Network</h4>
-                  <div className="space-y-4">
-                    <div>
-                      <p className="text-sm text-orange-100 mb-1">Advertiser ROAS</p>
-                      <div className="w-full bg-white bg-opacity-20 rounded-full h-2">
-                        <div className="bg-white h-2 rounded-full" style={{width: '72%'}}></div>
-                      </div>
-                      <p className="text-right text-sm mt-1">3.6X</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-orange-100 mb-1">Publisher EPC</p>
-                      <div className="w-full bg-white bg-opacity-20 rounded-full h-2">
-                        <div className="bg-white h-2 rounded-full" style={{width: '85%'}}></div>
-                      </div>
-                      <p className="text-right text-sm mt-1">$1.42</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-orange-100 mb-1">Approval Rate</p>
-                      <div className="w-full bg-white bg-opacity-20 rounded-full h-2">
-                        <div className="bg-white h-2 rounded-full" style={{width: '92%'}}></div>
-                      </div>
-                      <p className="text-right text-sm mt-1">92%</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </PageLayout>
-      </>
-    );
-
-    // About Us Page
-    const AboutUsPage = () => (
-      <>
-        <PageLayout 
-          title="About Emon Finance" 
-          subtitle="Our mission, values, and the team behind your performance marketing success."
-          bgColor="bg-gradient-to-br from-cyan-900 to-cyan-700"
-          textColor="text-white"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
-            <div>
-              <h2 className="text-3xl font-bold mb-6">Our Story</h2>
-              <p className="text-lg text-gray-600 mb-6">
-                Founded in 2018, Emon Finance began with a simple idea: to create a performance marketing network that 
-                prioritizes transparency, quality, and results for both advertisers and publishers.
-              </p>
-              <p className="text-lg text-gray-600 mb-6">
-                What started as a small team of digital marketing veterans has grown into a global platform connecting 
-                thousands of advertisers with premium publishers across all verticals.
-              </p>
-              <div className="bg-cyan-50 p-6 rounded-xl border border-cyan-100">
-                <h3 className="text-xl font-semibold mb-3 text-cyan-800">Our Mission</h3>
-                <p className="text-cyan-700">
-                  "To empower businesses and publishers through performance-based marketing solutions that drive 
-                  measurable results and sustainable growth."
-                </p>
-              </div>
-            </div>
-            <div>
-              <div className="bg-gradient-to-br from-cyan-50 to-white p-6 rounded-xl border border-cyan-100">
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[
+              {
+                title: "Financial Services Brand 3X ROAS",
+                excerpt: "How a leading fintech company scaled customer acquisition while maintaining profitability.",
+                stats: "3X ROAS • 45% lower CPA • 6-month campaign",
+                category: "Finance",
+                image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              },
+              {
+                title: "Publisher Increases Earnings by 82%",
+                excerpt: "Content network optimizes traffic mix with our AI-powered recommendations.",
+                stats: "82% revenue increase • 3.5% CR • 90-day period",
+                category: "Publishing",
+                image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              }
+            ].map((study, index) => (
+              <div 
+                key={index} 
+                className="bg-white rounded-xl overflow-hidden shadow-lg hover-scale feature-card"
+              >
                 <img 
-                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                  alt="Emon Finance team" 
-                  className="rounded-lg shadow-md w-full"
+                  src={study.image} 
+                  alt={study.title} 
+                  className="w-full h-48 object-cover"
                   loading="lazy"
                 />
-              </div>
-            </div>
-          </div>
-
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-8 text-center">Our Values</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                {
-                  title: "Transparency",
-                  description: "Clear reporting, honest communication, and no hidden fees.",
-                  icon: "fa-eye"
-                },
-                {
-                  title: "Quality",
-                  description: "Vetted publishers, high-converting offers, and premium traffic.",
-                  icon: "fa-medal"
-                },
-                {
-                  title: "Innovation",
-                  description: "Continuous improvement through technology and data science.",
-                  icon: "fa-lightbulb"
-                },
-                {
-                  title: "Partnership",
-                  description: "We succeed when our advertisers and publishers succeed.",
-                  icon: "fa-handshake"
-                },
-                {
-                  title: "Integrity",
-                  description: "Ethical practices and compliance with all regulations.",
-                  icon: "fa-shield-alt"
-                },
-                {
-                  title: "Results",
-                  description: "Focus on measurable outcomes that drive business growth.",
-                  icon: "fa-chart-line"
-                }
-              ].map((value, index) => (
-                <div 
-                  key={index} 
-                  className="bg-white p-8 rounded-xl feature-card hover-scale"
-                >
-                  <div className="w-12 h-12 bg-cyan-100 rounded-full flex items-center justify-center text-cyan-600 text-xl mb-4">
-                    <i className={`fas ${value.icon}`}></i>
+                <div className="p-6">
+                  <span className="inline-block bg-orange-100 text-orange-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">
+                    {study.category}
+                  </span>
+                  <h3 className="text-xl font-semibold mb-2">{study.title}</h3>
+                  <p className="text-gray-600 mb-4">{study.excerpt}</p>
+                  <div className="bg-orange-50 p-3 rounded-lg mb-4">
+                    <p className="text-orange-800 font-medium text-sm">{study.stats}</p>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">{value.title}</h3>
-                  <p className="text-gray-600">{value.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-8 text-center">Leadership Team</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-              {[
-                {
-                  name: "Alex Johnson",
-                  role: "CEO & Founder",
-                  bio: "Digital marketing veteran with 15+ years experience in performance marketing.",
-                  image: "https://randomuser.me/api/portraits/men/32.jpg"
-                },
-                {
-                  name: "Sarah Williams",
-                  role: "Chief Revenue Officer",
-                  bio: "Specializes in scaling customer acquisition for growth-stage companies.",
-                  image: "https://randomuser.me/api/portraits/women/44.jpg"
-                },
-                {
-                  name: "Michael Chen",
-                  role: "CTO",
-                  bio: "Leads our technology and data science teams to build innovative solutions.",
-                  image: "https://randomuser.me/api/portraits/men/75.jpg"
-                },
-                {
-                  name: "David Wilson",
-                  role: "VP Publisher Development",
-                  bio: "Connects advertisers with premium publishers across all verticals.",
-                  image: "https://randomuser.me/api/portraits/men/68.jpg"
-                }
-              ].map((member, index) => (
-                <div 
-                  key={index} 
-                  className="bg-white p-6 rounded-lg text-center hover-scale feature-card"
-                >
-                  <img 
-                    src={member.image} 
-                    alt={member.name} 
-                    className="w-24 h-24 rounded-full mx-auto mb-4 object-cover border-4 border-cyan-100"
-                  />
-                  <h3 className="text-lg font-semibold">{member.name}</h3>
-                  <p className="text-cyan-600 text-sm mb-2">{member.role}</p>
-                  <p className="text-gray-600 text-sm">{member.bio}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div id="contact" className="mb-16">
-            <h2 className="text-3xl font-bold mb-8 text-center">Get in Touch</h2>
-            <ContactForm />
-          </div>
-
-          <div className="bg-gradient-to-r from-cyan-600 to-cyan-800 rounded-2xl p-8 text-white">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              <div>
-                <h3 className="text-2xl font-bold mb-4">Join Our Team</h3>
-                <p className="text-cyan-100 mb-6">
-                  We're always looking for talented individuals to join our growing team. Check out our current 
-                  openings and become part of the Emon Finance story.
-                </p>
-                <a 
-                  href="#contact" 
-                  className="bg-white text-cyan-600 px-6 py-3 rounded-md font-semibold inline-block hover:bg-gray-50 hover:shadow-md transition-all duration-200 hover-scale"
-                >
-                  View Openings
-                </a>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { value: "50+", label: "Team Members" },
-                  { value: "10+", label: "Countries" },
-                  { value: "24/7", label: "Support" },
-                  { value: "2018", label: "Founded" }
-                ].map((stat, index) => (
-                  <div 
-                    key={index} 
-                    className="glass-card p-4 rounded-lg text-center"
+                  <button
+                    onClick={() => onLearnMore('case-study')}
+                    className="text-primary-600 hover:text-primary-800 font-medium inline-flex items-center"
                   >
-                    <p className="text-2xl font-bold">{stat.value}</p>
-                    <p className="text-sm text-cyan-100">{stat.label}</p>
-                  </div>
-                ))}
+                    Read Full Story <i className="fas fa-arrow-right ml-2"></i>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+
+    // CTA Section
+    const CTASection = ({ onContact }) => (
+      <section className="py-16 bg-gradient-to-r from-primary-600 to-primary-800 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold mb-6">Ready to Grow Your Business?</h2>
+          <p className="text-xl mb-8 max-w-3xl mx-auto">
+            Whether you're an advertiser looking to scale or a publisher wanting to maximize earnings, our team can help.
+          </p>
+          <button
+            onClick={() => onContact()}
+            className="bg-white text-primary-800 px-8 py-4 rounded-lg text-lg font-bold hover:bg-gray-50 hover:shadow-lg transition-all duration-200 hover-scale"
+          >
+            Contact Our Team
+          </button>
+        </div>
+      </section>
+    );
+
+    // Footer Component with Legal Links
+    const Footer = ({ currentPage }) => {
+      const handleLinkClick = (e, path) => {
+        e.preventDefault();
+        window.history.pushState({}, '', path);
+        window.dispatchEvent(new Event('popstate'));
+        window.scrollTo(0, 0);
+      };
+
+      return (
+        <footer className="bg-dark-900 text-white py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              <div>
+                <div className="flex items-center mb-4">
+                  <img 
+                    src="https://media.licdn.com/dms/image/v2/D560BAQGS4tCTdvEdGw/company-logo_100_100/B56ZZJf6fAHsAU-/0/1744989825409?e=1750291200&v=beta&t=Fi_TOPK-UtNdgjDNMtQzccX63GY3mY5_34v_bReHLjY" 
+                    alt="Emon Finance Ltd. Logo" 
+                    className="h-8 w-auto"
+                  />
+                  <span className="ml-2 text-xl font-bold text-primary-400">Emon Finance</span>
+                </div>
+                <p className="text-gray-400 text-sm">
+                  Premium performance marketing network connecting advertisers with top publishers worldwide.
+                </p>
+                <div className="mt-4 flex space-x-4">
+                  <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200" aria-label="Facebook">
+                    <i className="fab fa-facebook-f"></i>
+                  </a>
+                  <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200" aria-label="Twitter">
+                    <i className="fab fa-twitter"></i>
+                  </a>
+                  <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200" aria-label="LinkedIn">
+                    <i className="fab fa-linkedin-in"></i>
+                  </a>
+                  <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200" aria-label="Instagram">
+                    <i className="fab fa-instagram"></i>
+                  </a>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-primary-400 mb-4">Quick Links</h3>
+                <ul className="space-y-2">
+                  {['Advertisers', 'Publishers', 'Verticals', 'Resources', 'Case Studies', 'About'].map((item) => {
+                    const path = item.toLowerCase().replace(' ', '-');
+                    return (
+                      <li key={item}>
+                        <a 
+                          href={`/${path}`} 
+                          onClick={(e) => handleLinkClick(e, `/${path}`)}
+                          className={`text-gray-400 hover:text-white text-sm transition-colors duration-200 ${currentPage === path ? 'text-white font-medium' : ''}`}
+                        >
+                          {item}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-primary-400 mb-4">Legal</h3>
+                <ul className="space-y-2">
+                  {['Terms', 'Privacy', 'Cookies'].map((item) => {
+                    const path = item.toLowerCase();
+                    return (
+                      <li key={item}>
+                        <a 
+                          href={`/${path}`} 
+                          onClick={(e) => handleLinkClick(e, `/${path}`)}
+                          className={`text-gray-400 hover:text-white text-sm transition-colors duration-200 ${currentPage === path ? 'text-white font-medium' : ''}`}
+                        >
+                          {item === 'Cookies' ? 'Cookie Policy' : `${item} of Service`}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-primary-400 mb-4">Contact Us</h3>
+                <ul className="space-y-2 text-gray-400 text-sm">
+                  <li className="flex items-center">
+                    <i className="fas fa-envelope mr-2 text-primary-400"></i>
+                    <span>support@emonfinanceltd.com</span>
+                  </li>
+                  <li className="flex items-center">
+                    <i className="fas fa-phone-alt mr-2 text-primary-400"></i>
+                    <span>+1 (555) 123-4567</span>
+                  </li>
+                  <li className="flex items-center">
+                    <i className="fas fa-map-marker-alt mr-2 text-primary-400"></i>
+                    <span>123 Business Ave, Suite 500, New York, NY 10001</span>
+                  </li>
+                </ul>
               </div>
             </div>
+            <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
+              <p>© {new Date().getFullYear()} Emon Finance Ltd. All rights reserved.</p>
+            </div>
           </div>
-        </PageLayout>
-      </>
-    );
+        </footer>
+      );
+    };
+
+    // Legal Pages (Terms, Privacy, Cookie Policy)
+    const TermsOfService = () => {
+      const content = (
+        <>
+          <p><strong>Last Updated:</strong> January 1, 2023</p>
+          
+          <h2>1. Acceptance of Terms</h2>
+          <p>By accessing or using the services provided by Emon Finance Ltd. ("we," "us," or "our"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, you may not use our services.</p>
+          
+          <h2>2. Description of Service</h2>
+          <p>Emon Finance Ltd. operates a performance marketing network that connects advertisers with publishers. Our services include but are not limited to:</p>
+          <ul>
+            <li>Providing a platform for advertisers to promote offers</li>
+            <li>Enabling publishers to monetize their traffic</li>
+            <li>Tracking and reporting on campaign performance</li>
+            <li>Facilitating payments between parties</li>
+          </ul>
+          
+          <h2>3. Account Registration</h2>
+          <p>To use our services, you must register for an account. You agree to:</p>
+          <ul>
+            <li>Provide accurate, current, and complete information</li>
+            <li>Maintain the security of your password</li>
+            <li>Accept all risks of unauthorized access to your account</li>
+            <li>Notify us immediately of any unauthorized use of your account</li>
+          </ul>
+          
+          <h2>4. Advertiser Responsibilities</h2>
+          <p>Advertisers using our platform agree to:</p>
+          <ul>
+            <li>Provide accurate information about offers</li>
+            <li>Honor all commitments made to publishers</li>
+            <li>Comply with all applicable laws and regulations</li>
+            <li>Not engage in fraudulent or deceptive practices</li>
+          </ul>
+          
+          <h2>5. Publisher Responsibilities</h2>
+          <p>Publishers using our platform agree to:</p>
+          <ul>
+            <li>Generate traffic through legal means</li>
+            <li>Not use prohibited traffic sources</li>
+            <li>Comply with all offer requirements</li>
+            <li>Not engage in fraudulent activities</li>
+          </ul>
+          
+          <h2>6. Payment Terms</h2>
+          <p>Payments to publishers are made according to the following terms:</p>
+          <ul>
+            <li>Minimum payment threshold: $100</li>
+            <li>Payment schedule: Net-30 (payments issued 30 days after month-end)</li>
+            <li>Payment methods: Bank transfer, PayPal, or other approved methods</li>
+            <li>Chargebacks may be assessed for invalid leads/sales</li>
+          </ul>
+          
+          <h2>7. Intellectual Property</h2>
+          <p>All content and materials available on our platform, including but not limited to text, graphics, logos, and software, are the property of Emon Finance Ltd. or its licensors and are protected by copyright and other intellectual property laws.</p>
+          
+          <h2>8. Termination</h2>
+          <p>We may terminate or suspend your account immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach these Terms.</p>
+          
+          <h2>9. Limitation of Liability</h2>
+          <p>In no event shall Emon Finance Ltd. be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the services.</p>
+          
+          <h2>10. Governing Law</h2>
+          <p>These Terms shall be governed and construed in accordance with the laws of the United Kingdom, without regard to its conflict of law provisions.</p>
+          
+          <h2>11. Changes to Terms</h2>
+          <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. We will provide notice of any changes by posting the new Terms on this page.</p>
+          
+          <h2>12. Contact Us</h2>
+          <p>If you have any questions about these Terms, please contact us at legal@emonfinanceltd.com.</p>
+        </>
+      );
+      return <LegalPage title="Terms of Service" content={content} />;
+    };
+
+    const PrivacyPolicy = () => {
+      const content = (
+        <>
+          <p><strong>Last Updated:</strong> January 1, 2023</p>
+          
+          <h2>1. Introduction</h2>
+          <p>Emon Finance Ltd. ("we," "us," or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our performance marketing network services.</p>
+          
+          <h2>2. Information We Collect</h2>
+          <p>We may collect the following types of information:</p>
+          <h3>Personal Information</h3>
+          <ul>
+            <li>Name and contact details (email, phone number, address)</li>
+            <li>Business information (company name, tax ID, payment details)</li>
+            <li>Account credentials (username, password)</li>
+          </ul>
+          <h3>Technical Information</h3>
+          <ul>
+            <li>IP address and device information</li>
+            <li>Browser type and version</li>
+            <li>Pages visited and time spent on our platform</li>
+          </ul>
+          <h3>Performance Data</h3>
+          <ul>
+            <li>Campaign performance metrics</li>
+            <li>Conversion data</li>
+            <li>Traffic sources and quality</li>
+          </ul>
+          
+          <h2>3. How We Use Your Information</h2>
+          <p>We use the information we collect for the following purposes:</p>
+          <ul>
+            <li>To provide and maintain our services</li>
+            <li>To process payments and prevent fraud</li>
+            <li>To communicate with you about your account</li>
+            <li>To improve and optimize our platform</li>
+            <li>To comply with legal obligations</li>
+          </ul>
+          
+          <h2>4. Information Sharing and Disclosure</h2>
+          <p>We may share your information in the following situations:</p>
+          <ul>
+            <li><strong>With Service Providers:</strong> We may share information with third-party vendors who perform services on our behalf.</li>
+            <li><strong>For Legal Reasons:</strong> We may disclose information if required by law or in response to valid requests by public authorities.</li>
+            <li><strong>Business Transfers:</strong> In connection with any merger, sale of company assets, or acquisition.</li>
+          </ul>
+          
+          <h2>5. Data Security</h2>
+          <p>We implement appropriate technical and organizational measures to protect your personal information, including:</p>
+          <ul>
+            <li>Encryption of sensitive data</li>
+            <li>Regular security assessments</li>
+            <li>Access controls to personal information</li>
+          </ul>
+          
+          <h2>6. Your Data Protection Rights</h2>
+          <p>Depending on your location, you may have the following rights regarding your personal information:</p>
+          <ul>
+            <li><strong>Access:</strong> Request copies of your personal data.</li>
+            <li><strong>Rectification:</strong> Request correction of inaccurate data.</li>
+            <li><strong>Erasure:</strong> Request deletion of your personal data.</li>
+            <li><strong>Restriction:</strong> Request restriction of processing.</li>
+            <li><strong>Objection:</strong> Object to our processing of your data.</li>
+            <li><strong>Portability:</strong> Request transfer of your data.</li>
+          </ul>
+          
+          <h2>7. International Data Transfers</h2>
+          <p>Your information may be transferred to — and maintained on — computers located outside of your state, province, country or other governmental jurisdiction where the data protection laws may differ from those of your jurisdiction.</p>
+          
+          <h2>8. Cookies and Tracking Technologies</h2>
+          <p>We use cookies and similar tracking technologies to track activity on our platform. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.</p>
+          
+          <h2>9. Children's Privacy</h2>
+          <p>Our services are not intended for use by children under the age of 18. We do not knowingly collect personally identifiable information from children under 18.</p>
+          
+          <h2>10. Changes to This Privacy Policy</h2>
+          <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.</p>
+          
+          <h2>11. Contact Us</h2>
+          <p>If you have any questions about this Privacy Policy, please contact us at privacy@emonfinanceltd.com.</p>
+        </>
+      );
+      return <LegalPage title="Privacy Policy" content={content} />;
+    };
+
+    const CookiePolicy = () => {
+      const content = (
+        <>
+          <p><strong>Last Updated:</strong> January 1, 2023</p>
+          
+          <h2>1. What Are Cookies</h2>
+          <p>Cookies are small text files that are placed on your computer or mobile device when you visit a website. They are widely used to make websites work more efficiently, as well as to provide information to the website owners.</p>
+          
+          <h2>2. How We Use Cookies</h2>
+          <p>We use cookies for the following purposes:</p>
+          <h3>Essential Cookies</h3>
+          <p>These cookies are necessary for the website to function and cannot be switched off in our systems.</p>
+          <h3>Performance Cookies</h3>
+          <p>These cookies allow us to count visits and traffic sources so we can measure and improve the performance of our site.</p>
+          <h3>Functional Cookies</h3>
+          <p>These cookies enable the website to provide enhanced functionality and personalization.</p>
+          <h3>Targeting Cookies</h3>
+          <p>These cookies may be set through our site by our advertising partners to build a profile of your interests.</p>
+          
+          <h2>3. Types of Cookies We Use</h2>
+          <p>The table below explains the cookies we use and why:</p>
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cookie Name</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Purpose</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">session_id</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Maintain user session</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Session</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">_ga</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Google Analytics</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2 years</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">_gid</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Google Analytics</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">24 hours</td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <h2>4. Managing Cookies</h2>
+          <p>You can control and/or delete cookies as you wish. You can delete all cookies that are already on your computer and you can set most browsers to prevent them from being placed.</p>
+          
+          <h2>5. Changes to This Cookie Policy</h2>
+          <p>We may update our Cookie Policy from time to time. We will notify you of any changes by posting the new Cookie Policy on this page.</p>
+          
+          <h2>6. Contact Us</h2>
+          <p>If you have any questions about this Cookie Policy, please contact us at privacy@emonfinanceltd.com.</p>
+        </>
+      );
+      return <LegalPage title="Cookie Policy" content={content} />;
+    };
 
     // Login Page
     const LoginPage = () => {
@@ -2072,347 +1812,265 @@
       );
     };
 
-    // Legal Pages (Terms, Privacy, Cookie Policy)
-    const TermsOfService = () => {
+    // Content Pages
+    const AdvertisersContent = () => {
       const content = (
         <>
-          <p><strong>Last Updated:</strong> January 1, 2023</p>
+          <h2>Premium Advertiser Solutions</h2>
+          <p>At Emon Finance, we provide advertisers with access to our exclusive network of premium publishers to help you scale your customer acquisition efficiently.</p>
           
-          <h2>1. Acceptance of Terms</h2>
-          <p>By accessing or using the services provided by Emon Finance Ltd. ("we," "us," or "our"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, you may not use our services.</p>
+          <h3>How It Works</h3>
+          <ol>
+            <li><strong>Submit Your Campaign:</strong> Tell us about your offer, target audience, and KPIs.</li>
+            <li><strong>We Match You with Publishers:</strong> Our algorithm identifies the best publishers for your offer.</li>
+            <li><strong>Scale & Optimize:</strong> Monitor performance and work with our team to maximize results.</li>
+          </ol>
           
-          <h2>2. Description of Service</h2>
-          <p>Emon Finance Ltd. operates a performance marketing network that connects advertisers with publishers. Our services include but are not limited to:</p>
+          <h3>Key Benefits</h3>
           <ul>
-            <li>Providing a platform for advertisers to promote offers</li>
-            <li>Enabling publishers to monetize their traffic</li>
-            <li>Tracking and reporting on campaign performance</li>
-            <li>Facilitating payments between parties</li>
+            <li><strong>Quality Traffic:</strong> Access to hand-vetted publishers with proven conversion rates.</li>
+            <li><strong>Fraud Protection:</strong> Advanced monitoring to filter invalid traffic.</li>
+            <li><strong>Transparent Reporting:</strong> Real-time analytics with granular performance data.</li>
+            <li><strong>Flexible Pricing:</strong> Choose from CPA, CPC, CPL, or RevShare models.</li>
           </ul>
           
-          <h2>3. Account Registration</h2>
-          <p>To use our services, you must register for an account. You agree to:</p>
+          <h3>Our Technology</h3>
+          <p>Our proprietary platform provides:</p>
           <ul>
-            <li>Provide accurate, current, and complete information</li>
-            <li>Maintain the security of your password</li>
-            <li>Accept all risks of unauthorized access to your account</li>
-            <li>Notify us immediately of any unauthorized use of your account</li>
+            <li>Real-time tracking and optimization</li>
+            <li>Automated fraud detection</li>
+            <li>Customizable reporting dashboards</li>
+            <li>API integration options</li>
           </ul>
           
-          <h2>4. Advertiser Responsibilities</h2>
-          <p>Advertisers using our platform agree to:</p>
+          <h3>Verticals We Specialize In</h3>
           <ul>
-            <li>Provide accurate information about offers</li>
-            <li>Honor all commitments made to publishers</li>
-            <li>Comply with all applicable laws and regulations</li>
-            <li>Not engage in fraudulent or deceptive practices</li>
+            <li>Financial Services (Credit cards, loans, banking)</li>
+            <li>Health & Wellness (Supplements, telehealth)</li>
+            <li>E-commerce (Dropshipping, subscription boxes)</li>
+            <li>Insurance (Auto, home, life, health)</li>
           </ul>
           
-          <h2>5. Publisher Responsibilities</h2>
-          <p>Publishers using our platform agree to:</p>
+          <h3>Getting Started</h3>
+          <p>Our typical advertiser onboarding process takes 1-2 business days. We'll review your application and get back to you with next steps.</p>
+          
+          <h3>Pricing</h3>
+          <p>We offer competitive pricing models tailored to your campaign goals:</p>
+          <ul>
+            <li><strong>CPA (Cost Per Acquisition):</strong> Pay only for completed actions</li>
+            <li><strong>CPC (Cost Per Click):</strong> Pay for qualified clicks</li>
+            <li><strong>CPL (Cost Per Lead):</strong> Pay for verified leads</li>
+            <li><strong>RevShare:</strong> Share revenue with publishers</li>
+          </ul>
+        </>
+      );
+      return <ContentDetail title="Advertiser Solutions" content={content} />;
+    };
+
+    const PublishersContent = () => {
+      const content = (
+        <>
+          <h2>Publisher Network</h2>
+          <p>Join our network of premium publishers and monetize your traffic with high-converting offers from top advertisers.</p>
+          
+          <h3>How It Works</h3>
+          <ol>
+            <li><strong>Apply to Join:</strong> Complete our publisher application form.</li>
+            <li><strong>Get Approved:</strong> Our team reviews your application within 24-48 hours.</li>
+            <li><strong>Start Earning:</strong> Access offers and start driving traffic.</li>
+            <li><strong>Get Paid:</strong> Receive payments on your preferred schedule.</li>
+          </ol>
+          
+          <h3>Key Benefits</h3>
+          <ul>
+            <li><strong>High Payouts:</strong> Competitive rates with weekly, bi-weekly, or monthly payments</li>
+            <li><strong>Exclusive Offers:</strong> Access to premium campaigns not available elsewhere</li>
+            <li><strong>Real-time Tracking:</strong> Advanced reporting with conversion data updated in real-time</li>
+            <li><strong>Dedicated Support:</strong> 24/7 assistance from our publisher development team</li>
+          </ul>
+          
+          <h3>Supported Traffic Types</h3>
+          <ul>
+            <li>Content Websites</li>
+            <li>Social Media</li>
+            <li>Email Lists</li>
+            <li>Push Notifications</li>
+            <li>Native Ads</li>
+            <li>Search Traffic</li>
+            <li>Domain Redirect</li>
+            <li>In-App Ads</li>
+          </ul>
+          
+          <h3>Payment Information</h3>
+          <p>We offer flexible payment options to suit your needs:</p>
+          <ul>
+            <li><strong>Minimum Payout:</strong> $100</li>
+            <li><strong>Payment Schedule:</strong> Weekly, Bi-weekly, or Monthly</li>
+            <li><strong>Payment Methods:</strong> Bank Transfer, PayPal, Payoneer, Wire Transfer</li>
+          </ul>
+          
+          <h3>Publisher Requirements</h3>
+          <p>To maintain quality standards, we require all publishers to:</p>
           <ul>
             <li>Generate traffic through legal means</li>
-            <li>Not use prohibited traffic sources</li>
             <li>Comply with all offer requirements</li>
+            <li>Not use prohibited traffic sources</li>
             <li>Not engage in fraudulent activities</li>
           </ul>
           
-          <h2>6. Payment Terms</h2>
-          <p>Payments to publishers are made according to the following terms:</p>
+          <h3>Performance Benchmarks</h3>
+          <p>Average performance metrics across our network:</p>
           <ul>
-            <li>Minimum payment threshold: $100</li>
-            <li>Payment schedule: Net-30 (payments issued 30 days after month-end)</li>
-            <li>Payment methods: Bank transfer, PayPal, or other approved methods</li>
-            <li>Chargebacks may be assessed for invalid leads/sales</li>
+            <li><strong>EPC (Earnings Per Click):</strong> $1.42</li>
+            <li><strong>Conversion Rate:</strong> 4.8%</li>
+            <li><strong>Payment Approval Rate:</strong> 98%</li>
           </ul>
-          
-          <h2>7. Intellectual Property</h2>
-          <p>All content and materials available on our platform, including but not limited to text, graphics, logos, and software, are the property of Emon Finance Ltd. or its licensors and are protected by copyright and other intellectual property laws.</p>
-          
-          <h2>8. Termination</h2>
-          <p>We may terminate or suspend your account immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach these Terms.</p>
-          
-          <h2>9. Limitation of Liability</h2>
-          <p>In no event shall Emon Finance Ltd. be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the services.</p>
-          
-          <h2>10. Governing Law</h2>
-          <p>These Terms shall be governed and construed in accordance with the laws of the United Kingdom, without regard to its conflict of law provisions.</p>
-          
-          <h2>11. Changes to Terms</h2>
-          <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. We will provide notice of any changes by posting the new Terms on this page.</p>
-          
-          <h2>12. Contact Us</h2>
-          <p>If you have any questions about these Terms, please contact us at legal@emonfinanceltd.com.</p>
         </>
       );
-      return <LegalPage title="Terms of Service" content={content} />;
+      return <ContentDetail title="Publisher Network" content={content} />;
     };
 
-    const PrivacyPolicy = () => {
-      const content = (
-        <>
-          <p><strong>Last Updated:</strong> January 1, 2023</p>
-          
-          <h2>1. Introduction</h2>
-          <p>Emon Finance Ltd. ("we," "us," or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our performance marketing network services.</p>
-          
-          <h2>2. Information We Collect</h2>
-          <p>We may collect the following types of information:</p>
-          <h3>Personal Information</h3>
-          <ul>
-            <li>Name and contact details (email, phone number, address)</li>
-            <li>Business information (company name, tax ID, payment details)</li>
-            <li>Account credentials (username, password)</li>
-          </ul>
-          <h3>Technical Information</h3>
-          <ul>
-            <li>IP address and device information</li>
-            <li>Browser type and version</li>
-            <li>Pages visited and time spent on our platform</li>
-          </ul>
-          <h3>Performance Data</h3>
-          <ul>
-            <li>Campaign performance metrics</li>
-            <li>Conversion data</li>
-            <li>Traffic sources and quality</li>
-          </ul>
-          
-          <h2>3. How We Use Your Information</h2>
-          <p>We use the information we collect for the following purposes:</p>
-          <ul>
-            <li>To provide and maintain our services</li>
-            <li>To process payments and prevent fraud</li>
-            <li>To communicate with you about your account</li>
-            <li>To improve and optimize our platform</li>
-            <li>To comply with legal obligations</li>
-          </ul>
-          
-          <h2>4. Information Sharing and Disclosure</h2>
-          <p>We may share your information in the following situations:</p>
-          <ul>
-            <li><strong>With Service Providers:</strong> We may share information with third-party vendors who perform services on our behalf.</li>
-            <li><strong>For Legal Reasons:</strong> We may disclose information if required by law or in response to valid requests by public authorities.</li>
-            <li><strong>Business Transfers:</strong> In connection with any merger, sale of company assets, or acquisition.</li>
-          </ul>
-          
-          <h2>5. Data Security</h2>
-          <p>We implement appropriate technical and organizational measures to protect your personal information, including:</p>
-          <ul>
-            <li>Encryption of sensitive data</li>
-            <li>Regular security assessments</li>
-            <li>Access controls to personal information</li>
-          </ul>
-          
-          <h2>6. Your Data Protection Rights</h2>
-          <p>Depending on your location, you may have the following rights regarding your personal information:</p>
-          <ul>
-            <li><strong>Access:</strong> Request copies of your personal data.</li>
-            <li><strong>Rectification:</strong> Request correction of inaccurate data.</li>
-            <li><strong>Erasure:</strong> Request deletion of your personal data.</li>
-            <li><strong>Restriction:</strong> Request restriction of processing.</li>
-            <li><strong>Objection:</strong> Object to our processing of your data.</li>
-            <li><strong>Portability:</strong> Request transfer of your data.</li>
-          </ul>
-          
-          <h2>7. International Data Transfers</h2>
-          <p>Your information may be transferred to — and maintained on — computers located outside of your state, province, country or other governmental jurisdiction where the data protection laws may differ from those of your jurisdiction.</p>
-          
-          <h2>8. Cookies and Tracking Technologies</h2>
-          <p>We use cookies and similar tracking technologies to track activity on our platform. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.</p>
-          
-          <h2>9. Children's Privacy</h2>
-          <p>Our services are not intended for use by children under the age of 18. We do not knowingly collect personally identifiable information from children under 18.</p>
-          
-          <h2>10. Changes to This Privacy Policy</h2>
-          <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.</p>
-          
-          <h2>11. Contact Us</h2>
-          <p>If you have any questions about this Privacy Policy, please contact us at privacy@emonfinanceltd.com.</p>
-        </>
-      );
-      return <LegalPage title="Privacy Policy" content={content} />;
-    };
-
-    const CookiePolicy = () => {
-      const content = (
-        <>
-          <p><strong>Last Updated:</strong> January 1, 2023</p>
-          
-          <h2>1. What Are Cookies</h2>
-          <p>Cookies are small text files that are placed on your computer or mobile device when you visit a website. They are widely used to make websites work more efficiently, as well as to provide information to the website owners.</p>
-          
-          <h2>2. How We Use Cookies</h2>
-          <p>We use cookies for the following purposes:</p>
-          <h3>Essential Cookies</h3>
-          <p>These cookies are necessary for the website to function and cannot be switched off in our systems.</p>
-          <h3>Performance Cookies</h3>
-          <p>These cookies allow us to count visits and traffic sources so we can measure and improve the performance of our site.</p>
-          <h3>Functional Cookies</h3>
-          <p>These cookies enable the website to provide enhanced functionality and personalization.</p>
-          <h3>Targeting Cookies</h3>
-          <p>These cookies may be set through our site by our advertising partners to build a profile of your interests.</p>
-          
-          <h2>3. Types of Cookies We Use</h2>
-          <p>The table below explains the cookies we use and why:</p>
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cookie Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Purpose</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">session_id</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Maintain user session</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Session</td>
-              </tr>
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">_ga</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Google Analytics</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2 years</td>
-              </tr>
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">_gid</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Google Analytics</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">24 hours</td>
-              </tr>
-            </tbody>
-          </table>
-          
-          <h2>4. Managing Cookies</h2>
-          <p>You can control and/or delete cookies as you wish. You can delete all cookies that are already on your computer and you can set most browsers to prevent them from being placed.</p>
-          
-          <h2>5. Changes to This Cookie Policy</h2>
-          <p>We may update our Cookie Policy from time to time. We will notify you of any changes by posting the new Cookie Policy on this page.</p>
-          
-          <h2>6. Contact Us</h2>
-          <p>If you have any questions about this Cookie Policy, please contact us at privacy@emonfinanceltd.com.</p>
-        </>
-      );
-      return <LegalPage title="Cookie Policy" content={content} />;
-    };
-
-    // Footer Component with Legal Links
-    const Footer = ({ currentPage }) => {
-      const handleLinkClick = (e, path) => {
-        e.preventDefault();
-        window.history.pushState({}, '', path);
-        window.dispatchEvent(new Event('popstate'));
-        window.scrollTo(0, 0);
+    const VerticalContent = ({ vertical }) => {
+      const contentMap = {
+        finance: (
+          <>
+            <h2>Finance Vertical</h2>
+            <p>Our finance vertical specializes in high-value customer acquisition for financial products and services.</p>
+            
+            <h3>Top Performing Offers</h3>
+            <ul>
+              <li>Credit Cards</li>
+              <li>Personal Loans</li>
+              <li>Mortgage Refinancing</li>
+              <li>Investment Services</li>
+              <li>Banking Products</li>
+            </ul>
+            
+            <h3>Performance Benchmarks</h3>
+            <ul>
+              <li><strong>Average Conversion Rate:</strong> 6.8%</li>
+              <li><strong>Average EPC:</strong> $2.15</li>
+              <li><strong>Average Approval Rate:</strong> 72%</li>
+            </ul>
+            
+            <h3>Target Audience</h3>
+            <p>Our finance offers perform best with:</p>
+            <ul>
+              <li>Credit seekers (good to excellent credit)</li>
+              <li>Homeowners looking to refinance</li>
+              <li>Investors seeking higher yields</li>
+              <li>Consumers looking for better banking options</li>
+            </ul>
+            
+            <h3>Publishers</h3>
+            <p>Top performing publishers in this vertical include:</p>
+            <ul>
+              <li>Financial content websites</li>
+              <li>Credit score platforms</li>
+              <li>Personal finance blogs</li>
+              <li>Comparison shopping sites</li>
+            </ul>
+          </>
+        ),
+        health: (
+          <>
+            <h2>Health & Wellness Vertical</h2>
+            <p>Our health vertical focuses on products and services that improve quality of life and wellbeing.</p>
+            
+            <h3>Top Performing Offers</h3>
+            <ul>
+              <li>Dietary Supplements</li>
+              <li>Telehealth Services</li>
+              <li>Fitness Programs</li>
+              <li>Health Insurance</li>
+              <li>Wellness Subscriptions</li>
+            </ul>
+            
+            <h3>Performance Benchmarks</h3>
+            <ul>
+              <li><strong>Average Conversion Rate:</strong> 5.2%</li>
+              <li><strong>Average EPC:</strong> $1.75</li>
+              <li><strong>Average Approval Rate:</strong> 85%</li>
+            </ul>
+            
+            <h3>Target Audience</h3>
+            <p>Our health offers perform best with:</p>
+            <ul>
+              <li>Health-conscious consumers</li>
+              <li>Individuals with specific health concerns</li>
+              <li>Fitness enthusiasts</li>
+              <li>Seniors seeking health solutions</li>
+            </ul>
+          </>
+        ),
+        'case-study': (
+          <>
+            <h2>Case Study: Financial Services Brand</h2>
+            <h3>Client Overview</h3>
+            <p>A leading fintech company offering credit cards and personal loans wanted to scale their customer acquisition while maintaining profitability.</p>
+            
+            <h3>Challenge</h3>
+            <ul>
+              <li>High customer acquisition costs on other platforms</li>
+              <li>Difficulty finding quality traffic sources</li>
+              <li>Need for transparent reporting</li>
+            </ul>
+            
+            <h3>Our Solution</h3>
+            <ul>
+              <li>Matched them with premium finance-focused publishers</li>
+              <li>Implemented CPA model with fraud protection</li>
+              <li>Provided real-time optimization recommendations</li>
+            </ul>
+            
+            <h3>Results</h3>
+            <ul>
+              <li><strong>3X ROAS</strong> within 3 months</li>
+              <li><strong>45% lower CPA</strong> compared to previous channels</li>
+              <li><strong>6-month campaign</strong> with consistent performance</li>
+            </ul>
+            
+            <h3>Testimonial</h3>
+            <blockquote className="border-l-4 border-primary-500 pl-4 italic">
+              "Emon Finance helped us scale our customer acquisition while maintaining our target CPA. Their publisher network delivered high-quality traffic that converted at rates we hadn't seen before."
+            </blockquote>
+          </>
+        )
       };
 
-      return (
-        <footer className="bg-dark-900 text-white py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              <div>
-                <div className="flex items-center mb-4">
-                  <img 
-                    src="https://media.licdn.com/dms/image/v2/D560BAQGS4tCTdvEdGw/company-logo_100_100/B56ZZJf6fAHsAU-/0/1744989825409?e=1750291200&v=beta&t=Fi_TOPK-UtNdgjDNMtQzccX63GY3mY5_34v_bReHLjY" 
-                    alt="Emon Finance Ltd. Logo" 
-                    className="h-8 w-auto"
-                  />
-                  <span className="ml-2 text-xl font-bold text-primary-400">Emon Finance</span>
-                </div>
-                <p className="text-gray-400 text-sm">
-                  Premium performance marketing network connecting advertisers with top publishers worldwide.
-                </p>
-                <div className="mt-4 flex space-x-4">
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200" aria-label="Facebook">
-                    <i className="fab fa-facebook-f"></i>
-                  </a>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200" aria-label="Twitter">
-                    <i className="fab fa-twitter"></i>
-                  </a>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200" aria-label="LinkedIn">
-                    <i className="fab fa-linkedin-in"></i>
-                  </a>
-                  <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200" aria-label="Instagram">
-                    <i className="fab fa-instagram"></i>
-                  </a>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-primary-400 mb-4">Quick Links</h3>
-                <ul className="space-y-2">
-                  {['Advertisers', 'Publishers', 'Verticals', 'Resources', 'Case Study', 'About'].map((item) => {
-                    const path = item.toLowerCase().replace(' ', '-');
-                    return (
-                      <li key={item}>
-                        <a 
-                          href={`/${path}`} 
-                          onClick={(e) => handleLinkClick(e, `/${path}`)}
-                          className={`text-gray-400 hover:text-white text-sm transition-colors duration-200 ${currentPage === path ? 'text-white font-medium' : ''}`}
-                        >
-                          {item}
-                        </a>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-primary-400 mb-4">Legal</h3>
-                <ul className="space-y-2">
-                  {['Terms', 'Privacy', 'Cookies'].map((item) => {
-                    const path = item.toLowerCase();
-                    return (
-                      <li key={item}>
-                        <a 
-                          href={`/${path}`} 
-                          onClick={(e) => handleLinkClick(e, `/${path}`)}
-                          className={`text-gray-400 hover:text-white text-sm transition-colors duration-200 ${currentPage === path ? 'text-white font-medium' : ''}`}
-                        >
-                          {item === 'Cookies' ? 'Cookie Policy' : `${item} of Service`}
-                        </a>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-primary-400 mb-4">Contact Us</h3>
-                <ul className="space-y-2 text-gray-400 text-sm">
-                  <li className="flex items-center">
-                    <i className="fas fa-envelope mr-2 text-primary-400"></i>
-                    <span>support@emonfinanceltd.com</span>
-                  </li>
-                  <li className="flex items-center">
-                    <i className="fas fa-phone-alt mr-2 text-primary-400"></i>
-                    <span>+1 (555) 123-4567</span>
-                  </li>
-                  <li className="flex items-center">
-                    <i className="fas fa-map-marker-alt mr-2 text-primary-400"></i>
-                    <span>123 Business Ave, Suite 500, New York, NY 10001</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
-              <p>© {new Date().getFullYear()} Emon Finance Ltd. All rights reserved.</p>
-            </div>
-          </div>
-        </footer>
+      const defaultContent = (
+        <>
+          <h2>{vertical.charAt(0).toUpperCase() + vertical.slice(1)} Vertical</h2>
+          <p>Learn more about our performance marketing solutions for the {vertical} vertical.</p>
+          <p>Our network includes premium advertisers and publishers specializing in this vertical, with proven results and optimization strategies.</p>
+        </>
       );
+
+      return <ContentDetail 
+        title={`${vertical.charAt(0).toUpperCase() + vertical.slice(1)} Vertical`} 
+        content={contentMap[vertical] || defaultContent} 
+      />;
     };
 
     // Home Page Component
-    const HomePage = () => (
+    const HomePage = ({ onLearnMore, onGetStarted, onContact }) => (
       <>
-        <Hero />
+        <Hero onGetStarted={onGetStarted} />
         <Stats />
-        <AdvertisersPage />
-        <PublishersPage />
-        <VerticalsPage />
-        <CaseStudyPage />
+        <AdvertisersSection onLearnMore={onLearnMore} onGetStarted={onGetStarted} />
+        <PublishersSection onLearnMore={onLearnMore} onGetStarted={onGetStarted} />
+        <VerticalsSection onLearnMore={onLearnMore} />
+        <CaseStudiesSection onLearnMore={onLearnMore} />
+        <CTASection onContact={onContact} />
       </>
     );
 
     // App Router
     const App = () => {
       const [currentPage, setCurrentPage] = useState('home');
+      const [formType, setFormType] = useState('contact');
+      const [contentType, setContentType] = useState('');
+      const [contentVertical, setContentVertical] = useState('');
       
       useEffect(() => {
         const handlePopState = () => {
@@ -2430,6 +2088,30 @@
           window.removeEventListener('popstate', handlePopState);
         };
       }, []);
+
+      const handleGetStarted = (type) => {
+        setFormType(type);
+        setCurrentPage('form');
+        window.history.pushState({}, '', '/form');
+      };
+
+      const handleLearnMore = (type) => {
+        if (['finance', 'health', 'case-study'].includes(type)) {
+          setContentVertical(type);
+          setCurrentPage('vertical-content');
+          window.history.pushState({}, '', '/vertical-content');
+        } else {
+          setContentType(type);
+          setCurrentPage('content');
+          window.history.pushState({}, '', '/content');
+        }
+      };
+
+      const handleContact = () => {
+        setFormType('contact');
+        setCurrentPage('form');
+        window.history.pushState({}, '', '/form');
+      };
 
       const renderPage = () => {
         switch(currentPage) {
@@ -2454,48 +2136,6 @@
               <Footer currentPage={currentPage} />
             </>
           );
-          case 'resources': return (
-            <>
-              <Navbar currentPage={currentPage} />
-              <ResourcesPage />
-              <Footer currentPage={currentPage} />
-            </>
-          );
-          case 'advertisers': return (
-            <>
-              <Navbar currentPage={currentPage} />
-              <AdvertisersPage />
-              <Footer currentPage={currentPage} />
-            </>
-          );
-          case 'publishers': return (
-            <>
-              <Navbar currentPage={currentPage} />
-              <PublishersPage />
-              <Footer currentPage={currentPage} />
-            </>
-          );
-          case 'verticals': return (
-            <>
-              <Navbar currentPage={currentPage} />
-              <VerticalsPage />
-              <Footer currentPage={currentPage} />
-            </>
-          );
-          case 'case-study': return (
-            <>
-              <Navbar currentPage={currentPage} />
-              <CaseStudyPage />
-              <Footer currentPage={currentPage} />
-            </>
-          );
-          case 'about': return (
-            <>
-              <Navbar currentPage={currentPage} />
-              <AboutUsPage />
-              <Footer currentPage={currentPage} />
-            </>
-          );
           case 'login': return (
             <>
               <Navbar currentPage={currentPage} />
@@ -2510,10 +2150,46 @@
               <Footer currentPage={currentPage} />
             </>
           );
+          case 'form': return (
+            <>
+              <Navbar currentPage={currentPage} />
+              <PageLayout 
+                title={formType === 'advertiser' ? 'Advertiser Application' : 
+                      formType === 'publisher' ? 'Publisher Application' : 
+                      'Contact Our Team'}
+                subtitle={formType === 'advertiser' ? 'Join our network of premium advertisers' : 
+                        formType === 'publisher' ? 'Monetize your traffic with our offers' : 
+                        'Get in touch with our team'}
+                bgColor="bg-gradient-to-br from-primary-800 to-primary-600"
+                textColor="text-white"
+              >
+                <DynamicForm formType={formType} />
+              </PageLayout>
+              <Footer currentPage={currentPage} />
+            </>
+          );
+          case 'content': return (
+            <>
+              <Navbar currentPage={currentPage} />
+              {contentType === 'advertiser' ? <AdvertisersContent /> : <PublishersContent />}
+              <Footer currentPage={currentPage} />
+            </>
+          );
+          case 'vertical-content': return (
+            <>
+              <Navbar currentPage={currentPage} />
+              <VerticalContent vertical={contentVertical} />
+              <Footer currentPage={currentPage} />
+            </>
+          );
           default: return (
             <>
               <Navbar currentPage={currentPage} />
-              <HomePage />
+              <HomePage 
+                onLearnMore={handleLearnMore} 
+                onGetStarted={handleGetStarted}
+                onContact={handleContact}
+              />
               <Footer currentPage={currentPage} />
             </>
           );
